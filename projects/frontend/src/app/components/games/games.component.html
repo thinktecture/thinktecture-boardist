@@ -1,0 +1,27 @@
+<table *ngIf="games$ | async as games; else loading" mat-table [dataSource]="games">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let game">{{ game.name }}</td>
+  </ng-container>
+  <ng-container matColumnDef="minPlayers">
+    <th mat-header-cell *matHeaderCellDef>Min.</th>
+    <td mat-cell *matCellDef="let game">{{ game.minPlayers }}</td>
+  </ng-container>
+  <ng-container matColumnDef="maxPlayers">
+    <th mat-header-cell *matHeaderCellDef>Max.</th>
+    <td mat-cell *matCellDef="let game">{{ game.maxPlayers }}</td>
+  </ng-container>
+  <ng-container matColumnDef="isExtension">
+    <th mat-header-cell *matHeaderCellDef>Extension?</th>
+    <td mat-cell *matCellDef="let game">
+      <mat-icon *ngIf="game.mainGameId">extension</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['name', 'minPlayers', 'maxPlayers', 'isExtension']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension']" (click)="showGame(row.id)"></tr>
+</table>
+
+<ng-template #loading>
+  <ttb-spinner></ttb-spinner>
+</ng-template>

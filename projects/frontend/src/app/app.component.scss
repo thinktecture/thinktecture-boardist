@@ -6,6 +6,11 @@
   height: 100vh;
 
   &.is-mobile {
+    mat-toolbar {
+      position: fixed;
+      z-index: 2;
+    }
+
     mat-sidenav-container {
       flex: 1 0 auto;
     }
@@ -27,6 +32,10 @@ mat-sidenav-container {
   flex: 1;
 }
 
-a mat-icon {
-  margin-right: 8px;
+mat-nav-list {
+  padding-top: 7px;
+
+  mat-icon {
+    margin-right: 8px;
+  }
 }

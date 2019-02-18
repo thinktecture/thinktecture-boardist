@@ -1,0 +1,18 @@
+table {
+  width: 100%;
+
+  .mat-column-minPlayers,
+  .mat-column-maxPlayers {
+    width: 50px;
+    text-align: center;
+  }
+
+  .mat-column-isExtension {
+    width: 70px;
+    text-align: center;
+  }
+}
+
+mat-spinner {
+  margin: 100px auto;
+}

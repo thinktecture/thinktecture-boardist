@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Board game</h2>
+
+<mat-dialog-content>
+  <form *ngIf="game$ | async; else loading" [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Board game name</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+
+    <div class="flex">
+      <mat-form-field class="flex-1">
+        <mat-label>Minimum players</mat-label>
+        <mat-select formControlName="minPlayers">
+          <mat-option *ngFor="let nr of null | numberOfPlayers : 1 : 4" [value]="nr">{{ nr }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="flex-1">
+        <mat-label>Maximum players</mat-label>
+        <mat-select formControlName="maxPlayers">
+          <mat-option *ngFor="let nr of null | numberOfPlayers : +form.value.minPlayers + 1 : 10" [value]="nr">{{ nr }}</mat-option>
+          <mat-option [value]="99">11 or more</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex">
+      <mat-form-field class="flex-1">
+        <mat-label>Minimum duration</mat-label>
+        <mat-select formControlName="minDuration">
+          <mat-option *ngFor="let nr of null | durations : 5 : 120 : 5" [value]="nr">{{ nr }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="flex-1">
+        <mat-label>Maximum duration</mat-label>
+        <mat-select formControlName="maxDuration">
+          <mat-option *ngFor="let nr of null | durations : +form.value.minDuration + 5 : 240 : 5" [value]="nr">{{ nr }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" [disabled]="form.invalid">Save</button>
+</mat-dialog-actions>
+
+<ng-template #loading>
+  <ttb-spinner></ttb-spinner>
+</ng-template>
