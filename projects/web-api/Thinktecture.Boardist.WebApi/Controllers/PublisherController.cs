@@ -34,5 +34,29 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return Ok(result);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<PublisherDto>> Create([FromBody] PublisherDto publisher)
+    {
+      return Ok(await _publisherService.Create(publisher));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+      if (await _publisherService.Delete(id))
+      {
+        return Ok();
+      }
+
+      return NotFound();
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<PublisherDto>> Update([FromBody] PublisherDto publisher)
+    {
+      await _publisherService.Update(publisher);
+      return Ok();
+    }
   }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 
 namespace Thinktecture.Boardist.WebApi.Services
@@ -27,6 +28,47 @@ namespace Thinktecture.Boardist.WebApi.Services
     public async Task<PublisherDto> Get(Guid id)
     {
       return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.Where(p => p.Id == id)).SingleOrDefaultAsync();
+    }
+
+    public async Task<PublisherDto> Create(PublisherDto publisher)
+    {
+      var dbPublisher = new Publisher() {Name = publisher.Name, Id = Guid.NewGuid()};
+
+      await _boardistContext.Publishers.AddAsync(dbPublisher);
+      await _boardistContext.SaveChangesAsync();
+
+      return _mapper.Map<Publisher, PublisherDto>(dbPublisher);
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+      var dbPublisher = new Publisher() {Id = id};
+
+      _boardistContext.Entry(dbPublisher).State = EntityState.Deleted;
+
+      try
+      {
+        await _boardistContext.SaveChangesAsync();
+
+        return true;
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        return false;
+      }
+    }
+
+    public async Task<PublisherDto> Update(PublisherDto publisher)
+    {
+      var dbPublisher = new Publisher() {Id = publisher.Id};
+
+      _boardistContext.Attach(dbPublisher);
+
+      dbPublisher.Name = publisher.Name;
+
+      await _boardistContext.SaveChangesAsync();
+
+      return _mapper.Map<Publisher, PublisherDto>(dbPublisher);
     }
   }
 }
