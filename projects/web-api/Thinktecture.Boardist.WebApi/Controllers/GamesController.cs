@@ -17,15 +17,15 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<GameDto[]>> List()
+    public async Task<ActionResult<GameDto[]>> ListAsync()
     {
-      return Ok(await _gamesService.GetAll());
+      return Ok(await _gamesService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GameDto>> Single(Guid id)
+    public async Task<ActionResult<GameDto>> SingleAsync(Guid id)
     {
-      var result = await _gamesService.Get(id);
+      var result = await _gamesService.GetAsync(id);
 
       if (result == null)
       {

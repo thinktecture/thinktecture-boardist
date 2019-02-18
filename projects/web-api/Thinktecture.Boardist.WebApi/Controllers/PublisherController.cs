@@ -17,15 +17,15 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<PublisherDto[]>> List()
+    public async Task<ActionResult<PublisherDto[]>> ListAsync()
     {
-      return Ok(await _publisherService.GetAll());
+      return Ok(await _publisherService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PublisherDto>> Single(Guid id)
+    public async Task<ActionResult<PublisherDto>> SingleAsync(Guid id)
     {
-      var result = await _publisherService.Get(id);
+      var result = await _publisherService.GetAsync(id);
 
       if (result == null)
       {
@@ -36,15 +36,15 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<PublisherDto>> Create([FromBody] PublisherDto publisher)
+    public async Task<ActionResult<PublisherDto>> CreateAsync([FromBody] PublisherDto publisher)
     {
-      return Ok(await _publisherService.Create(publisher));
+      return Ok(await _publisherService.CreateAsync(publisher));
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-      if (await _publisherService.Delete(id))
+      if (await _publisherService.DeleteAsync(id))
       {
         return Ok();
       }
@@ -53,9 +53,9 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpPut]
-    public async Task<ActionResult<PublisherDto>> Update([FromBody] PublisherDto publisher)
+    public async Task<ActionResult<PublisherDto>> UpdateAsync([FromBody] PublisherDto publisher)
     {
-      await _publisherService.Update(publisher);
+      await _publisherService.UpdateAsync(publisher);
       return Ok();
     }
   }

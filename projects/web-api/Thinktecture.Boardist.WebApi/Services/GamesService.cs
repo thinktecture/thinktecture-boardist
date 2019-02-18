@@ -19,12 +19,12 @@ namespace Thinktecture.Boardist.WebApi.Services
       _boardistContext = boardistContext;
     }
 
-    public async Task<GameDto[]> GetAll()
+    public async Task<GameDto[]> GetAllAsync()
     {
       return await _mapper.ProjectTo<GameDto>(_boardistContext.Games).ToArrayAsync();
     }
 
-    public async Task<GameDto> Get(Guid id)
+    public async Task<GameDto> GetAsync(Guid id)
     {
       return await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
     }

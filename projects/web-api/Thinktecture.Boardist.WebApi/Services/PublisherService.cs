@@ -20,17 +20,17 @@ namespace Thinktecture.Boardist.WebApi.Services
       _boardistContext = boardistContext;
     }
 
-    public async Task<PublisherDto[]> GetAll()
+    public async Task<PublisherDto[]> GetAllAsync()
     {
       return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers).ToArrayAsync();
     }
 
-    public async Task<PublisherDto> Get(Guid id)
+    public async Task<PublisherDto> GetAsync(Guid id)
     {
       return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
-    public async Task<PublisherDto> Create(PublisherDto publisher)
+    public async Task<PublisherDto> CreateAsync(PublisherDto publisher)
     {
       var dbPublisher = new Publisher() {Name = publisher.Name, Id = Guid.NewGuid()};
 
@@ -40,7 +40,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Publisher, PublisherDto>(dbPublisher);
     }
 
-    public async Task<bool> Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
       var dbPublisher = new Publisher() {Id = id};
 
@@ -58,7 +58,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task<PublisherDto> Update(PublisherDto publisher)
+    public async Task<PublisherDto> UpdateAsync(PublisherDto publisher)
     {
       var dbPublisher = new Publisher() {Id = publisher.Id};
 
