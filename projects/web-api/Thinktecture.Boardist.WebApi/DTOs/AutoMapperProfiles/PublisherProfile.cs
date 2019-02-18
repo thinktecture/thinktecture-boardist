@@ -8,7 +8,6 @@ namespace Thinktecture.Boardist.WebApi.DTOs.AutoMapperProfiles
     public PublisherProfile()
     {
       CreateMap<Publisher, PublisherDto>();
-      CreateMap<PublisherDto, Publisher>();
     }
   }
 }
