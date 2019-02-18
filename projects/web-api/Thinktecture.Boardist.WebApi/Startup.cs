@@ -28,6 +28,8 @@ namespace Thinktecture.Boardist.WebApi
       services.AddTransient<DatabaseMigrator>();
       services.AddTransient<GamesService>();
       services.AddTransient<PublisherService>();
+      services.AddTransient<CategoryService>();
+      services.AddTransient<PersonService>();
 
       services.AddMvc()
         .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
