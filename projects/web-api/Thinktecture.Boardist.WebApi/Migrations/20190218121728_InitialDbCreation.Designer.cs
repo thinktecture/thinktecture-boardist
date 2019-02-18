@@ -10,7 +10,7 @@ using Thinktecture.Boardist.WebApi.Database;
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    [Migration("20190218111248_InitialDbCreation")]
+    [Migration("20190218121728_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int?>("PerPlayerDuration");
 
-                    b.Property<Guid?>("PublisherId");
+                    b.Property<Guid>("PublisherId");
 
                     b.HasKey("Id");
 
@@ -72,6 +72,36 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
+                            MaxPlayers = 7,
+                            MinPlayers = 3,
+                            Name = "7 Wonders",
+                            PerPlayerDuration = 40,
+                            PublisherId = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897")
+                        },
+                        new
+                        {
+                            Id = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
+                            MainGameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
+                            MaxPlayers = 7,
+                            MinPlayers = 2,
+                            Name = "7 Wonders - Babel",
+                            PerPlayerDuration = 40,
+                            PublisherId = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897")
+                        },
+                        new
+                        {
+                            Id = new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"),
+                            MaxPlayers = 4,
+                            MinPlayers = 2,
+                            Name = "Die Legenden von Andor",
+                            PerPlayerDuration = 90,
+                            PublisherId = new Guid("579176ab-5eaa-484b-87fb-33806252c214")
+                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameAuthor", b =>
@@ -85,6 +115,23 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("GameAuthor");
+
+                    b.HasData(
+                        new
+                        {
+                            GameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
+                            AuthorId = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2")
+                        },
+                        new
+                        {
+                            GameId = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
+                            AuthorId = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2")
+                        },
+                        new
+                        {
+                            GameId = new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"),
+                            AuthorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c")
+                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameIllustrator", b =>
@@ -112,6 +159,20 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2"),
+                            FirstName = "Antoine",
+                            LastName = "Bauza"
+                        },
+                        new
+                        {
+                            Id = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c"),
+                            FirstName = "Menzel",
+                            LastName = "Michael"
+                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Publisher", b =>
@@ -124,6 +185,18 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publishers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897"),
+                            Name = "Asmodee"
+                        },
+                        new
+                        {
+                            Id = new Guid("579176ab-5eaa-484b-87fb-33806252c214"),
+                            Name = "Kosmos"
+                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Category", b =>
@@ -141,7 +214,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Publisher", "Publisher")
                         .WithMany()
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameAuthor", b =>

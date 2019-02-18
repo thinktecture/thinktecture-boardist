@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
-namespace Thinktecture.Boardist.WebApi.Database.Models
+namespace Thinktecture.Boardist.WebApi.DTOs
 {
-  public class Game
+  public class GameDto
   {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -14,14 +13,8 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
     public int? PerPlayerDuration { get; set; }
     public decimal? BuyPrice { get; set; }
     public DateTime? BuyDate { get; set; }
-
-    public Guid? MainGameId { get; set; }
-    public Game MainGame { get; set; }
+    
     public Guid PublisherId { get; set; }
-    public Publisher Publisher { get; set; }
-
-    public ICollection<GameAuthor> Authors { get; set; }
-    public ICollection<GameIllustrator> Illustrators { get; set; }
-    public ICollection<Category> Categories { get; set; }
+    public Guid? MainGameId { get; set; }
   }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -19,11 +21,16 @@ namespace Thinktecture.Boardist.WebApi
 
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddAutoMapper();
+      
       services.AddDbContext<BoardistContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BoardistContext")));
 
       services.AddTransient<DatabaseMigrator>();
+      services.AddTransient<GamesService>();
+      services.AddTransient<PublisherService>();
 
-      services.AddMvc();
+      services.AddMvc()
+        .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
