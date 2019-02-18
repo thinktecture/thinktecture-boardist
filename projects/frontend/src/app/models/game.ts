@@ -5,6 +5,9 @@ import {Person} from './person';
 export interface Game {
   id: string;
   name: string;
+}
+
+export interface GameDetail extends Game {
   minPlayers: number;
   maxPlayers: number;
   minDuration?: number;
