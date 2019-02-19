@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 
 namespace Thinktecture.Boardist.WebApi.Services
@@ -27,6 +28,24 @@ namespace Thinktecture.Boardist.WebApi.Services
     public async Task<GameDto> GetAsync(Guid id)
     {
       return await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
+    }
+    
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+      var dbGame = new Game() {Id = id};
+
+      _boardistContext.Entry(dbGame).State = EntityState.Deleted;
+
+      try
+      {
+        await _boardistContext.SaveChangesAsync();
+
+        return true;
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        return false;
+      }
     }
   }
 }

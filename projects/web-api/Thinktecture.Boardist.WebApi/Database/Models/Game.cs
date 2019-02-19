@@ -22,6 +22,6 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
 
     public ICollection<GameAuthor> Authors { get; set; }
     public ICollection<GameIllustrator> Illustrators { get; set; }
-    public ICollection<Category> Categories { get; set; }
+    public ICollection<GameCategory> Categories { get; set; }
   }
 }

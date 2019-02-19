@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database.Models;
+using Thinktecture.Boardist.WebApi.Services;
 
 namespace Thinktecture.Boardist.WebApi.Database
 {
   public class BoardistContext : DbContext
   {
+    private const int MAX_STRING_LENGTH = 250;
+    
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Person> Persons { get; set; }
     public DbSet<Game> Games { get; set; }
@@ -22,8 +25,10 @@ namespace Thinktecture.Boardist.WebApi.Database
       base.OnModelCreating(modelBuilder);
 
       modelBuilder.Entity<Category>().HasKey(p => p.Id);
+      modelBuilder.Entity<Category>().Property(p => p.Name).HasMaxLength(MAX_STRING_LENGTH);
 
       modelBuilder.Entity<Game>().HasKey(p => p.Id);
+      modelBuilder.Entity<Game>().Property(p => p.Name).HasMaxLength(MAX_STRING_LENGTH);
 
       modelBuilder.Entity<Game>()
         .HasOne(p => p.Publisher)
@@ -64,10 +69,25 @@ namespace Thinktecture.Boardist.WebApi.Database
         .HasOne(p => p.Illustrator)
         .WithMany()
         .HasForeignKey(p => p.IllustratorId);
+      
+      modelBuilder.Entity<GameCategory>().HasKey(p => new {p.GameId, p.CategoryId});
+
+      modelBuilder.Entity<GameCategory>()
+        .HasOne(p => p.Game)
+        .WithMany(p => p.Categories)
+        .HasForeignKey(p => p.GameId);
+
+      modelBuilder.Entity<GameCategory>()
+        .HasOne(p => p.Category)
+        .WithMany()
+        .HasForeignKey(p => p.CategoryId);
 
       modelBuilder.Entity<Person>().HasKey(p => p.Id);
+      modelBuilder.Entity<Person>().Property(p => p.FirstName).HasMaxLength(MAX_STRING_LENGTH);
+      modelBuilder.Entity<Person>().Property(p => p.LastName).HasMaxLength(MAX_STRING_LENGTH);
 
       modelBuilder.Entity<Publisher>().HasKey(p => p.Id);
+      modelBuilder.Entity<Publisher>().Property(p => p.Name).HasMaxLength(MAX_STRING_LENGTH);
 
       SeedDatabase(modelBuilder);
     }
@@ -77,7 +97,9 @@ namespace Thinktecture.Boardist.WebApi.Database
       var persons = new List<Person>()
       {
         new Person() {Id = Guid.Parse("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2"), LastName = "Bauza", FirstName = "Antoine"},
-        new Person() {Id = Guid.Parse("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c"), LastName = "Michael", FirstName = "Menzel"}
+        new Person() {Id = Guid.Parse("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c"), LastName = "Michael", FirstName = "Menzel"},
+        new Person() {Id = Guid.Parse("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50d"), LastName = "Herbert", FirstName = "Grönemeyer"},
+        new Person() {Id = Guid.Parse("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50e"), LastName = "Lucialla", FirstName = "Löhr"}
       };
 
       var publishers = new List<Publisher>()
@@ -136,12 +158,107 @@ namespace Thinktecture.Boardist.WebApi.Database
         }
       };
 
+      var illustratorRelationships = new List<GameIllustrator>()
+      {
+        new GameIllustrator()
+        {
+          IllustratorId = persons[2].Id,
+          GameId = sevenWonders.Id
+        },
+        new GameIllustrator()
+        {
+          IllustratorId = persons[3].Id,
+          GameId = sevenWonders.Id
+        },
+        new GameIllustrator()
+        {
+          IllustratorId = persons[2].Id,
+          GameId = sevenWondersBabel.Id
+        },
+        new GameIllustrator()
+        {
+          IllustratorId = persons[3].Id,
+          GameId = sevenWondersBabel.Id
+        },
+        new GameIllustrator()
+        {
+          IllustratorId = persons[3].Id,
+          GameId = legendenVonAndor.Id
+        },
+      };
+
+      var categories = new List<Category>()
+      {
+        new Category()
+        {
+          Id = Guid.Parse("23d3a212-4996-4fe2-a3fa-d9fe8b975952"),
+          Name = "Roleplay Game"
+        },
+        new Category()
+        {
+          Id = Guid.Parse("75590c0d-46c6-4db3-a772-6614b6354c71"),
+          Name = "Card Game"
+        },
+        new Category()
+        {
+          Id = Guid.Parse("631caec4-088d-4cce-baa8-3356302b76da"),
+          Name = "City Building"
+        },
+        new Category()
+        {
+          Id = Guid.Parse("537d56da-6a38-4da8-b872-ec462d5ef512"),
+          Name = "Civilization"
+        }
+      };
+
+      var categoriesRelationships = new List<GameCategory>()
+      {
+        new GameCategory()
+        {
+          GameId = sevenWonders.Id,
+          CategoryId = categories[1].Id
+        },
+        new GameCategory()
+        {
+          GameId = sevenWonders.Id,
+          CategoryId = categories[2].Id
+        },
+        new GameCategory()
+        {
+          GameId = sevenWonders.Id,
+          CategoryId = categories[3].Id
+        },
+        new GameCategory()
+        {
+          GameId = sevenWondersBabel.Id,
+          CategoryId = categories[1].Id
+        },
+        new GameCategory()
+        {
+          GameId = sevenWondersBabel.Id,
+          CategoryId = categories[2].Id
+        },
+        new GameCategory()
+        {
+          GameId = sevenWondersBabel.Id,
+          CategoryId = categories[3].Id
+        },
+        new GameCategory()
+        {
+          GameId = legendenVonAndor.Id,
+          CategoryId = categories[0].Id
+        }
+      };
+      
       var games = new List<Game>() {sevenWonders, sevenWondersBabel, legendenVonAndor};
 
       modelBuilder.Entity<Publisher>().HasData(publishers);
       modelBuilder.Entity<Person>().HasData(persons);
       modelBuilder.Entity<Game>().HasData(games);
+      modelBuilder.Entity<Category>().HasData(categories);
       modelBuilder.Entity<GameAuthor>().HasData(authorRelationships);
+      modelBuilder.Entity<GameCategory>().HasData(categoriesRelationships);
+      modelBuilder.Entity<GameIllustrator>().HasData(illustratorRelationships);
     }
   }
 }

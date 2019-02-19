@@ -34,5 +34,16 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return Ok(result);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync(Guid id)
+    {
+      if (await _gamesService.DeleteAsync(id))
+      {
+        return Ok();
+      }
+
+      return NotFound();
+    }
   }
 }

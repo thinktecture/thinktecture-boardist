@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Thinktecture.Boardist.WebApi.Database;
 
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    partial class BoardistContextModelSnapshot : ModelSnapshot
+    [Migration("20190219074952_AddIllustratorRelationships")]
+    partial class AddIllustratorRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -74,8 +75,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int>("MinPlayers");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.Property<int?>("PerPlayerDuration");
 
@@ -247,11 +247,9 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(250);
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(250);
+                    b.Property<string>("LastName");
 
                     b.HasKey("Id");
 
@@ -289,8 +287,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 

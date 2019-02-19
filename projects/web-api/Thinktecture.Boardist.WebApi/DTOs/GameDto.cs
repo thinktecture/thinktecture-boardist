@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Thinktecture.Boardist.WebApi.DTOs
 {
@@ -16,5 +17,9 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     
     public Guid PublisherId { get; set; }
     public Guid? MainGameId { get; set; }
+    
+    public ICollection<Guid> Authors { get; set; }
+    public ICollection<Guid> Illustrators { get; set; }
+    public ICollection<Guid> Categories { get; set; }
   }
 }

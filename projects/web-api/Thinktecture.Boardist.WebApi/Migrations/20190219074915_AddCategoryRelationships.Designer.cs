@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Thinktecture.Boardist.WebApi.Database;
 
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    partial class BoardistContextModelSnapshot : ModelSnapshot
+    [Migration("20190219074915_AddCategoryRelationships")]
+    partial class AddCategoryRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -74,8 +75,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int>("MinPlayers");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.Property<int?>("PerPlayerDuration");
 
@@ -213,33 +213,6 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasIndex("IllustratorId");
 
                     b.ToTable("GameIllustrator");
-
-                    b.HasData(
-                        new
-                        {
-                            GameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
-                            IllustratorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50d")
-                        },
-                        new
-                        {
-                            GameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
-                            IllustratorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50e")
-                        },
-                        new
-                        {
-                            GameId = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
-                            IllustratorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50d")
-                        },
-                        new
-                        {
-                            GameId = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
-                            IllustratorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50e")
-                        },
-                        new
-                        {
-                            GameId = new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"),
-                            IllustratorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50e")
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Person", b =>
@@ -247,11 +220,9 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(250);
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(250);
+                    b.Property<string>("LastName");
 
                     b.HasKey("Id");
 
@@ -289,8 +260,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(250);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
