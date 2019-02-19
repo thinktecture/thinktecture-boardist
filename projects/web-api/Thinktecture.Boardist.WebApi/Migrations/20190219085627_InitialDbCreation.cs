@@ -8,12 +8,24 @@ namespace Thinktecture.Boardist.WebApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    FirstName = table.Column<string>(maxLength: 250, nullable: true),
+                    LastName = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,7 +37,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,7 +49,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
                     MinPlayers = table.Column<int>(nullable: false),
                     MaxPlayers = table.Column<int>(nullable: false),
                     MinDuration = table.Column<int>(nullable: true),
@@ -66,25 +78,6 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    GameId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GameAuthor",
                 columns: table => new
                 {
@@ -102,6 +95,30 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GameAuthor_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameCategory",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameCategory", x => new { x.GameId, x.CategoryId });
+                    table.ForeignKey(
+                        name: "FK_GameCategory_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameCategory_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "Id",
@@ -132,63 +149,15 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Persons",
-                columns: new[] { "Id", "FirstName", "LastName" },
-                values: new object[,]
-                {
-                    { new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2"), "Antoine", "Bauza" },
-                    { new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c"), "Menzel", "Michael" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Publishers",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897"), "Asmodee" },
-                    { new Guid("579176ab-5eaa-484b-87fb-33806252c214"), "Kosmos" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "Id", "BuyDate", "BuyPrice", "MainGameId", "MaxDuration", "MaxPlayers", "MinDuration", "MinPlayers", "Name", "PerPlayerDuration", "PublisherId" },
-                values: new object[] { new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"), null, null, null, null, 7, null, 3, "7 Wonders", 40, new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897") });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "Id", "BuyDate", "BuyPrice", "MainGameId", "MaxDuration", "MaxPlayers", "MinDuration", "MinPlayers", "Name", "PerPlayerDuration", "PublisherId" },
-                values: new object[] { new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"), null, null, null, null, 4, null, 2, "Die Legenden von Andor", 90, new Guid("579176ab-5eaa-484b-87fb-33806252c214") });
-
-            migrationBuilder.InsertData(
-                table: "GameAuthor",
-                columns: new[] { "GameId", "AuthorId" },
-                values: new object[] { new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"), new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2") });
-
-            migrationBuilder.InsertData(
-                table: "GameAuthor",
-                columns: new[] { "GameId", "AuthorId" },
-                values: new object[] { new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"), new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c") });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "Id", "BuyDate", "BuyPrice", "MainGameId", "MaxDuration", "MaxPlayers", "MinDuration", "MinPlayers", "Name", "PerPlayerDuration", "PublisherId" },
-                values: new object[] { new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"), null, null, new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"), null, 7, null, 2, "7 Wonders - Babel", 40, new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897") });
-
-            migrationBuilder.InsertData(
-                table: "GameAuthor",
-                columns: new[] { "GameId", "AuthorId" },
-                values: new object[] { new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"), new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2") });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_GameId",
-                table: "Categories",
-                column: "GameId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_GameAuthor_AuthorId",
                 table: "GameAuthor",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameCategory_CategoryId",
+                table: "GameCategory",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameIllustrator_IllustratorId",
@@ -198,9 +167,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Games_MainGameId",
                 table: "Games",
-                column: "MainGameId",
-                unique: true,
-                filter: "[MainGameId] IS NOT NULL");
+                column: "MainGameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_PublisherId",
@@ -211,13 +178,16 @@ namespace Thinktecture.Boardist.WebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "GameAuthor");
 
             migrationBuilder.DropTable(
+                name: "GameCategory");
+
+            migrationBuilder.DropTable(
                 name: "GameIllustrator");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Games");

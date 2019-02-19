@@ -10,8 +10,8 @@ using Thinktecture.Boardist.WebApi.Database;
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    [Migration("20190219074645_JoinTableForGameCategory")]
-    partial class JoinTableForGameCategory
+    [Migration("20190219085627_InitialDbCreation")]
+    partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,33 +26,12 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("23d3a212-4996-4fe2-a3fa-d9fe8b975952"),
-                            Name = "Rollenspiel"
-                        },
-                        new
-                        {
-                            Id = new Guid("75590c0d-46c6-4db3-a772-6614b6354c71"),
-                            Name = "Card Game"
-                        },
-                        new
-                        {
-                            Id = new Guid("631caec4-088d-4cce-baa8-3356302b76da"),
-                            Name = "City Building"
-                        },
-                        new
-                        {
-                            Id = new Guid("537d56da-6a38-4da8-b872-ec462d5ef512"),
-                            Name = "Civilization"
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Game", b =>
@@ -75,7 +54,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int>("MinPlayers");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(250);
 
                     b.Property<int?>("PerPlayerDuration");
 
@@ -83,43 +63,11 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MainGameId")
-                        .IsUnique()
-                        .HasFilter("[MainGameId] IS NOT NULL");
+                    b.HasIndex("MainGameId");
 
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Games");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
-                            MaxPlayers = 7,
-                            MinPlayers = 3,
-                            Name = "7 Wonders",
-                            PerPlayerDuration = 40,
-                            PublisherId = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897")
-                        },
-                        new
-                        {
-                            Id = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
-                            MainGameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
-                            MaxPlayers = 7,
-                            MinPlayers = 2,
-                            Name = "7 Wonders - Babel",
-                            PerPlayerDuration = 40,
-                            PublisherId = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897")
-                        },
-                        new
-                        {
-                            Id = new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"),
-                            MaxPlayers = 4,
-                            MinPlayers = 2,
-                            Name = "Die Legenden von Andor",
-                            PerPlayerDuration = 90,
-                            PublisherId = new Guid("579176ab-5eaa-484b-87fb-33806252c214")
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameAuthor", b =>
@@ -133,23 +81,6 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("GameAuthor");
-
-                    b.HasData(
-                        new
-                        {
-                            GameId = new Guid("7586c43c-ef14-499c-996b-05ad0ddecc67"),
-                            AuthorId = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2")
-                        },
-                        new
-                        {
-                            GameId = new Guid("0dc94f91-dc0d-4071-91f1-ff67c80cda3a"),
-                            AuthorId = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2")
-                        },
-                        new
-                        {
-                            GameId = new Guid("7e677287-e070-4ffb-b102-b45f3aeff158"),
-                            AuthorId = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c")
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameCategory", b =>
@@ -183,39 +114,15 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(250);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6d6e4795-fd8d-4630-add0-eb80cc2c7fb2"),
-                            FirstName = "Antoine",
-                            LastName = "Bauza"
-                        },
-                        new
-                        {
-                            Id = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50c"),
-                            FirstName = "Menzel",
-                            LastName = "Michael"
-                        },
-                        new
-                        {
-                            Id = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50d"),
-                            FirstName = "Grönemeyer",
-                            LastName = "Herbert"
-                        },
-                        new
-                        {
-                            Id = new Guid("2202fe49-34ed-4e0e-9ffc-7e9ff8aca50e"),
-                            FirstName = "Löhr",
-                            LastName = "Lucialla"
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Publisher", b =>
@@ -223,30 +130,19 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.ToTable("Publishers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("e6237d73-007a-4aa5-b068-bc909f0f9897"),
-                            Name = "Asmodee"
-                        },
-                        new
-                        {
-                            Id = new Guid("579176ab-5eaa-484b-87fb-33806252c214"),
-                            Name = "Kosmos"
-                        });
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Game", b =>
                 {
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Game", "MainGame")
-                        .WithOne()
-                        .HasForeignKey("Thinktecture.Boardist.WebApi.Database.Models.Game", "MainGameId");
+                        .WithMany()
+                        .HasForeignKey("MainGameId");
 
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Publisher", "Publisher")
                         .WithMany()
