@@ -22,6 +22,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
+import {PublisherComponent} from './components/publisher/publisher.component';
+import {PublishersComponent} from './components/publishers/publishers.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
 
@@ -32,6 +34,8 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     GameComponent,
     SpinnerComponent,
     NumbersPipe,
+    PublishersComponent,
+    PublisherComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +65,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
   bootstrap: [AppComponent],
   entryComponents: [
     GameComponent,
+    PublisherComponent,
   ],
 })
 export class AppModule {
