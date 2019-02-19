@@ -9,12 +9,12 @@ using Thinktecture.Boardist.WebApi.DTOs;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
-  public class PublisherService
+  public class PublishersService
   {
     private readonly IMapper _mapper;
     private readonly BoardistContext _boardistContext;
 
-    public PublisherService(IMapper mapper, BoardistContext boardistContext)
+    public PublishersService(IMapper mapper, BoardistContext boardistContext)
     {
       _mapper = mapper;
       _boardistContext = boardistContext;

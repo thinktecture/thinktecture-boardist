@@ -7,25 +7,25 @@ using Thinktecture.Boardist.WebApi.Services;
 namespace Thinktecture.Boardist.WebApi.Controllers
 {
   [Route("api/[controller]")]
-  public class PersonController : ControllerBase
+  public class PersonsController : ControllerBase
   {
-    private readonly PersonService _personService;
+    private readonly PersonsService _personsService;
 
-    public PersonController(PersonService personService)
+    public PersonsController(PersonsService personsService)
     {
-      _personService = personService;
+      _personsService = personsService;
     }
 
     [HttpGet]
     public async Task<ActionResult<PersonDto[]>> ListAsync()
     {
-      return Ok(await _personService.GetAllAsync());
+      return Ok(await _personsService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<PersonDto>> SingleAsync(Guid id)
     {
-      var result = await _personService.GetAsync(id);
+      var result = await _personsService.GetAsync(id);
 
       if (result == null)
       {
@@ -38,13 +38,13 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpPost]
     public async Task<ActionResult<PersonDto>> CreateAsync([FromBody] PersonDto person)
     {
-      return Ok(await _personService.CreateAsync(person));
+      return Ok(await _personsService.CreateAsync(person));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-      if (await _personService.DeleteAsync(id))
+      if (await _personsService.DeleteAsync(id))
       {
         return Ok();
       }
@@ -55,7 +55,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpPut]
     public async Task<ActionResult<PersonDto>> UpdateAsync([FromBody] PersonDto person)
     {
-      await _personService.UpdateAsync(person);
+      await _personsService.UpdateAsync(person);
       return Ok();
     }
   }

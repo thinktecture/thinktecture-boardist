@@ -7,25 +7,25 @@ using Thinktecture.Boardist.WebApi.Services;
 namespace Thinktecture.Boardist.WebApi.Controllers
 {
   [Route("api/[controller]")]
-  public class CategoryController : ControllerBase
+  public class CategoriesController : ControllerBase
   {
-    private readonly CategoryService _categoryService;
+    private readonly CategoriesService _categoriesService;
 
-    public CategoryController(CategoryService categoryService)
+    public CategoriesController(CategoriesService categoriesService)
     {
-      _categoryService = categoryService;
+      _categoriesService = categoriesService;
     }
 
     [HttpGet]
     public async Task<ActionResult<CategoryDto[]>> ListAsync()
     {
-      return Ok(await _categoryService.GetAllAsync());
+      return Ok(await _categoriesService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoryDto>> SingleAsync(Guid id)
     {
-      var result = await _categoryService.GetAsync(id);
+      var result = await _categoriesService.GetAsync(id);
 
       if (result == null)
       {
@@ -38,13 +38,13 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpPost]
     public async Task<ActionResult<CategoryDto>> CreateAsync([FromBody] CategoryDto category)
     {
-      return Ok(await _categoryService.CreateAsync(category));
+      return Ok(await _categoriesService.CreateAsync(category));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-      if (await _categoryService.DeleteAsync(id))
+      if (await _categoriesService.DeleteAsync(id))
       {
         return Ok();
       }
@@ -55,7 +55,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpPut]
     public async Task<ActionResult<CategoryDto>> UpdateAsync([FromBody] CategoryDto category)
     {
-      await _categoryService.UpdateAsync(category);
+      await _categoriesService.UpdateAsync(category);
       return Ok();
     }
   }

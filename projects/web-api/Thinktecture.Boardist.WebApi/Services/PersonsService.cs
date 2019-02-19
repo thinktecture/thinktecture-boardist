@@ -9,12 +9,12 @@ using Thinktecture.Boardist.WebApi.DTOs;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
-  public class PersonService
+  public class PersonsService
   {
     private readonly IMapper _mapper;
     private readonly BoardistContext _boardistContext;
 
-    public PersonService(IMapper mapper, BoardistContext boardistContext)
+    public PersonsService(IMapper mapper, BoardistContext boardistContext)
     {
       _mapper = mapper;
       _boardistContext = boardistContext;
