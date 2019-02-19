@@ -65,11 +65,13 @@ namespace Thinktecture.Boardist.WebApi.Services
         .Include(p => p.Authors)
         .Include(p => p.Illustrators)
         .Include(p => p.Categories)
+        .Include(p => p.Mechanics)
         .SingleOrDefaultAsync(g => g.Id == game.Id);
             
       dbGame.Authors.Clear();
       dbGame.Illustrators.Clear();
       dbGame.Categories.Clear();
+      dbGame.Mechanics.Clear();
       
       _mapper.Map(game, dbGame, typeof(GameDto), typeof(Game));
 

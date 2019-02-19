@@ -31,6 +31,7 @@ namespace Thinktecture.Boardist.WebApi.Database
       CreateGameCategoryModel(modelBuilder);
       CreatePersonModel(modelBuilder);
       CreatePublisherModel(modelBuilder);
+      CreateGameMechanicModel(modelBuilder);
     }
 
     private static void CreatePublisherModel(ModelBuilder modelBuilder)
@@ -89,6 +90,21 @@ namespace Thinktecture.Boardist.WebApi.Database
         .HasOne(p => p.Author)
         .WithMany()
         .HasForeignKey(p => p.AuthorId);
+    }
+    
+    private static void CreateGameMechanicModel(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<GameMechanic>().HasKey(p => new {p.GameId, p.MechanicId});
+
+      modelBuilder.Entity<GameMechanic>()
+        .HasOne(p => p.Game)
+        .WithMany(p => p.Mechanics)
+        .HasForeignKey(p => p.GameId);
+
+      modelBuilder.Entity<GameMechanic>()
+        .HasOne(p => p.Mechanic)
+        .WithMany()
+        .HasForeignKey(p => p.MechanicId);
     }
 
     private static void CreateGameModel(ModelBuilder modelBuilder)

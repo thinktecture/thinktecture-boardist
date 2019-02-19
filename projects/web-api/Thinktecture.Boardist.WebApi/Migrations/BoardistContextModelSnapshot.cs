@@ -50,6 +50,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int>("MaxPlayers");
 
+                    b.Property<int>("MinAge");
+
                     b.Property<int?>("MinDuration");
 
                     b.Property<int>("MinPlayers");
@@ -57,9 +59,9 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(250);
 
-                    b.Property<int?>("PerPlayerDuration");
-
                     b.Property<Guid>("PublisherId");
+
+                    b.Property<int>("YearPublished");
 
                     b.HasKey("Id");
 
@@ -107,6 +109,31 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasIndex("IllustratorId");
 
                     b.ToTable("GameIllustrator");
+                });
+
+            modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameMechanic", b =>
+                {
+                    b.Property<Guid>("GameId");
+
+                    b.Property<Guid>("MechanicId");
+
+                    b.HasKey("GameId", "MechanicId");
+
+                    b.HasIndex("MechanicId");
+
+                    b.ToTable("GameMechanic");
+                });
+
+            modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Mechanic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mechanic");
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Person", b =>
@@ -186,6 +213,19 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Person", "Illustrator")
                         .WithMany()
                         .HasForeignKey("IllustratorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameMechanic", b =>
+                {
+                    b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Game", "Game")
+                        .WithMany("Mechanics")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Mechanic", "Mechanic")
+                        .WithMany()
+                        .HasForeignKey("MechanicId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
