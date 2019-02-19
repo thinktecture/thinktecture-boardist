@@ -1,10 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import * as moment from 'moment';
 import {Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
-import {Game, GameDetail} from '../models/game';
+import {Game} from '../models/game';
 
 @Injectable({
   providedIn: 'root',
@@ -13,17 +11,15 @@ export class GamesService {
   constructor(private readonly httpClient: HttpClient) {
   }
 
-  getAll$(): Observable<Game[]> {
-    return this.httpClient.get<Game[]>(`${environment.baseApiUrl}games`);
+  getAll(expansions = true): Observable<Game[]> {
+    return this.httpClient.get<Game[]>(`${environment.baseApiUrl}games`, { params: { expansions: expansions.toString() } });
   }
 
-  get$(id: string): Observable<GameDetail> {
-    return this.httpClient.get<GameDetail>(`${environment.baseApiUrl}games/${id}`).pipe(
-      tap(game => game.buyDate = game.buyDate && moment(game.buyDate)),
-    );
-  }
-
-  save$(game: GameDetail): Observable<void> {
+  save(game: Game): Observable<void> {
     return this.httpClient[game.id ? 'put' : 'post']<void>(`${environment.baseApiUrl}games`, game);
+  }
+
+  import(id: string): Observable<Game | null> {
+    return this.httpClient.post<Game | null>(`${environment.baseApiUrl}games/${id}/import`, null);
   }
 }

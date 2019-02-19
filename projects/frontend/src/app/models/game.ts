@@ -7,16 +7,14 @@ export interface Game {
   name: string;
   minPlayers: number;
   maxPlayers: number;
-  mainGameId?: string;
-}
-
-export interface GameDetail extends Game {
   minDuration?: number;
   maxDuration?: number;
+  minAge?: number;
   buyDate?: Moment;
   buyPrice?: number;
   publisherId: string;
   boardGameGeekId?: number;
+  mainGameId?: string;
 
   categories: Category[];
   authors: Person[];

@@ -1,9 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {filter, switchMap} from 'rxjs/operators';
 import {Game} from '../../models/game';
 import {GamesService} from '../../services/games.service';
+import {AbstractOverview} from '../abstract-overview';
 import {GameComponent} from '../game/game.component';
 
 @Component({
@@ -12,23 +11,8 @@ import {GameComponent} from '../game/game.component';
   styleUrls: ['./games.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GamesComponent implements OnInit {
-  private readonly refresh = new BehaviorSubject<null>(null);
-
-  games$: Observable<Game[]>;
-
-  constructor(private readonly games: GamesService, private readonly matDialog: MatDialog) {
-  }
-
-  ngOnInit(): void {
-    this.games$ = this.refresh.pipe(
-      switchMap(() => this.games.getAll$()),
-    );
-  }
-
-  show(id: string): void {
-    this.matDialog.open(GameComponent, { data: id }).afterClosed().pipe(
-      filter(refresh => refresh),
-    ).subscribe(() => this.refresh.next(null));
+export class GamesComponent extends AbstractOverview<Game> {
+  constructor(games: GamesService, matDialog: MatDialog) {
+    super(() => games.getAll(), matDialog, GameComponent);
   }
 }

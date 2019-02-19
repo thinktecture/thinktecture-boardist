@@ -11,11 +11,11 @@ export class PublishersService {
   constructor(private readonly httpClient: HttpClient) {
   }
 
-  getAll$(): Observable<Publisher[]> {
+  getAll(): Observable<Publisher[]> {
     return this.httpClient.get<Publisher[]>(`${environment.baseApiUrl}publishers`);
   }
 
-  get$(id: string): Observable<Publisher> {
-    return this.httpClient.get<Publisher>(`${environment.baseApiUrl}publishers/${id}`);
+  save(publisher: Publisher): Observable<void> {
+    return this.httpClient[publisher.id ? 'put' : 'post']<void>(`${environment.baseApiUrl}publishers`, publisher);
   }
 }

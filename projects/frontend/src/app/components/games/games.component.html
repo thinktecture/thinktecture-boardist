@@ -1,4 +1,4 @@
-<table *ngIf="games$ | async as games; else loading" mat-table [dataSource]="games">
+<table *ngIf="items$ | async as games; else loading" mat-table [dataSource]="games">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Name</th>
     <td mat-cell *matCellDef="let game">{{ game.name }}</td>
@@ -19,7 +19,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="['name', 'minPlayers', 'maxPlayers', 'isExtension']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension']" (click)="show(row.id)"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension']" (click)="show(row)"></tr>
 </table>
 
 <ng-template #loading>

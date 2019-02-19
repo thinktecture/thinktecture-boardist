@@ -2,7 +2,7 @@
   <h2 mat-dialog-title>Board game</h2>
 
   <mat-dialog-content>
-    <ng-container *ngIf="game$ | async; else loading">
+    <ng-container *ngIf="data$ | async as context; else loading">
       <mat-form-field>
         <mat-label>Board game name</mat-label>
         <input type="text" matInput formControlName="name">
@@ -47,41 +47,42 @@
         <mat-label>Expansion to</mat-label>
         <mat-select formControlName="mainGameId">
           <mat-option [value]="null"></mat-option>
-          <mat-option *ngFor="let game of games$ | async" [value]="game.id">{{ game.name }}</mat-option>
+          <mat-option *ngFor="let game of context.games" [value]="game.id">{{ game.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Publisher</mat-label>
         <mat-select formControlName="publisherId">
-          <mat-option *ngFor="let publisher of publishers$ | async" [value]="publisher.id">{{ publisher.name }}</mat-option>
+          <mat-option *ngFor="let publisher of context.publishers" [value]="publisher.id">{{ publisher.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>BoardGameGeek Id</mat-label>
+        <mat-label>BoardGameGeek™ Id</mat-label>
         <input type="text" matInput formControlName="boardGameGeekId">
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Authors</mat-label>
         <mat-select formControlName="authors" multiple>
-          <mat-option *ngFor="let person of persons$ | async" [value]="person.id">{{ person.name }}</mat-option>
+          <mat-option *ngFor="let person of context.persons" [value]="person.id">{{ person.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Illustrators</mat-label>
         <mat-select formControlName="illustrators" multiple>
-          <mat-option *ngFor="let person of persons$ | async" [value]="person.id">{{ person.name }}</mat-option>
+          <mat-option *ngFor="let person of context.persons" [value]="person.id">{{ person.name }}</mat-option>
         </mat-select>
       </mat-form-field>
     </ng-container>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button type="submit" mat-button color="primary" [disabled]="form.invalid">Save</button>
+    <button mat-flat-button type="button" class="import" color="accent" (click)="import()">Import from BoardGameGeek™</button>
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid">Save</button>
   </mat-dialog-actions>
 </form>
 
