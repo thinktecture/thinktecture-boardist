@@ -14,6 +14,7 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
     public int? PerPlayerDuration { get; set; }
     public decimal? BuyPrice { get; set; }
     public DateTime? BuyDate { get; set; }
+    public int? BoardGameGeekId { get; set; }
 
     public Guid? MainGameId { get; set; }
     public Game MainGame { get; set; }
