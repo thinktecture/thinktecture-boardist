@@ -20,7 +20,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mechanic",
+                name: "Mechanics",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -28,7 +28,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mechanic", x => x.Id);
+                    table.PrimaryKey("PK_Mechanics", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,9 +180,9 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GameMechanic_Mechanic_MechanicId",
+                        name: "FK_GameMechanic_Mechanics_MechanicId",
                         column: x => x.MechanicId,
-                        principalTable: "Mechanic",
+                        principalTable: "Mechanics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -242,7 +242,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "Mechanic");
+                name: "Mechanics");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

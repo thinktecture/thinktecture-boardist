@@ -30,6 +30,7 @@ namespace Thinktecture.Boardist.WebApi
       services.AddTransient<PublishersService>();
       services.AddTransient<CategoriesService>();
       services.AddTransient<PersonsService>();
+      services.AddTransient<MechanicsService>();
 
       services.AddMvc()
         .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);

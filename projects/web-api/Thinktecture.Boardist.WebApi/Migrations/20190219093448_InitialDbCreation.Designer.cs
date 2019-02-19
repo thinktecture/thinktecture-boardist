@@ -10,7 +10,7 @@ using Thinktecture.Boardist.WebApi.Database;
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    [Migration("20190219092636_InitialDbCreation")]
+    [Migration("20190219093448_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,7 +135,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Mechanic");
+                    b.ToTable("Mechanics");
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Person", b =>

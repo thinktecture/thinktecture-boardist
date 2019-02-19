@@ -9,11 +9,12 @@ namespace Thinktecture.Boardist.WebApi.Database
   public class BoardistContext : DbContext
   {
     private const int MAX_STRING_LENGTH = 250;
-    
+
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Person> Persons { get; set; }
     public DbSet<Game> Games { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Mechanic> Mechanics { get; set; }
 
     public BoardistContext(DbContextOptions<BoardistContext> options)
       : base(options)
@@ -91,7 +92,7 @@ namespace Thinktecture.Boardist.WebApi.Database
         .WithMany()
         .HasForeignKey(p => p.AuthorId);
     }
-    
+
     private static void CreateGameMechanicModel(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<GameMechanic>().HasKey(p => new {p.GameId, p.MechanicId});

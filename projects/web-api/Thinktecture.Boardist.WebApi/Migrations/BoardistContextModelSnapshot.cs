@@ -133,7 +133,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Mechanic");
+                    b.ToTable("Mechanics");
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.Person", b =>
