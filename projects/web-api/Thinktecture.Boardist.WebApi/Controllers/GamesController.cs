@@ -51,5 +51,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return NotFound();
     }
+    
+    [HttpPut]
+    public async Task<ActionResult<GameDto>> UpdateAsync([FromBody] GameDto game)
+    {
+      await _gamesService.UpdateAsync(game);
+      return Ok();
+    }
   }
 }

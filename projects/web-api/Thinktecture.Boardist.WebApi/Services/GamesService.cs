@@ -58,5 +58,24 @@ namespace Thinktecture.Boardist.WebApi.Services
         return false;
       }
     }
+    
+    public async Task<GameDto> UpdateAsync(GameDto game)
+    {
+      var dbGame = await _boardistContext.Games
+        .Include(p => p.Authors)
+        .Include(p => p.Illustrators)
+        .Include(p => p.Categories)
+        .SingleOrDefaultAsync(g => g.Id == game.Id);
+            
+      dbGame.Authors.Clear();
+      dbGame.Illustrators.Clear();
+      dbGame.Categories.Clear();
+      
+      _mapper.Map(game, dbGame, typeof(GameDto), typeof(Game));
+
+      await _boardistContext.SaveChangesAsync();
+
+      return _mapper.Map<Game, GameDto>(dbGame);
+    }
   }
 }
