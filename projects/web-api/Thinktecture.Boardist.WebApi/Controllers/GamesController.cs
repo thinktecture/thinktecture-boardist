@@ -10,10 +10,18 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   public class GamesController : ControllerBase
   {
     private readonly GamesService _gamesService;
+    private readonly BoardGameGeekImporter _importer;
 
-    public GamesController(GamesService gamesService)
+    public GamesController(GamesService gamesService, BoardGameGeekImporter importer)
     {
       _gamesService = gamesService;
+      _importer = importer;
+    }
+    
+    [HttpPost("{id}/import")]
+    public async Task<ActionResult<bool>> Import(Guid id)
+    {
+      return Ok(await _importer.Import(id));
     }
 
     [HttpGet]

@@ -32,7 +32,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PersonDto> CreateAsync(PersonDto person)
     {
-      var dbPerson = new Person() {FirstName = person.FirstName, LastName = person.LastName, Id = Guid.NewGuid()};
+      var dbPerson = new Person() {Name = person.Name, Id = Guid.NewGuid()};
 
       await _boardistContext.Persons.AddAsync(dbPerson);
       await _boardistContext.SaveChangesAsync();
@@ -64,8 +64,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       _boardistContext.Attach(dbPerson);
 
-      dbPerson.FirstName = person.FirstName;
-      dbPerson.LastName = person.LastName;
+      dbPerson.Name = person.Name;
 
       await _boardistContext.SaveChangesAsync();
 

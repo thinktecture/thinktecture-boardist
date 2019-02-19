@@ -30,9 +30,9 @@ namespace Thinktecture.Boardist.WebApi.Services
       return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
-    public async Task<CategoryDto> CreateAsync(CategoryDto publisher)
+    public async Task<CategoryDto> CreateAsync(CategoryDto category)
     {
-      var dbCategory = new Category() {Name = publisher.Name, Id = Guid.NewGuid()};
+      var dbCategory = new Category() {Name = category.Name, Id = Guid.NewGuid(), BoardGameGeekId = category.BoardGameGeekId};
 
       await _boardistContext.Categories.AddAsync(dbCategory);
       await _boardistContext.SaveChangesAsync();
@@ -58,13 +58,14 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task<CategoryDto> UpdateAsync(CategoryDto publisher)
+    public async Task<CategoryDto> UpdateAsync(CategoryDto category)
     {
-      var dbCategory = new Category() {Id = publisher.Id};
+      var dbCategory = new Category() {Id = category.Id};
 
       _boardistContext.Attach(dbCategory);
 
-      dbCategory.Name = publisher.Name;
+      dbCategory.Name = category.Name;
+      dbCategory.BoardGameGeekId = category.BoardGameGeekId;
 
       await _boardistContext.SaveChangesAsync();
 

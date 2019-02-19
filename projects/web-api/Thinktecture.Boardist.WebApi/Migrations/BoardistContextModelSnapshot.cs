@@ -24,6 +24,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("BoardGameGeekId");
+
                     b.Property<string>("Name")
                         .HasMaxLength(250);
 
@@ -127,6 +129,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("BoardGameGeekId");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
@@ -139,10 +143,9 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(250);
+                    b.Property<int?>("BoardGameGeekId");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -154,6 +157,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BoardGameGeekId");
 
                     b.Property<string>("Name")
                         .HasMaxLength(250);

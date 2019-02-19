@@ -3,208 +3,223 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
-  public partial class InitialDbCreation : Migration
-  {
-    protected override void Up(MigrationBuilder migrationBuilder)
+    public partial class InitialDbCreation : Migration
     {
-      migrationBuilder.CreateTable(
-        name: "Categories",
-        columns: table => new
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
-          Id = table.Column<Guid>(nullable: false),
-          Name = table.Column<string>(maxLength: 250, nullable: true)
-        },
-        constraints: table => { table.PrimaryKey("PK_Categories", x => x.Id); });
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
+                    BoardGameGeekId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "Mechanics",
-        columns: table => new
-        {
-          Id = table.Column<Guid>(nullable: false),
-          Name = table.Column<string>(nullable: true)
-        },
-        constraints: table => { table.PrimaryKey("PK_Mechanics", x => x.Id); });
+            migrationBuilder.CreateTable(
+                name: "Mechanics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    BoardGameGeekId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mechanics", x => x.Id);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "Persons",
-        columns: table => new
-        {
-          Id = table.Column<Guid>(nullable: false),
-          FirstName = table.Column<string>(maxLength: 250, nullable: true),
-          LastName = table.Column<string>(maxLength: 250, nullable: true)
-        },
-        constraints: table => { table.PrimaryKey("PK_Persons", x => x.Id); });
+            migrationBuilder.CreateTable(
+                name: "Persons",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
+                    BoardGameGeekId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Persons", x => x.Id);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "Publishers",
-        columns: table => new
-        {
-          Id = table.Column<Guid>(nullable: false),
-          Name = table.Column<string>(maxLength: 250, nullable: true)
-        },
-        constraints: table => { table.PrimaryKey("PK_Publishers", x => x.Id); });
+            migrationBuilder.CreateTable(
+                name: "Publishers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
+                    BoardGameGeekId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Publishers", x => x.Id);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "Games",
-        columns: table => new
-        {
-          Id = table.Column<Guid>(nullable: false),
-          Name = table.Column<string>(maxLength: 250, nullable: true),
-          MinPlayers = table.Column<int>(nullable: false),
-          MaxPlayers = table.Column<int>(nullable: false),
-          MinAge = table.Column<int>(nullable: false),
-          MinDuration = table.Column<int>(nullable: true),
-          MaxDuration = table.Column<int>(nullable: true),
-          BuyPrice = table.Column<decimal>(type: "decimal(3,2)", nullable: true),
-          BuyDate = table.Column<DateTime>(nullable: true),
-          BoardGameGeekId = table.Column<int>(nullable: true),
-          MainGameId = table.Column<Guid>(nullable: true),
-          PublisherId = table.Column<Guid>(nullable: false)
-        },
-        constraints: table =>
-        {
-          table.PrimaryKey("PK_Games", x => x.Id);
-          table.ForeignKey(
-            name: "FK_Games_Games_MainGameId",
-            column: x => x.MainGameId,
-            principalTable: "Games",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Restrict);
-          table.ForeignKey(
-            name: "FK_Games_Publishers_PublisherId",
-            column: x => x.PublisherId,
-            principalTable: "Publishers",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-        });
+            migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
+                    MinPlayers = table.Column<int>(nullable: false),
+                    MaxPlayers = table.Column<int>(nullable: false),
+                    MinAge = table.Column<int>(nullable: false),
+                    MinDuration = table.Column<int>(nullable: true),
+                    MaxDuration = table.Column<int>(nullable: true),
+                    BuyPrice = table.Column<decimal>(type: "decimal(3,2)", nullable: true),
+                    BuyDate = table.Column<DateTime>(nullable: true),
+                    BoardGameGeekId = table.Column<int>(nullable: true),
+                    MainGameId = table.Column<Guid>(nullable: true),
+                    PublisherId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Games_MainGameId",
+                        column: x => x.MainGameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Games_Publishers_PublisherId",
+                        column: x => x.PublisherId,
+                        principalTable: "Publishers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "GameAuthor",
-        columns: table => new
-        {
-          GameId = table.Column<Guid>(nullable: false),
-          AuthorId = table.Column<Guid>(nullable: false)
-        },
-        constraints: table =>
-        {
-          table.PrimaryKey("PK_GameAuthor", x => new {x.GameId, x.AuthorId});
-          table.ForeignKey(
-            name: "FK_GameAuthor_Persons_AuthorId",
-            column: x => x.AuthorId,
-            principalTable: "Persons",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-          table.ForeignKey(
-            name: "FK_GameAuthor_Games_GameId",
-            column: x => x.GameId,
-            principalTable: "Games",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-        });
+            migrationBuilder.CreateTable(
+                name: "GameAuthor",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(nullable: false),
+                    AuthorId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameAuthor", x => new { x.GameId, x.AuthorId });
+                    table.ForeignKey(
+                        name: "FK_GameAuthor_Persons_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameAuthor_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "GameCategory",
-        columns: table => new
-        {
-          GameId = table.Column<Guid>(nullable: false),
-          CategoryId = table.Column<Guid>(nullable: false)
-        },
-        constraints: table =>
-        {
-          table.PrimaryKey("PK_GameCategory", x => new {x.GameId, x.CategoryId});
-          table.ForeignKey(
-            name: "FK_GameCategory_Categories_CategoryId",
-            column: x => x.CategoryId,
-            principalTable: "Categories",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-          table.ForeignKey(
-            name: "FK_GameCategory_Games_GameId",
-            column: x => x.GameId,
-            principalTable: "Games",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-        });
+            migrationBuilder.CreateTable(
+                name: "GameCategory",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameCategory", x => new { x.GameId, x.CategoryId });
+                    table.ForeignKey(
+                        name: "FK_GameCategory_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameCategory_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "GameIllustrator",
-        columns: table => new
-        {
-          GameId = table.Column<Guid>(nullable: false),
-          IllustratorId = table.Column<Guid>(nullable: false)
-        },
-        constraints: table =>
-        {
-          table.PrimaryKey("PK_GameIllustrator", x => new {x.GameId, x.IllustratorId});
-          table.ForeignKey(
-            name: "FK_GameIllustrator_Games_GameId",
-            column: x => x.GameId,
-            principalTable: "Games",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-          table.ForeignKey(
-            name: "FK_GameIllustrator_Persons_IllustratorId",
-            column: x => x.IllustratorId,
-            principalTable: "Persons",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-        });
+            migrationBuilder.CreateTable(
+                name: "GameIllustrator",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(nullable: false),
+                    IllustratorId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameIllustrator", x => new { x.GameId, x.IllustratorId });
+                    table.ForeignKey(
+                        name: "FK_GameIllustrator_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameIllustrator_Persons_IllustratorId",
+                        column: x => x.IllustratorId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-      migrationBuilder.CreateTable(
-        name: "GameMechanic",
-        columns: table => new
-        {
-          GameId = table.Column<Guid>(nullable: false),
-          MechanicId = table.Column<Guid>(nullable: false)
-        },
-        constraints: table =>
-        {
-          table.PrimaryKey("PK_GameMechanic", x => new {x.GameId, x.MechanicId});
-          table.ForeignKey(
-            name: "FK_GameMechanic_Games_GameId",
-            column: x => x.GameId,
-            principalTable: "Games",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-          table.ForeignKey(
-            name: "FK_GameMechanic_Mechanics_MechanicId",
-            column: x => x.MechanicId,
-            principalTable: "Mechanics",
-            principalColumn: "Id",
-            onDelete: ReferentialAction.Cascade);
-        });
+            migrationBuilder.CreateTable(
+                name: "GameMechanic",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(nullable: false),
+                    MechanicId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameMechanic", x => new { x.GameId, x.MechanicId });
+                    table.ForeignKey(
+                        name: "FK_GameMechanic_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameMechanic_Mechanics_MechanicId",
+                        column: x => x.MechanicId,
+                        principalTable: "Mechanics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-      migrationBuilder.CreateIndex(
-        name: "IX_GameAuthor_AuthorId",
-        table: "GameAuthor",
-        column: "AuthorId");
+            migrationBuilder.CreateIndex(
+                name: "IX_GameAuthor_AuthorId",
+                table: "GameAuthor",
+                column: "AuthorId");
 
-      migrationBuilder.CreateIndex(
-        name: "IX_GameCategory_CategoryId",
-        table: "GameCategory",
-        column: "CategoryId");
+            migrationBuilder.CreateIndex(
+                name: "IX_GameCategory_CategoryId",
+                table: "GameCategory",
+                column: "CategoryId");
 
-      migrationBuilder.CreateIndex(
-        name: "IX_GameIllustrator_IllustratorId",
-        table: "GameIllustrator",
-        column: "IllustratorId");
+            migrationBuilder.CreateIndex(
+                name: "IX_GameIllustrator_IllustratorId",
+                table: "GameIllustrator",
+                column: "IllustratorId");
 
-      migrationBuilder.CreateIndex(
-        name: "IX_GameMechanic_MechanicId",
-        table: "GameMechanic",
-        column: "MechanicId");
+            migrationBuilder.CreateIndex(
+                name: "IX_GameMechanic_MechanicId",
+                table: "GameMechanic",
+                column: "MechanicId");
 
-      migrationBuilder.CreateIndex(
-        name: "IX_Games_MainGameId",
-        table: "Games",
-        column: "MainGameId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_MainGameId",
+                table: "Games",
+                column: "MainGameId");
 
-      migrationBuilder.CreateIndex(
-        name: "IX_Games_PublisherId",
-        table: "Games",
-        column: "PublisherId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_PublisherId",
+                table: "Games",
+                column: "PublisherId");
 
-      migrationBuilder.Sql(@"
+            migrationBuilder.Sql(@"
 INSERT INTO Publishers (Id, Name) VALUES ('68A28E87-170C-4AC6-A77F-75B49DE67452', 'Abacusspiele');
 INSERT INTO Publishers (Id, Name) VALUES ('FF19A341-8372-423A-B82F-2C36031681EA', 'Artipia Games');
 INSERT INTO Publishers (Id, Name) VALUES ('8C8C8781-4926-403B-86AC-A4B61975FE31', 'Asmodee');
@@ -228,7 +243,7 @@ INSERT INTO Publishers (Id, Name) VALUES ('579176AB-5EAA-484B-87FB-33806252C214'
 INSERT INTO Publishers (Id, Name) VALUES ('69209C44-22C9-40CE-AAF6-1E75C5A6C83E', 'WiWa Spiele');
 ");
 
-      migrationBuilder.Sql(@"
+            migrationBuilder.Sql(@"
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('322F3FCC-0D12-4D18-827F-1673BD6A1F5A', '7 Wonders', null, '8C8C8781-4926-403B-86AC-A4B61975FE31', 3, 7, 40, 40, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('0814C055-AD39-428A-B5E3-545C955D6FE8', '7 Wonders - Babel', '322F3FCC-0D12-4D18-827F-1673BD6A1F5A', '8C8C8781-4926-403B-86AC-A4B61975FE31', 2, 7, 40, 40, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('98634FC4-D569-4459-8503-FA3BDD377A42', '7 Wonders - Cities', '322F3FCC-0D12-4D18-827F-1673BD6A1F5A', '8C8C8781-4926-403B-86AC-A4B61975FE31', 2, 8, 40, 40, null, null, 0);
@@ -290,7 +305,7 @@ INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, Mi
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('A754D44B-EDD2-4586-B195-2F6F85DB92C6', 'Die blutige Herberge', null, '579176AB-5EAA-484B-87FB-33806252C214', 1, 4, 60, 60, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('64EDCCE8-11CC-4EAC-BA1A-138E2F9F99EB', 'Die Grimoire des Wahnsinns', null, '579176AB-5EAA-484B-87FB-33806252C214', 2, 5, 90, 90, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('56AEC2B6-B022-4A91-B58F-C4B05A6F0592', 'Die holde Isolde', null, '579176AB-5EAA-484B-87FB-33806252C214', 2, 5, 30, 30, null, null, 0);
-INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('0DCA2D1A-6845-4375-A488-C0E867EA90F8', 'Die Legenden von Andor', null, '72E8B7A0-1C25-4DEB-BD7E-2CB339DBC163', 2, 4, 90, 90, null, null, 0);
+INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge, BoardGameGeekId) VALUES ('0DCA2D1A-6845-4375-A488-C0E867EA90F8', 'Die Legenden von Andor', null, '72E8B7A0-1C25-4DEB-BD7E-2CB339DBC163', 2, 4, 90, 90, null, null, 0, 127398);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('1A76B5DD-B9E8-4B54-8A43-ACCE111605C2', 'Die Legenden von Andor - Chada und Thorn', '0DCA2D1A-6845-4375-A488-C0E867EA90F8', '72E8B7A0-1C25-4DEB-BD7E-2CB339DBC163', 2, 2, 45, 45, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('8F089DB6-1B79-4E1D-B022-96985CD9F18A', 'Die Legenden von Andor - Der Sternenschild', '0DCA2D1A-6845-4375-A488-C0E867EA90F8', '72E8B7A0-1C25-4DEB-BD7E-2CB339DBC163', 2, 4, 90, 90, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('D5E07C29-0992-4701-9412-D2B53449F4EE', 'Die Legenden von Andor - Die Reise in den Norden', '0DCA2D1A-6845-4375-A488-C0E867EA90F8', '72E8B7A0-1C25-4DEB-BD7E-2CB339DBC163', 2, 4, 60, 60, null, null, 0);
@@ -486,36 +501,36 @@ INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, Mi
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('CA97F406-4EC3-4EFD-B1A2-74DB3CDE1BE6', 'Zug um Zug - Deutschland', null, '38AAC893-67DE-4FCD-9DA3-E94BDC024DBE', 2, 5, 60, 60, null, null, 0);
 INSERT INTO Games (Id, Name, MainGameId, PublisherId, MinPlayers, MaxPlayers, MinDuration, MaxDuration, BuyPrice, BuyDate, MinAge) VALUES ('79F5544A-A0A1-46F8-AAF2-0EC2EE3FD146', 'Zug um Zug - Europa', null, '38AAC893-67DE-4FCD-9DA3-E94BDC024DBE', 2, 5, 60, 60, null, null, 0);
 ");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "GameAuthor");
+
+            migrationBuilder.DropTable(
+                name: "GameCategory");
+
+            migrationBuilder.DropTable(
+                name: "GameIllustrator");
+
+            migrationBuilder.DropTable(
+                name: "GameMechanic");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Persons");
+
+            migrationBuilder.DropTable(
+                name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "Mechanics");
+
+            migrationBuilder.DropTable(
+                name: "Publishers");
+        }
     }
-
-    protected override void Down(MigrationBuilder migrationBuilder)
-    {
-      migrationBuilder.DropTable(
-        name: "GameAuthor");
-
-      migrationBuilder.DropTable(
-        name: "GameCategory");
-
-      migrationBuilder.DropTable(
-        name: "GameIllustrator");
-
-      migrationBuilder.DropTable(
-        name: "GameMechanic");
-
-      migrationBuilder.DropTable(
-        name: "Categories");
-
-      migrationBuilder.DropTable(
-        name: "Persons");
-
-      migrationBuilder.DropTable(
-        name: "Games");
-
-      migrationBuilder.DropTable(
-        name: "Mechanics");
-
-      migrationBuilder.DropTable(
-        name: "Publishers");
-    }
-  }
 }

@@ -44,8 +44,7 @@ namespace Thinktecture.Boardist.WebApi.Database
     private static void CreatePersonModel(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<Person>().HasKey(p => p.Id);
-      modelBuilder.Entity<Person>().Property(p => p.FirstName).HasMaxLength(MAX_STRING_LENGTH);
-      modelBuilder.Entity<Person>().Property(p => p.LastName).HasMaxLength(MAX_STRING_LENGTH);
+      modelBuilder.Entity<Person>().Property(p => p.Name).HasMaxLength(MAX_STRING_LENGTH);
     }
 
     private static void CreateGameCategoryModel(ModelBuilder modelBuilder)

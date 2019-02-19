@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class Game
+  public class Game : IBoardGameGeekItem
   {
     public Guid Id { get; set; }
     public string Name { get; set; }
