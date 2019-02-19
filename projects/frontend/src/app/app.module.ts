@@ -22,8 +22,7 @@ import {AppComponent} from './app.component';
 import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
-import {DurationsPipe} from './pipes/durations.pipe';
-import {NumberOfPlayersPipe} from './pipes/number-of-players.pipe';
+import {NumbersPipe} from './pipes/numbers.pipe';
 
 @NgModule({
   declarations: [
@@ -31,8 +30,7 @@ import {NumberOfPlayersPipe} from './pipes/number-of-players.pipe';
     GamesComponent,
     GameComponent,
     SpinnerComponent,
-    NumberOfPlayersPipe,
-    DurationsPipe,
+    NumbersPipe,
   ],
   imports: [
     BrowserModule,
