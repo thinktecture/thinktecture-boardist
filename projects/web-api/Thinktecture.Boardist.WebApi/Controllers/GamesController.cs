@@ -17,9 +17,9 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<GameDto[]>> ListAsync()
+    public async Task<ActionResult<GameDto[]>> ListAsync(bool expansion = true)
     {
-      return Ok(await _gamesService.GetAllAsync());
+      return Ok(await _gamesService.GetAllAsync(expansion));
     }
 
     [HttpGet("{id}")]
