@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, switchMap} from 'rxjs/operators';
 import {Game} from '../../models/game';
 import {GamesService} from '../../services/games.service';
@@ -12,8 +12,7 @@ import {GameComponent} from '../game/game.component';
   styleUrls: ['./games.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GamesComponent implements OnInit, OnDestroy {
-  private subscription = Subscription.EMPTY;
+export class GamesComponent implements OnInit {
   private readonly refresh = new BehaviorSubject<null>(null);
 
   games$: Observable<Game[]>;
@@ -27,18 +26,8 @@ export class GamesComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  showGame(id: string): void {
-    this.subscription = this.matDialog.open(GameComponent, {
-      data: id,
-      closeOnNavigation: true,
-      disableClose: true,
-      width: '500px',
-      maxWidth: '90vw',
-    }).afterClosed().pipe(
+  show(id: string): void {
+    this.matDialog.open(GameComponent, { data: id }).afterClosed().pipe(
       filter(refresh => refresh),
     ).subscribe(() => this.refresh.next(null));
   }

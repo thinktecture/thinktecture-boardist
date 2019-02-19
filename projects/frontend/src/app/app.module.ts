@@ -2,6 +2,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MatButtonModule,
   MatDialogModule,
@@ -51,6 +52,10 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     MatFormFieldModule,
   ],
   providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { closeOnNavigation: true, disableClose: true, width: '500px', maxWidth: '90vw', hasBackdrop: true, autoFocus: true },
+    },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
   bootstrap: [AppComponent],

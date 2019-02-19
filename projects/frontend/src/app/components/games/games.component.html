@@ -19,7 +19,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="['name', 'minPlayers', 'maxPlayers', 'isExtension']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension']" (click)="showGame(row.id)"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension']" (click)="show(row.id)"></tr>
 </table>
 
 <ng-template #loading>
