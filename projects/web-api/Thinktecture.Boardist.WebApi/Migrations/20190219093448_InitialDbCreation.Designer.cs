@@ -63,8 +63,6 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<Guid>("PublisherId");
 
-                    b.Property<int>("YearPublished");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MainGameId");

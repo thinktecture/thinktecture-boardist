@@ -9,7 +9,6 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     public string Name { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
-    public int YearPublished { get; set; }
     public int MinAge { get; set; }
     public int? MinDuration { get; set; }
     public int? MaxDuration { get; set; }
