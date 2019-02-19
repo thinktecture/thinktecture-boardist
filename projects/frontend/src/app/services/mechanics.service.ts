@@ -1,13 +1,13 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Person} from '../models/person';
+import {Mechanic} from '../models/mechanic';
 import {AbstractData} from './abstract-data';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PersonsService extends AbstractData<Person> {
+export class MechanicsService extends AbstractData<Mechanic> {
   constructor(httpClient: HttpClient) {
-    super(httpClient, 'persons');
+    super(httpClient, 'mechanics');
   }
 }

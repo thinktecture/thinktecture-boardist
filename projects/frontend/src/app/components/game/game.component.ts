@@ -9,6 +9,8 @@ import {Publisher} from '../../models/publisher';
 import {GamesService} from '../../services/games.service';
 import {PersonsService} from '../../services/persons.service';
 import {PublishersService} from '../../services/publishers.service';
+import {AbstractDetail} from '../abstract-detail';
+import {DetailComponentContainer} from '../detail/detail.component';
 
 @Component({
   selector: 'ttb-game',
@@ -16,7 +18,7 @@ import {PublishersService} from '../../services/publishers.service';
   styleUrls: ['./game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent implements OnInit {
+export class GameComponent extends AbstractDetail<Game> implements OnInit {
   private readonly refresh = new BehaviorSubject<null>(null);
 
   data$: Observable<{
@@ -45,40 +47,29 @@ export class GameComponent implements OnInit {
     private readonly games: GamesService,
     private readonly publishers: PublishersService,
     private readonly persons: PersonsService,
-    @Inject(MAT_DIALOG_DATA) public readonly game: Game,
-    private readonly matDialogRef: MatDialogRef<GameComponent>,
+    @Inject(MAT_DIALOG_DATA) data: DetailComponentContainer<Game>,
+    matDialogRef: MatDialogRef<GameComponent>,
   ) {
+    super(game => games.save(game), data.item, matDialogRef);
   }
 
   ngOnInit(): void {
-    this.form.patchValue(this.game);
+    super.ngOnInit();
 
     this.data$ = combineLatest(
       this.games.getAll(false),
       this.publishers.getAll(),
-      this.persons.getAll$(),
+      this.persons.getAll(),
     ).pipe(
       map(([games, publishers, persons]) => ({ games, publishers, persons })),
       repeatWhen(() => this.refresh),
     );
   }
 
-  save(): void {
-    this.form.disable();
-
-    if (this.form.pristine) {
-      this.matDialogRef.close();
-      return;
-    }
-
-    this.games.save({ ...this.form.value, id: this.game.id })
-      .subscribe(() => this.matDialogRef.close(true), () => this.form.enable());
-  }
-
   import(): void {
     this.form.disable();
 
-    this.games.import(this.game.id).pipe(
+    this.games.import(this.data.id).pipe(
       filter(result => result !== null),
       tap(result => this.form.patchValue(result)),
       finalize(() => this.form.enable()),

@@ -20,9 +20,12 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {CategoriesComponent} from './components/categories/categories.component';
+import {DetailComponent} from './components/detail/detail.component';
 import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
-import {PublisherComponent} from './components/publisher/publisher.component';
+import {MechanicsComponent} from './components/mechanics/mechanics.component';
+import {PersonsComponent} from './components/persons/persons.component';
 import {PublishersComponent} from './components/publishers/publishers.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
@@ -35,7 +38,10 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     SpinnerComponent,
     NumbersPipe,
     PublishersComponent,
-    PublisherComponent,
+    PersonsComponent,
+    CategoriesComponent,
+    DetailComponent,
+    MechanicsComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +71,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
   bootstrap: [AppComponent],
   entryComponents: [
     GameComponent,
-    PublisherComponent,
+    DetailComponent,
   ],
 })
 export class AppModule {

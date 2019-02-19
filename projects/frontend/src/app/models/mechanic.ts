@@ -1,4 +1,4 @@
-export interface Person {
+export interface Mechanic {
   id: string;
   name: string;
 

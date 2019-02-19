@@ -13,10 +13,11 @@ export interface Game {
   buyDate?: Moment;
   buyPrice?: number;
   publisherId: string;
-  boardGameGeekId?: number;
   mainGameId?: string;
 
   categories: Category[];
   authors: Person[];
   illustrators: Person[];
+
+  boardGameGeekId?: number;
 }

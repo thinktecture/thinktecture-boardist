@@ -80,9 +80,9 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-flat-button type="button" class="import" color="accent" (click)="import()">Import from BoardGameGeek™</button>
+    <button mat-flat-button type="button" class="import" color="accent" (click)="import()">BGG™ Import</button>
     <button mat-button type="button" mat-dialog-close>Cancel</button>
-    <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid">Save</button>
+    <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid || form.pristine">Save</button>
   </mat-dialog-actions>
 </form>
 

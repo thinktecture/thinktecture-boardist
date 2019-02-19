@@ -1,6 +1,10 @@
 table {
   width: 100%;
 
+  .mat-row {
+    cursor: pointer;
+  }
+
   .mat-column-minPlayers,
   .mat-column-maxPlayers {
     width: 50px;
@@ -15,8 +19,4 @@ table {
       opacity: .4;
     }
   }
-}
-
-mat-spinner {
-  margin: 100px auto;
 }

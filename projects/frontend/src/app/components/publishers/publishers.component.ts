@@ -3,7 +3,6 @@ import {MatDialog} from '@angular/material';
 import {Publisher} from '../../models/publisher';
 import {PublishersService} from '../../services/publishers.service';
 import {AbstractOverview} from '../abstract-overview';
-import {PublisherComponent} from '../publisher/publisher.component';
 
 @Component({
   selector: 'ttb-publishers',
@@ -13,6 +12,6 @@ import {PublisherComponent} from '../publisher/publisher.component';
 })
 export class PublishersComponent extends AbstractOverview<Publisher> {
   constructor(publishers: PublishersService, matDialog: MatDialog) {
-    super(() => publishers.getAll(), matDialog, PublisherComponent);
+    super('Publishers', publishers, matDialog);
   }
 }

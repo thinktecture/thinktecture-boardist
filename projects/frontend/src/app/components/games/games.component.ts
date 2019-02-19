@@ -13,6 +13,6 @@ import {GameComponent} from '../game/game.component';
 })
 export class GamesComponent extends AbstractOverview<Game> {
   constructor(games: GamesService, matDialog: MatDialog) {
-    super(() => games.getAll(), matDialog, GameComponent);
+    super('Games', games, matDialog, GameComponent);
   }
 }
