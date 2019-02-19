@@ -29,6 +29,17 @@ namespace Thinktecture.Boardist.WebApi.Services
     {
       return await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
+
+    public async Task<GameDto> CreateAsync(GameDto game)
+    {
+      var dbGame = _mapper.Map<GameDto, Game>(game);
+      dbGame.Id = Guid.NewGuid();
+
+      await _boardistContext.Games.AddAsync(dbGame);
+      await _boardistContext.SaveChangesAsync();
+
+      return _mapper.Map<Game, GameDto>(dbGame);
+    }
     
     public async Task<bool> DeleteAsync(Guid id)
     {

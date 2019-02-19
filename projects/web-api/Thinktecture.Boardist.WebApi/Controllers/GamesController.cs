@@ -35,6 +35,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
       return Ok(result);
     }
     
+    [HttpPost]
+    public async Task<ActionResult<GameDto>> CreateAsync([FromBody] GameDto game)
+    {
+      return Ok(await _gamesService.CreateAsync(game));
+    }
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
