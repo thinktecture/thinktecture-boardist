@@ -5,18 +5,18 @@ import {Person} from './person';
 export interface Game {
   id: string;
   name: string;
+  minPlayers: number;
+  maxPlayers: number;
+  mainGameId?: string;
 }
 
 export interface GameDetail extends Game {
-  minPlayers: number;
-  maxPlayers: number;
   minDuration?: number;
   maxDuration?: number;
-  perPlayerDuration?: number;
   buyDate?: Moment;
   buyPrice?: number;
   publisherId: string;
-  mainGameId?: string;
+  boardGameGeekId?: number;
 
   categories: Category[];
   authors: Person[];

@@ -10,6 +10,10 @@ table {
   .mat-column-isExtension {
     width: 70px;
     text-align: center;
+
+    mat-icon {
+      opacity: .4;
+    }
   }
 }
 

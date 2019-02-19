@@ -22,4 +22,8 @@ export class GamesService {
       tap(game => game.buyDate = game.buyDate && moment(game.buyDate)),
     );
   }
+
+  save$(game: GameDetail): Observable<void> {
+    return this.httpClient[game.id ? 'put' : 'post']<void>(`${environment.baseApiUrl}games`, game);
+  }
 }

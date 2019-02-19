@@ -37,7 +37,7 @@ export class GamesComponent implements OnInit, OnDestroy {
       closeOnNavigation: true,
       disableClose: true,
       width: '500px',
-      maxWidth: '80%',
+      maxWidth: '90vw',
     }).afterClosed().pipe(
       filter(refresh => refresh),
     ).subscribe(() => this.refresh.next(null));
