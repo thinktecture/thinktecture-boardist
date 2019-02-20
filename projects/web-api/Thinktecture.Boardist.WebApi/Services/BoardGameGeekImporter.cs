@@ -201,11 +201,21 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       if (xmlPublisher != null)
       {
-        var dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.Name == xmlPublisher.Value);
+        var dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.BoardGameGeekId == xmlPublisher.Id);
 
         if (dbPublisher == null)
         {
-          dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid()};
+          dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.Name == xmlPublisher.Value);
+
+          if (dbPublisher != null)
+          {
+            dbPublisher.BoardGameGeekId = xmlPublisher.Id;
+          }
+        }
+       
+        if (dbPublisher == null)
+        {
+          dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id};
           _boardistContext.Publishers.Add(dbPublisher);
         }
 
