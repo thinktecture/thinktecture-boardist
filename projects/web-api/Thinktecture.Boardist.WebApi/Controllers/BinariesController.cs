@@ -13,15 +13,22 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   public class BinariesController : ControllerBase
   {
     private readonly FilesService _filesService;
+    private readonly BoardGameGeekImporter _boardGameGeekImporter;
 
-    public BinariesController(FilesService filesService)
+    public BinariesController(FilesService filesService, BoardGameGeekImporter boardGameGeekImporter)
     {
       _filesService = filesService;
+      _boardGameGeekImporter = boardGameGeekImporter;
     }
 
     [HttpGet("{id}/logo")]
-    public IActionResult Logo(Guid id)
+    public async Task<IActionResult> Logo(Guid id)
     {
+      if (!_filesService.Exists(id, FileCategory.Logo))
+      {
+        await _boardGameGeekImporter.ImportImage(id);
+      }
+      
       var result = _filesService.Load(id, FileCategory.Logo);
 
       return File(result.Stream, result.MimeType);

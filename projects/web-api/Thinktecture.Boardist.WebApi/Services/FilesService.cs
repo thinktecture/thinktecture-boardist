@@ -28,10 +28,10 @@ namespace Thinktecture.Boardist.WebApi.Services
       {
         fileExtension = $".{fileExtension}";
       }
-      
+
       var fileIdName = fileId.ToString();
       var fileName = $"{FileCategoryToFileName(category)}{fileExtension}";
-      
+
       EnsureFolderExists(Path.Combine(BaseDirectory, fileIdName));
 
       using (var fileStream = new FileStream(Path.Combine(BaseDirectory, fileIdName, fileName), FileMode.Create))
@@ -68,11 +68,19 @@ namespace Thinktecture.Boardist.WebApi.Services
       };
     }
 
+    public bool Exists(Guid fileId, FileCategory category)
+    {
+      var fileIdName = fileId.ToString();
+      var fileToLoad = GetSingleFile(category, fileIdName);
+      return !string.IsNullOrWhiteSpace(fileToLoad);
+    }
+
     public void Delete(Guid fileId)
     {
       var directoryPath = Path.Combine(BaseDirectory, fileId.ToString());
-      
-      if (Directory.Exists(directoryPath)) {
+
+      if (Directory.Exists(directoryPath))
+      {
         Directory.Delete(directoryPath, true);
       }
     }
@@ -85,7 +93,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       {
         return string.Empty;
       }
-      
+
       var fileToDelete = Directory.GetFiles(path)
         .SingleOrDefault(file => file.Contains(Path.Combine(path, FileCategoryToFileName(fileCategory))));
       return fileToDelete;
