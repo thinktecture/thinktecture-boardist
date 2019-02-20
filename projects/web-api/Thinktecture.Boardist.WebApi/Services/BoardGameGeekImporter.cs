@@ -96,7 +96,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     private async Task RelateToMainGame(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame)
     {
-      var inboundLink = boardGameGeekResult.Link.LastOrDefault(p => p.Inbound);
+      var inboundLink = boardGameGeekResult.Link.LastOrDefault(p => p.Inbound && p.Type == BoardGameExpansionType);
 
       if (inboundLink == null)
       {
