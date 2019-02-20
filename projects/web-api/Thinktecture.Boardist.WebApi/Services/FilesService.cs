@@ -22,10 +22,15 @@ namespace Thinktecture.Boardist.WebApi.Services
       _hostingEnvironment = hostingEnvironment;
     }
 
-    public async Task Save(Stream stream, Guid fileId, FileCategory category, MediaTypeHeaderValue contentType)
+    public async Task Save(Stream stream, Guid fileId, FileCategory category, string fileExtension)
     {
+      if (!fileExtension.StartsWith('.'))
+      {
+        fileExtension = $".{fileExtension}";
+      }
+      
       var fileIdName = fileId.ToString();
-      var fileName = $"{FileCategoryToFileName(category)}{MimeTypeMap.GetExtension(contentType.MediaType)}";
+      var fileName = $"{FileCategoryToFileName(category)}{fileExtension}";
       
       EnsureFolderExists(Path.Combine(BaseDirectory, fileIdName));
 
@@ -34,6 +39,11 @@ namespace Thinktecture.Boardist.WebApi.Services
         stream.Seek(0, SeekOrigin.Begin);
         await stream.CopyToAsync(fileStream);
       }
+    }
+
+    public async Task Save(Stream stream, Guid fileId, FileCategory category, MediaTypeHeaderValue contentType)
+    {
+      await Save(stream, fileId, category, MimeTypeMap.GetExtension(contentType.MediaType));
     }
 
     public FileLoadResult Load(Guid fileId, FileCategory category)
