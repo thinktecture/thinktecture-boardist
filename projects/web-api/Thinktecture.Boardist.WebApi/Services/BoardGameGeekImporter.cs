@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -195,6 +196,29 @@ namespace Thinktecture.Boardist.WebApi.Services
           return result.Game;
         }
       }
+    }
+
+    private async Task<BoardGameGeekApiResult.BoardGame> QueryBoardGameGeekApi(string query)
+    {
+      var httpClient = _httpClientFactory.CreateClient();
+
+      var httpResult = await httpClient.GetByteArrayAsync($"{BoardGameGeekApiUrl}/search?query={HtmlEncoder.Default.Encode(query)}&exact=1&type=boardgame,boardgameexpansion");
+      using (var memoryStream = new MemoryStream(httpResult))
+      {
+        using (var xmlTextReader = new XmlTextReader(memoryStream))
+        {
+          var xmlSerializer = new XmlSerializer(typeof(BoardGameGeekApiResult));
+          var result = (BoardGameGeekApiResult) xmlSerializer.Deserialize(xmlTextReader);
+          return result.Game;
+        }
+      }
+    }
+
+    public async Task<int?> Lookup(string query)
+    {
+      var boardGameGeekResult = await QueryBoardGameGeekApi(query);
+
+      return boardGameGeekResult?.Id;
     }
   }
 }

@@ -12,6 +12,9 @@ namespace Thinktecture.Boardist.WebApi.DTOs
 
     public class BoardGame
     {
+      [XmlAttribute("id")]
+      public int Id { get; set; }
+
       [XmlElement("image")]
       public string Image { get; set; }
 
@@ -50,7 +53,7 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     {
       [XmlAttribute("value")]
       public int Value { get; set; }
-      
+
       public static implicit operator int(AttributeValue value)
       {
         return value.Value;

@@ -17,11 +17,17 @@ namespace Thinktecture.Boardist.WebApi.Controllers
       _gamesService = gamesService;
       _importer = importer;
     }
-    
+
     [HttpPost("{id}/import")]
     public async Task<ActionResult<bool>> Import(Guid id)
     {
       return Ok(await _importer.Import(id));
+    }
+
+    [HttpGet("lookup")]
+    public async Task<ActionResult<bool>> Lookup(string query)
+    {
+      return Ok(await _importer.Lookup(query));
     }
 
     [HttpGet]
@@ -42,13 +48,13 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return Ok(result);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<GameDto>> CreateAsync([FromBody] GameDto game)
     {
       return Ok(await _gamesService.CreateAsync(game));
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
@@ -59,7 +65,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return NotFound();
     }
-    
+
     [HttpPut]
     public async Task<ActionResult<GameDto>> UpdateAsync([FromBody] GameDto game)
     {
