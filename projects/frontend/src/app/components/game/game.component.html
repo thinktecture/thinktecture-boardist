@@ -19,7 +19,7 @@
         <mat-form-field class="flex-1">
           <mat-label>Maximum players</mat-label>
           <mat-select formControlName="maxPlayers">
-            <mat-option *ngFor="let nr of null | numbers : +form.value.minPlayers : 20" [value]="nr">{{ nr }}</mat-option>
+            <mat-option *ngFor="let nr of null | numbers : 1 : 20 : 1 : form.value.minPlayers" [value]="nr">{{ nr }}</mat-option>
             <mat-option [value]="99">21 or more</mat-option>
           </mat-select>
         </mat-form-field>
@@ -38,7 +38,7 @@
           <mat-label>Maximum play time</mat-label>
           <mat-select formControlName="maxDuration">
             <mat-option [value]="null"></mat-option>
-            <mat-option *ngFor="let nr of null | numbers : +form.value.minDuration : 240 : 5" [value]="nr">{{ nr }}</mat-option>
+            <mat-option *ngFor="let nr of null | numbers : 5 : 240 : 5 : form.value.minDuration" [value]="nr">{{ nr }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

@@ -16,7 +16,7 @@ table {
     text-align: center;
 
     mat-icon {
-      opacity: .4;
+      color: rgba(0, 0, 0, .4);
     }
   }
 
@@ -28,4 +28,10 @@ table {
       color: inherit;
     }
   }
+}
+
+.add {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }

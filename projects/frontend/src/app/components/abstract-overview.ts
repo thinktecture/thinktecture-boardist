@@ -49,6 +49,10 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
     this.subscription.unsubscribe();
   }
 
+  add(): void {
+    this.show({} as T);
+  }
+
   show(item: T): void {
     this.matDialog
       .open<any, DetailContext<S, T>, boolean>(this.context.detail, { data: { ...this.context, item } })

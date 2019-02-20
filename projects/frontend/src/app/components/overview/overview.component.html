@@ -8,6 +8,8 @@
   <tr mat-row *matRowDef="let row; columns: ['name']" routerLink="." [queryParams]="{ id: row.id }"></tr>
 </table>
 
+<button mat-fab class="add" color="primary" (click)="add()"><mat-icon>create</mat-icon></button>
+
 <ng-template #loading>
   <ttb-spinner></ttb-spinner>
 </ng-template>

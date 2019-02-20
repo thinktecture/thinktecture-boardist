@@ -4,7 +4,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatButtonModule, MatCheckboxModule,
+  MatButtonModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -26,6 +27,7 @@ import {DetailComponent} from './components/detail/detail.component';
 import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
 import {OverviewComponent} from './components/overview/overview.component';
+import {PublisherComponent} from './components/publisher/publisher.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
 
@@ -38,6 +40,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     NumbersPipe,
     DetailComponent,
     OverviewComponent,
+    PublisherComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
   entryComponents: [
     GameComponent,
     DetailComponent,
+    PublisherComponent,
   ],
 })
 export class AppModule {

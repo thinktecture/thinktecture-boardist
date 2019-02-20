@@ -39,7 +39,10 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     ).subscribe();
   }
 
-  protected save(close = true): Observable<void> {
+  import(): void {
+  }
+
+  protected save(close = true): Observable<T> {
     return this.context.service.save({ ...this.form.value, id: this.context.item.id }).pipe(
       tap(() => close && this.matDialogRef.close(this.reload)),
     );

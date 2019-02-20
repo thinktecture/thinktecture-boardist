@@ -85,8 +85,8 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
 
     this.importing = true;
 
-    iif(() => this.form.dirty, this.save(false), of(false)).pipe(
-      switchMap(() => this.context.service.import(this.context.item.id, this.overwrite)),
+    iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
+      switchMap(item => this.context.service.import(item.id, this.overwrite)),
       filter(result => result !== null),
       finalize(() => {
         this.form.enable();
