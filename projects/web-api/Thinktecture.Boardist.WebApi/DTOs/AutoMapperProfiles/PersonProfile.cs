@@ -8,6 +8,7 @@ namespace Thinktecture.Boardist.WebApi.DTOs.AutoMapperProfiles
     public PersonProfile()
     {
       CreateMap<Person, PersonDto>();
+      CreateMap<PersonDto, Person>();
     }
   }
 }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace Thinktecture.Boardist.WebApi.DTOs
 {
-  public class GameDto
+  public class GameDto : ItemDto
   {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
     public int MinAge { get; set; }
@@ -14,11 +12,10 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     public int? MaxDuration { get; set; }
     public decimal? BuyPrice { get; set; }
     public DateTime? BuyDate { get; set; }
-    public int? BoardGameGeekId { get; set; }
-    
+
     public Guid? PublisherId { get; set; }
     public Guid? MainGameId { get; set; }
-    
+
     public ICollection<Guid> Authors { get; set; }
     public ICollection<Guid> Illustrators { get; set; }
     public ICollection<Guid> Categories { get; set; }

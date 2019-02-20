@@ -32,7 +32,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PersonDto> CreateAsync(PersonDto person)
     {
-      var dbPerson = new Person() {Name = person.Name, Id = Guid.NewGuid()};
+      var dbPerson = _mapper.Map<Person>(person);
 
       await _boardistContext.Persons.AddAsync(dbPerson);
       await _boardistContext.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-      var dbPerson = new Person() {Id = id};
+      var dbPerson = new Person() { Id = id };
 
       _boardistContext.Entry(dbPerson).State = EntityState.Deleted;
 
@@ -60,11 +60,11 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PersonDto> UpdateAsync(PersonDto person)
     {
-      var dbPerson = new Person() {Id = person.Id};
+      var dbPerson = new Person() { Id = person.Id };
 
       _boardistContext.Attach(dbPerson);
 
-      dbPerson.Name = person.Name;
+      _mapper.Map(person, dbPerson);
 
       await _boardistContext.SaveChangesAsync();
 

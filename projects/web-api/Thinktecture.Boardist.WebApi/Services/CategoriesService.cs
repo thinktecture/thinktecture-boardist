@@ -32,7 +32,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<CategoryDto> CreateAsync(CategoryDto category)
     {
-      var dbCategory = new Category() {Name = category.Name, Id = Guid.NewGuid(), BoardGameGeekId = category.BoardGameGeekId};
+      var dbCategory = _mapper.Map<Category>(category);
 
       await _boardistContext.Categories.AddAsync(dbCategory);
       await _boardistContext.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-      var dbCategory = new Category() {Id = id};
+      var dbCategory = new Category() { Id = id };
 
       _boardistContext.Entry(dbCategory).State = EntityState.Deleted;
 
@@ -60,12 +60,11 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<CategoryDto> UpdateAsync(CategoryDto category)
     {
-      var dbCategory = new Category() {Id = category.Id};
+      var dbCategory = new Category() { Id = category.Id };
 
       _boardistContext.Attach(dbCategory);
 
-      dbCategory.Name = category.Name;
-      dbCategory.BoardGameGeekId = category.BoardGameGeekId;
+      _mapper.Map(category, dbCategory);
 
       await _boardistContext.SaveChangesAsync();
 

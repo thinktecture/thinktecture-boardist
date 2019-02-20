@@ -34,7 +34,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PublisherDto> CreateAsync(PublisherDto publisher)
     {
-      var dbPublisher = new Publisher() {Name = publisher.Name, Id = Guid.NewGuid()};
+      var dbPublisher = _mapper.Map<Publisher>(publisher);
 
       await _boardistContext.Publishers.AddAsync(dbPublisher);
       await _boardistContext.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-      var dbPublisher = new Publisher() {Id = id};
+      var dbPublisher = new Publisher() { Id = id };
 
       _boardistContext.Entry(dbPublisher).State = EntityState.Deleted;
 
@@ -63,11 +63,11 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PublisherDto> UpdateAsync(PublisherDto publisher)
     {
-      var dbPublisher = new Publisher() {Id = publisher.Id};
+      var dbPublisher = new Publisher() { Id = publisher.Id };
 
       _boardistContext.Attach(dbPublisher);
 
-      dbPublisher.Name = publisher.Name;
+      _mapper.Map(publisher, dbPublisher);
 
       await _boardistContext.SaveChangesAsync();
 

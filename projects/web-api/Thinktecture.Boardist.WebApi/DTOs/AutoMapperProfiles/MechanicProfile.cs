@@ -3,12 +3,12 @@ using Thinktecture.Boardist.WebApi.Database.Models;
 
 namespace Thinktecture.Boardist.WebApi.DTOs.AutoMapperProfiles
 {
-  public class CategoryProfile : Profile
+  public class MechanicProfile : Profile
   {
-    public CategoryProfile()
+    public MechanicProfile()
     {
-      CreateMap<Category, CategoryDto>();
-      CreateMap<CategoryDto, Category>();
+      CreateMap<Mechanic, MechanicDto>();
+      CreateMap<MechanicDto, Mechanic>();
     }
   }
 }

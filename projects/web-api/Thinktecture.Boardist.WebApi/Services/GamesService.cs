@@ -30,7 +30,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       {
         query = query.Where(p => p.MainGame == null);
       }
-      
+
       return await _mapper.ProjectTo<GameDto>(query).ToArrayAsync();
     }
 
@@ -49,7 +49,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       return _mapper.Map<Game, GameDto>(dbGame);
     }
-    
+
     public async Task<bool> DeleteAsync(Guid id)
     {
       var dbGame = new Game() {Id = id};
@@ -68,7 +68,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         return false;
       }
     }
-    
+
     public async Task<GameDto> UpdateAsync(GameDto game)
     {
       var dbGame = await _boardistContext.Games
@@ -77,13 +77,13 @@ namespace Thinktecture.Boardist.WebApi.Services
         .Include(p => p.Categories)
         .Include(p => p.Mechanics)
         .SingleOrDefaultAsync(g => g.Id == game.Id);
-            
+
       dbGame.Authors.Clear();
       dbGame.Illustrators.Clear();
       dbGame.Categories.Clear();
       dbGame.Mechanics.Clear();
-      
-      _mapper.Map(game, dbGame, typeof(GameDto), typeof(Game));
+
+      _mapper.Map(game, dbGame);
 
       await _boardistContext.SaveChangesAsync();
 

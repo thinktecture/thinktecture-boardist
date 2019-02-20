@@ -30,9 +30,9 @@ namespace Thinktecture.Boardist.WebApi.Services
       return await _mapper.ProjectTo<MechanicDto>(_boardistContext.Mechanics.Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
-    public async Task<MechanicDto> CreateAsync(MechanicDto publisher)
+    public async Task<MechanicDto> CreateAsync(MechanicDto mechanic)
     {
-      var dbMechanic = new Mechanic() {Name = publisher.Name, Id = Guid.NewGuid()};
+      var dbMechanic = _mapper.Map<Mechanic>(mechanic);
 
       await _boardistContext.Mechanics.AddAsync(dbMechanic);
       await _boardistContext.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-      var dbMechanic = new Mechanic() {Id = id};
+      var dbMechanic = new Mechanic() { Id = id };
 
       _boardistContext.Entry(dbMechanic).State = EntityState.Deleted;
 
@@ -58,13 +58,13 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task<MechanicDto> UpdateAsync(MechanicDto publisher)
+    public async Task<MechanicDto> UpdateAsync(MechanicDto mechanic)
     {
-      var dbMechanic = new Mechanic() {Id = publisher.Id};
+      var dbMechanic = new Mechanic() { Id = mechanic.Id };
 
       _boardistContext.Attach(dbMechanic);
 
-      dbMechanic.Name = publisher.Name;
+      _mapper.Map(mechanic, dbMechanic);
 
       await _boardistContext.SaveChangesAsync();
 

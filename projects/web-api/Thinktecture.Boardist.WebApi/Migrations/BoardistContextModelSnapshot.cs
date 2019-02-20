@@ -163,6 +163,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(250);
 
+                    b.Property<int>("Priority");
+
                     b.HasKey("Id");
 
                     b.ToTable("Publishers");
