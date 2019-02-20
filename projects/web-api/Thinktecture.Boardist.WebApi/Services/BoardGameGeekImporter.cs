@@ -243,7 +243,7 @@ namespace Thinktecture.Boardist.WebApi.Services
     {
       var httpClient = _httpClientFactory.CreateClient();
 
-      var httpResult = await httpClient.GetByteArrayAsync($"{BoardGameGeekApiUrl}/search?query={HtmlEncoder.Default.Encode(query)}&exact=1&type=boardgame,boardgameexpansion");
+      var httpResult = await httpClient.GetByteArrayAsync($"{BoardGameGeekApiUrl}/search?query={UrlEncoder.Default.Encode(query)}&exact=1&type=boardgame,boardgameexpansion");
       using (var memoryStream = new MemoryStream(httpResult))
       {
         using (var xmlTextReader = new XmlTextReader(memoryStream))
