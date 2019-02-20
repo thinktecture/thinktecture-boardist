@@ -128,22 +128,17 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     private async Task ImportMainGameRelation(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
     {
-      var inboundLink = boardGameGeekResult.Link.LastOrDefault(p => p.Inbound && p.Type == BoardGameExpansionType);
+      var xmlInbounds = boardGameGeekResult.Link.Where(p => p.Inbound && p.Type == BoardGameExpansionType).Select(p => p.Id).ToArray();
 
-      if (inboundLink == null)
+      if (xmlInbounds.Length > 0 && (overwrite || !dbGame.MainGameId.HasValue))
       {
-        return;
-      }
+        var dbMainGame = await _boardistContext.Games.FirstOrDefaultAsync(p => xmlInbounds.Contains(p.BoardGameGeekId.GetValueOrDefault()));
 
-      var dbMainGame = await _boardistContext.Games.SingleOrDefaultAsync(p => p.BoardGameGeekId == inboundLink.Id);
+        if (dbMainGame == null)
+        {
+          return;
+        }
 
-      if (dbMainGame == null)
-      {
-        return;
-      }
-
-      if (overwrite || !dbGame.MainGameId.HasValue)
-      {
         dbGame.MainGameId = dbMainGame.Id;
 
         await _boardistContext.SaveChangesAsync();
