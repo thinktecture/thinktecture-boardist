@@ -1,5 +1,11 @@
 <form [formGroup]="form" (ngSubmit)="saveAndClose()">
-  <h2 mat-dialog-title>Board game</h2>
+  <h2 mat-dialog-title>
+    Board game
+    <a *ngIf="context.item.boardGameGeekId" [href]="'https://boardgamegeek.com/boardgame/' + context.item.boardGameGeekId" target="_blank"
+       (click)="$event.stopPropagation()">
+      <mat-icon>open_in_new</mat-icon>
+    </a>
+  </h2>
 
   <mat-dialog-content>
     <ng-container *ngIf="data$ | async as context; else loading">
