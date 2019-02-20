@@ -78,6 +78,8 @@ namespace Thinktecture.Boardist.WebApi.Services
 
         await ImportMainGameRelation(boardGameGeekResult, dbGame, overwrite);
 
+        await _boardistContext.SaveChangesAsync();
+
         transaction.Commit();
 
         return _mapper.Map<Game, GameDto>(dbGame);
