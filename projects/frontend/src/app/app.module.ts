@@ -30,6 +30,7 @@ import {OverviewComponent} from './components/overview/overview.component';
 import {PublisherComponent} from './components/publisher/publisher.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
+import {PublisherPipe} from './pipes/publisher.pipe';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     DetailComponent,
     OverviewComponent,
     PublisherComponent,
+    PublisherPipe,
   ],
   imports: [
     BrowserModule,

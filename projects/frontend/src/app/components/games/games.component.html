@@ -3,6 +3,10 @@
     <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
     <mat-cell *matCellDef="let game">{{ game.name }}</mat-cell>
   </ng-container>
+  <ng-container matColumnDef="publisher">
+    <mat-header-cell *matHeaderCellDef>Publisher</mat-header-cell>
+    <mat-cell *matCellDef="let game">{{ game.publisherId | publisher$ | async }}</mat-cell>
+  </ng-container>
   <ng-container matColumnDef="minPlayers">
     <mat-header-cell *matHeaderCellDef>Min.</mat-header-cell>
     <mat-cell *matCellDef="let game">{{ game.minPlayers }}</mat-cell>
@@ -12,7 +16,7 @@
     <mat-cell *matCellDef="let game">{{ game.maxPlayers }}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="isExtension">
-    <mat-header-cell *matHeaderCellDef>Extension?</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>Ext.</mat-header-cell>
     <mat-cell *matCellDef="let game">
       <mat-icon *ngIf="game.mainGameId">extension_outlined</mat-icon>
     </mat-cell>
@@ -27,8 +31,8 @@
     </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['name', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['name', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']" routerLink="."
+  <mat-header-row *matHeaderRowDef="['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']" routerLink="."
       [queryParams]="{ id: row.id }"></mat-row>
 </mat-table>
 

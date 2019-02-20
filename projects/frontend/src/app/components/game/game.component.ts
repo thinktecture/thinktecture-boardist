@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core'
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, finalize, map, repeatWhen, switchMap} from 'rxjs/operators';
+import {filter, finalize, map, repeatWhen, switchMap, tap} from 'rxjs/operators';
 import {Category} from '../../models/category';
 import {Game} from '../../models/game';
 import {Mechanic} from '../../models/mechanic';
@@ -88,6 +88,12 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
       switchMap(item => this.context.service.import(item.id, this.overwrite)),
       filter(result => result !== null),
+      tap(() => {
+        this.publishers.clearCache();
+        this.persons.clearCache();
+        this.categories.clearCache();
+        this.mechanics.clearCache();
+      }),
       finalize(() => {
         this.form.enable();
         this.importing = false;

@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {Game} from '../models/game';
 import {AbstractData} from './abstract-data';
@@ -14,7 +15,9 @@ export class GamesService extends AbstractData<Game> {
   }
 
   getAll(expansions = true): Observable<Game[]> {
-    return this.httpClient.get<Game[]>(`${environment.baseApiUrl}${this.endpoint}`, { params: { expansions: expansions.toString() } });
+    return super.getAll().pipe(
+      map(items => items.filter(item => expansions || !item.mainGameId)),
+    );
   }
 
   import(id: string, overwrite: boolean): Observable<Game | null> {
