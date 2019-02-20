@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
+import {combineLatest, defer, iif, Observable, of, Subject} from 'rxjs';
 import {filter, finalize, map, repeatWhen, switchMap, tap} from 'rxjs/operators';
 import {Category} from '../../models/category';
 import {Game} from '../../models/game';
@@ -68,13 +68,13 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.data$ = combineLatest(
+    this.data$ = defer(() => combineLatest(
       this.context.service.getAll(false),
       this.publishers.getAll(),
       this.persons.getAll(),
       this.categories.getAll(),
       this.mechanics.getAll(),
-    ).pipe(
+    )).pipe(
       map(([games, publishers, persons, categories, mechanics]) => ({ games, publishers, persons, categories, mechanics })),
       repeatWhen(() => this.refresh),
     );
@@ -89,6 +89,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       switchMap(item => this.context.service.import(item.id, this.overwrite)),
       filter(result => result !== null),
       tap(() => {
+        this.context.service.clearCache();
         this.publishers.clearCache();
         this.persons.clearCache();
         this.categories.clearCache();

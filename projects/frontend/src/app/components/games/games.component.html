@@ -1,6 +1,7 @@
-<mat-table *ngIf="items$ | async as games; else loading" [dataSource]="games">
+<mat-table *ngIf="items$ | async as games; else loading" [dataSource]="games" matSort (matSortChange)="this.resort($event)"
+           [matSortActive]="sort.active" [matSortDirection]="sort.direction">
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
     <mat-cell *matCellDef="let game">{{ game.name }}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="publisher">
@@ -33,10 +34,12 @@
 
   <mat-header-row *matHeaderRowDef="['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']"></mat-header-row>
   <mat-row *matRowDef="let row; columns: ['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']" routerLink="."
-      [queryParams]="{ id: row.id }"></mat-row>
+           [queryParams]="{ id: row.id }"></mat-row>
 </mat-table>
 
-<button mat-fab class="add" color="primary" (click)="add()"><mat-icon>create</mat-icon></button>
+<button mat-fab class="add" color="primary" (click)="add()">
+  <mat-icon>create</mat-icon>
+</button>
 
 <ng-template #loading>
   <ttb-spinner></ttb-spinner>

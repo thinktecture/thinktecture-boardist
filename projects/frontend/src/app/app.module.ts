@@ -15,6 +15,7 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
+  MatSortModule,
   MatTableModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -63,6 +64,7 @@ import {PublisherPipe} from './pipes/publisher.pipe';
     MatFormFieldModule,
     MatProgressBarModule,
     MatCheckboxModule,
+    MatSortModule,
   ],
   providers: [
     {

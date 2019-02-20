@@ -1,6 +1,7 @@
-<mat-table *ngIf="items$ | async as items; else loading" [dataSource]="items">
+<mat-table *ngIf="items$ | async as items; else loading" [dataSource]="items" matSort (matSortChange)="this.resort($event)"
+           [matSortActive]="sort.active" [matSortDirection]="sort.direction">
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
     <mat-cell *matCellDef="let item">{{ item.name }}</mat-cell>
   </ng-container>
 

@@ -1,11 +1,15 @@
 import {InjectionToken, OnDestroy, OnInit, Type} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, Sort} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, Observable, Subject, Subscription} from 'rxjs';
-import {distinctUntilChanged, filter, map, repeatWhen, shareReplay} from 'rxjs/operators';
+import {combineLatest, defer, Observable, Subject, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, map, repeatWhen} from 'rxjs/operators';
 import {Item} from '../models/item';
 import {AbstractData} from '../services/abstract-data';
 import {DetailContext} from './abstract-detail';
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
 
 export interface OverviewContext<S extends AbstractData<T>, T extends Item> {
   title: string;
@@ -21,6 +25,7 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
   private subscription = Subscription.EMPTY;
 
   items$: Observable<T[]>;
+  sort: Sort = { active: 'name', direction: 'asc' };
 
   protected constructor(
     private readonly context: OverviewContext<S, T>,
@@ -31,7 +36,10 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
   }
 
   ngOnInit(): void {
-    this.items$ = this.context.service.getAll().pipe(repeatWhen(() => this.refresh), shareReplay(1));
+    this.items$ = defer(() => this.context.service.getAll()).pipe(
+      map(items => this.sortData(items)),
+      repeatWhen(() => this.refresh),
+    );
 
     this.subscription = combineLatest(
       this.items$,
@@ -47,6 +55,17 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  private sortData(items: T[]): T[] {
+    return !this.sort || !this.sort.active || this.sort.direction === ''
+      ? items
+      : items.slice().sort((a, b) => compare(a[this.sort.active], b[this.sort.active], this.sort.direction === 'asc'));
+  }
+
+  resort(sort: Sort): void {
+    this.sort = sort;
+    this.refresh.next();
   }
 
   add(): void {
