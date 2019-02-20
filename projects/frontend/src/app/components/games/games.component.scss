@@ -19,4 +19,13 @@ table {
       opacity: .4;
     }
   }
+
+  .mat-column-boardGameGeekId {
+    width: 50px;
+    text-align: center;
+
+    a {
+      color: inherit;
+    }
+  }
 }

@@ -1,6 +1,10 @@
 mat-form-field {
   width: 100%;
   min-width: 1px;
+
+  .search {
+    cursor: pointer;
+  }
 }
 
 .flex {
@@ -15,4 +19,14 @@ button + button {
 
 .import {
   margin-right: auto;
+
+  mat-spinner {
+    margin-right: 8px;
+    display: inline-block;
+  }
+}
+
+mat-progress-bar {
+  margin-top: calc(-1.34375em - 4px);
+  margin-bottom: 1.34375em;
 }

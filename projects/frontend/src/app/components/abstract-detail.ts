@@ -1,6 +1,8 @@
 import {OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import {Observable} from 'rxjs';
+import {filter, finalize, tap} from 'rxjs/operators';
 import {Item} from '../models/item';
 import {AbstractData} from '../services/abstract-data';
 
@@ -13,6 +15,8 @@ export interface DetailContext<S extends AbstractData<T>, T extends Item> {
 export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> implements OnInit {
   abstract readonly form: FormGroup;
 
+  protected reload = false;
+
   protected constructor(protected readonly context: DetailContext<S, T>, private readonly matDialogRef: MatDialogRef<any>) {
   }
 
@@ -20,7 +24,7 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     this.form.patchValue(this.context.item);
   }
 
-  save(): void {
+  saveAndClose(): void {
     this.form.disable();
 
     if (this.form.pristine) {
@@ -28,7 +32,16 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
       return;
     }
 
-    this.context.service.save({ ...this.form.value, id: this.context.item.id })
-      .subscribe(() => this.matDialogRef.close(true), () => this.form.enable());
+    this.reload = true;
+
+    this.save(true).pipe(
+      finalize(() => () => this.form.enable()),
+    ).subscribe();
+  }
+
+  protected save(close = true): Observable<void> {
+    return this.context.service.save({ ...this.form.value, id: this.context.item.id }).pipe(
+      tap(() => close && this.matDialogRef.close(this.reload)),
+    );
   }
 }

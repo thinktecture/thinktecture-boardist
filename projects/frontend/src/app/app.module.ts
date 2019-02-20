@@ -10,6 +10,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
@@ -55,6 +56,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatProgressBarModule,
   ],
   providers: [
     {

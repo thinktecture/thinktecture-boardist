@@ -20,4 +20,8 @@ export class GamesService extends AbstractData<Game> {
   import(id: string): Observable<Game | null> {
     return this.httpClient.post<Game | null>(`${environment.baseApiUrl}${this.endpoint}/${id}/import`, null);
   }
+
+  search(query: string): Observable<number | null> {
+    return this.httpClient.get<number | null>(`${environment.baseApiUrl}${this.endpoint}/lookup`, { params: { query } });
+  }
 }

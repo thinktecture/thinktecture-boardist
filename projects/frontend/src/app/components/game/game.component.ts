@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
-import {filter, finalize, map, repeatWhen, tap} from 'rxjs/operators';
+import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
+import {filter, finalize, map, repeatWhen, switchMap} from 'rxjs/operators';
 import {Game} from '../../models/game';
 import {Person} from '../../models/person';
 import {Publisher} from '../../models/publisher';
@@ -19,6 +19,9 @@ import {AbstractDetail, DetailContext} from '../abstract-detail';
 })
 export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit {
   private readonly refresh = new Subject<void>();
+
+  searching = false;
+  importing = false;
 
   data$: Observable<{
     games: Game[],
@@ -67,10 +70,41 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
   import(): void {
     this.form.disable();
 
-    this.context.service.import(this.context.item.id).pipe(
+    this.importing = true;
+
+    iif(() => this.form.dirty, this.save(false), of(false)).pipe(
+      switchMap(() => this.context.service.import(this.context.item.id)),
       filter(result => result !== null),
-      tap(result => this.form.patchValue(result)),
-      finalize(() => this.form.enable()),
-    ).subscribe(() => this.refresh.next(null));
+      finalize(() => {
+        this.form.enable();
+        this.importing = false;
+      }),
+    ).subscribe(result => {
+      this.form.patchValue(result);
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
+
+      this.reload = true;
+      this.refresh.next(null);
+    });
+  }
+
+  search(): void {
+    const { boardGameGeekId } = this.form.controls;
+    boardGameGeekId.disable();
+
+    this.searching = true;
+
+    this.context.service.search(this.form.value.name).pipe(
+      filter(result => result !== null),
+      finalize(() => {
+        boardGameGeekId.enable();
+        this.searching = false;
+      }),
+    ).subscribe(result => {
+      this.form.patchValue({ boardGameGeekId: result });
+      boardGameGeekId.markAsDirty();
+      boardGameGeekId.markAsTouched();
+    });
   }
 }
