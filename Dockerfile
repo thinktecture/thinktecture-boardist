@@ -12,7 +12,7 @@ COPY angular.json ./
 COPY tsconfig.json ./
 COPY tslint.json ./
 
-RUN npm run build
+RUN npm run build-prod
 
 # Prod Env
 FROM nginx:alpine
