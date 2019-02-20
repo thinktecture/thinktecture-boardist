@@ -1,0 +1,5 @@
+node_modules
+.git
+.editorconfig
+README.md
+projects/web-api

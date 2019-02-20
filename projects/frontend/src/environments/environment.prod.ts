@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseApiUrl: 'TBD',
+  baseApiUrl: 'https://tt-boardist-api.azurewebsites.net/api/',
 };
