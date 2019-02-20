@@ -45,7 +45,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     maxDuration: [null],
     buyDate: [null],
     buyPrice: [null],
-    publisherId: ['', Validators.required],
+    publisherId: [null],
     boardGameGeekId: [null, Validators.pattern(/\d*/)],
     authors: [[]],
     illustrators: [[]],
