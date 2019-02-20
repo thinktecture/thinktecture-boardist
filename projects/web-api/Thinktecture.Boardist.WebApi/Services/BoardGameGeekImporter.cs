@@ -132,7 +132,9 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       if (xmlInbounds.Length > 0 && (overwrite || !dbGame.MainGameId.HasValue))
       {
-        var dbMainGame = await _boardistContext.Games.FirstOrDefaultAsync(p => xmlInbounds.Contains(p.BoardGameGeekId.GetValueOrDefault()));
+        var dbMainGame = await _boardistContext.Games
+          .Where(p => p.MainGameId == null)
+          .FirstOrDefaultAsync(p => xmlInbounds.Contains(p.BoardGameGeekId.GetValueOrDefault()));
 
         if (dbMainGame == null)
         {
