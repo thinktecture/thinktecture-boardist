@@ -16,7 +16,7 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     public DateTime? BuyDate { get; set; }
     public int? BoardGameGeekId { get; set; }
     
-    public Guid PublisherId { get; set; }
+    public Guid? PublisherId { get; set; }
     public Guid? MainGameId { get; set; }
     
     public ICollection<Guid> Authors { get; set; }

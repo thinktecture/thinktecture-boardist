@@ -10,7 +10,7 @@ using Thinktecture.Boardist.WebApi.Database;
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    [Migration("20190219121812_InitialDbCreation")]
+    [Migration("20190220083515_InitialDbCreation")]
     partial class InitialDbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,7 +63,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(250);
 
-                    b.Property<Guid>("PublisherId");
+                    b.Property<Guid?>("PublisherId");
 
                     b.HasKey("Id");
 
@@ -179,7 +179,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Publisher", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameAuthor", b =>

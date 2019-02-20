@@ -1,3 +1,5 @@
+Thinktecture.Boardist.WebApi/Assets/*
+!Thinktecture.Boardist.WebApi/Assets/no-image-available.png
 
 # Created by https://www.gitignore.io/api/rider,aspnetcore
 # Edit at https://www.gitignore.io/?templates=rider,aspnetcore

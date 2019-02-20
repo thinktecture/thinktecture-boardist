@@ -32,6 +32,7 @@ namespace Thinktecture.Boardist.WebApi
       services.AddTransient<PersonsService>();
       services.AddTransient<MechanicsService>();
       services.AddTransient<BoardGameGeekImporter>();
+      services.AddTransient<FilesService>();
       
       services.AddHttpClient();
 

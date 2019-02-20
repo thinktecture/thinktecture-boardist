@@ -61,7 +61,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(250);
 
-                    b.Property<Guid>("PublisherId");
+                    b.Property<Guid?>("PublisherId");
 
                     b.HasKey("Id");
 
@@ -177,7 +177,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                     b.HasOne("Thinktecture.Boardist.WebApi.Database.Models.Publisher", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Thinktecture.Boardist.WebApi.Database.Models.GameAuthor", b =>

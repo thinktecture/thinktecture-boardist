@@ -18,7 +18,7 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
 
     public Guid? MainGameId { get; set; }
     public Game MainGame { get; set; }
-    public Guid PublisherId { get; set; }
+    public Guid? PublisherId { get; set; }
     public Publisher Publisher { get; set; }
 
     public ICollection<GameAuthor> Authors { get; set; }

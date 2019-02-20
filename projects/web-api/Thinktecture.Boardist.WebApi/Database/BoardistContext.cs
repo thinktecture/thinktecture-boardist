@@ -116,7 +116,8 @@ namespace Thinktecture.Boardist.WebApi.Database
         .HasOne(p => p.Publisher)
         .WithMany()
         .HasForeignKey(p => p.PublisherId)
-        .IsRequired();
+        .IsRequired(false)
+        .OnDelete(DeleteBehavior.SetNull);
 
       modelBuilder.Entity<Game>()
         .HasOne(p => p.MainGame)

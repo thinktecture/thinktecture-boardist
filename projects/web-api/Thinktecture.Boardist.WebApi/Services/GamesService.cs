@@ -13,11 +13,13 @@ namespace Thinktecture.Boardist.WebApi.Services
   {
     private readonly IMapper _mapper;
     private readonly BoardistContext _boardistContext;
+    private readonly FilesService _filesService;
 
-    public GamesService(IMapper mapper, BoardistContext boardistContext)
+    public GamesService(IMapper mapper, BoardistContext boardistContext, FilesService filesService)
     {
       _mapper = mapper;
       _boardistContext = boardistContext;
+      _filesService = filesService;
     }
 
     public async Task<GameDto[]> GetAllAsync(bool includeExpansions)
@@ -57,6 +59,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       try
       {
         await _boardistContext.SaveChangesAsync();
+        _filesService.Delete(id);
 
         return true;
       }
