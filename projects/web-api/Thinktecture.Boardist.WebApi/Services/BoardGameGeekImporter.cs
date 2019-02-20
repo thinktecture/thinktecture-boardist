@@ -25,6 +25,7 @@ namespace Thinktecture.Boardist.WebApi.Services
     private const string BoardGameArtistType = "boardgameartist";
     private const string BoardGameCategoryType = "boardgamecategory";
     private const string BoardGameMechanicType = "boardgamemechanic";
+    private const string BoardGameExpansionType = "boardgameexpansion";
 
     private readonly BoardistContext _boardistContext;
     private readonly IHttpClientFactory _httpClientFactory;
@@ -73,6 +74,7 @@ namespace Thinktecture.Boardist.WebApi.Services
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, _boardistContext.Mechanics);
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, _boardistContext.Persons);
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, _boardistContext.Persons);
+          await RelateToMainGame(boardGameGeekResult, dbGame);
 
           await DownloadImage(boardGameGeekResult, dbGame.Id);
 
@@ -90,6 +92,27 @@ namespace Thinktecture.Boardist.WebApi.Services
 #endif
         }
       }
+    }
+
+    private async Task RelateToMainGame(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame)
+    {
+      var inboundLink = boardGameGeekResult.Link.LastOrDefault(p => p.Inbound);
+
+      if (inboundLink == null)
+      {
+        return;
+      }
+
+      var dbMainGame = await _boardistContext.Games.SingleOrDefaultAsync(p => p.BoardGameGeekId == inboundLink.Id);
+
+      if (dbMainGame == null)
+      {
+        return;
+      }
+
+      dbGame.MainGameId = dbMainGame.Id;
+
+      await _boardistContext.SaveChangesAsync();
     }
 
     private async Task ImportBoardGameGeekItem<TSource, TResult>(BoardGameGeekApiResult.BoardGame boardGameGeekResult,

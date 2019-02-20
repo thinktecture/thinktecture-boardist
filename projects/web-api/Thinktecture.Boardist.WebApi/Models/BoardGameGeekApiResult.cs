@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Thinktecture.Boardist.WebApi.DTOs
+namespace Thinktecture.Boardist.WebApi.Models
 {
   [Serializable, XmlRoot("items")]
   public class BoardGameGeekApiResult
@@ -47,6 +47,9 @@ namespace Thinktecture.Boardist.WebApi.DTOs
 
       [XmlAttribute("value")]
       public string Value { get; set; }
+      
+      [XmlAttribute("inbound")]
+      public bool Inbound { get; set; }
     }
 
     public class AttributeValue
