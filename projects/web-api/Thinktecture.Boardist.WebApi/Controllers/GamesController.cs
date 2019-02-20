@@ -19,9 +19,9 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpPost("{id}/import")]
-    public async Task<ActionResult<bool>> Import(Guid id)
+    public async Task<ActionResult<bool>> Import(Guid id, bool overwrite = false)
     {
-      return Ok(await _importer.Import(id));
+      return Ok(await _importer.Import(id, overwrite));
     }
 
     [HttpGet("lookup")]

@@ -43,7 +43,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       _mapper = mapper;
     }
 
-    public async Task<GameDto> Import(Guid id)
+    public async Task<GameDto> Import(Guid id, bool overwrite)
     {
       using (var transaction = await _boardistContext.Database.BeginTransactionAsync())
       {
@@ -68,13 +68,13 @@ namespace Thinktecture.Boardist.WebApi.Services
             return null;
           }
 
-          await ImportSimpleValues(boardGameGeekResult, dbGame);
+          await ImportSimpleValues(boardGameGeekResult, dbGame, overwrite);
 
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, _boardistContext.Categories);
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, _boardistContext.Mechanics);
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, _boardistContext.Persons);
           await ImportBoardGameGeekItem(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, _boardistContext.Persons);
-          await RelateToMainGame(boardGameGeekResult, dbGame);
+          await RelateToMainGame(boardGameGeekResult, dbGame, overwrite);
 
           await DownloadImage(boardGameGeekResult, dbGame.Id);
 
@@ -94,7 +94,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task RelateToMainGame(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame)
+    private async Task RelateToMainGame(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
     {
       var inboundLink = boardGameGeekResult.Link.LastOrDefault(p => p.Inbound && p.Type == BoardGameExpansionType);
 
@@ -110,7 +110,10 @@ namespace Thinktecture.Boardist.WebApi.Services
         return;
       }
 
-      dbGame.MainGameId = dbMainGame.Id;
+      if (overwrite || !dbGame.MainGameId.HasValue)
+      {
+        dbGame.MainGameId = dbMainGame.Id;
+      }
 
       await _boardistContext.SaveChangesAsync();
     }
@@ -193,29 +196,29 @@ namespace Thinktecture.Boardist.WebApi.Services
       await _filesService.Save(stream, gameId, FileCategory.Logo, responseMessage.Content.Headers.ContentType);
     }
 
-    private async Task ImportSimpleValues(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame)
+    private async Task ImportSimpleValues(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
     {
-      if (boardGameGeekResult.MinAge != 0)
+      if (boardGameGeekResult.MinAge != 0 && (overwrite || dbGame.MinAge == 0))
       {
         dbGame.MinAge = boardGameGeekResult.MinAge;
       }
 
-      if (boardGameGeekResult.MaxPlayers != 0)
+      if (boardGameGeekResult.MaxPlayers != 0 && (overwrite || dbGame.MaxPlayers == 0))
       {
         dbGame.MaxPlayers = boardGameGeekResult.MaxPlayers;
       }
 
-      if (boardGameGeekResult.MinPlayers != 0)
+      if (boardGameGeekResult.MinPlayers != 0 && (overwrite || dbGame.MinPlayers == 0))
       {
         dbGame.MinPlayers = boardGameGeekResult.MinPlayers;
       }
 
-      if (boardGameGeekResult.MinPlayTime != 0)
+      if (boardGameGeekResult.MinPlayTime != 0 && (overwrite || !dbGame.MinDuration.HasValue))
       {
         dbGame.MinDuration = boardGameGeekResult.MinPlayTime;
       }
 
-      if (boardGameGeekResult.MaxPlayTime != 0)
+      if (boardGameGeekResult.MaxPlayTime != 0 && (overwrite || !dbGame.MaxDuration.HasValue))
       {
         dbGame.MaxDuration = boardGameGeekResult.MaxPlayTime;
       }
@@ -235,14 +238,17 @@ namespace Thinktecture.Boardist.WebApi.Services
             dbPublisher.BoardGameGeekId = xmlPublisher.Id;
           }
         }
-       
+
         if (dbPublisher == null)
         {
           dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id};
           _boardistContext.Publishers.Add(dbPublisher);
         }
 
-        dbGame.PublisherId = dbPublisher.Id;
+        if (overwrite || !dbGame.PublisherId.HasValue)
+        {
+          dbGame.PublisherId = dbPublisher.Id;
+        }
       }
     }
 
