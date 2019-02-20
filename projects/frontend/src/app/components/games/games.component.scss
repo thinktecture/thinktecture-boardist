@@ -1,19 +1,17 @@
-table {
-  width: 100%;
-
+.mat-table {
   .mat-row {
     cursor: pointer;
   }
 
   .mat-column-minPlayers,
   .mat-column-maxPlayers {
-    width: 50px;
-    text-align: center;
+    flex: 0 0 50px;
+    justify-content: center;
   }
 
   .mat-column-isExtension {
-    width: 70px;
-    text-align: center;
+    flex: 0 0 70px;
+    justify-content: center;
 
     mat-icon {
       color: rgba(0, 0, 0, .4);
@@ -21,8 +19,8 @@ table {
   }
 
   .mat-column-boardGameGeekId {
-    width: 50px;
-    text-align: center;
+    flex: 0 0 50px;
+    justify-content: center;
 
     a {
       color: inherit;
@@ -34,4 +32,10 @@ table {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Publisher} from '../../models/publisher';
@@ -9,7 +9,7 @@ import {AbstractDetail, DetailContext} from '../abstract-detail';
   selector: 'ttb-publisher',
   templateUrl: './publisher.component.html',
   styleUrls: ['./publisher.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublisherComponent extends AbstractDetail<PublishersService, Publisher> {
   readonly form = this.fb.group({
