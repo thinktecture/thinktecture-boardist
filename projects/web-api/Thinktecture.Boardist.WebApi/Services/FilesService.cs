@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using MimeTypes;
 using Thinktecture.Boardist.WebApi.Models;
-using Thinktecture.Boardist.WebApi.Services.MimeTypes;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
