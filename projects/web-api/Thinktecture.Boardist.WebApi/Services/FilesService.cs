@@ -91,7 +91,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       switch (fileCategory)
       {
         case FileCategory.Logo: return "logo";
-        default: return "rule";
+        default: return "rules";
       }
     }
   }

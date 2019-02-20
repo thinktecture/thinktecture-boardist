@@ -22,5 +22,13 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       return File(result.Stream, result.MimeType);
     }
+    
+    [HttpGet("{id}/rules")]
+    public IActionResult Rules(Guid id)
+    {
+      var result = _filesService.Load(id, FileCategory.Rules);
+
+      return File(result.Stream, result.MimeType);
+    }
   }
 }
