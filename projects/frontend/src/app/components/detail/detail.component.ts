@@ -22,4 +22,7 @@ export class DetailComponent extends AbstractDetail<any, any> {
   ) {
     super(context, matDialogRef);
   }
+
+  import(): void {
+  }
 }

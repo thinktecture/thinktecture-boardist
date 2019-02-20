@@ -15,9 +15,9 @@ export interface DetailContext<S extends AbstractData<T>, T extends Item> {
 export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> implements OnInit {
   abstract readonly form: FormGroup;
 
-  protected reload = false;
+  reload = false;
 
-  protected constructor(protected readonly context: DetailContext<S, T>, private readonly matDialogRef: MatDialogRef<any>) {
+  protected constructor(readonly context: DetailContext<S, T>, private readonly matDialogRef: MatDialogRef<any>) {
   }
 
   ngOnInit(): void {
