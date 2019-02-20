@@ -3,10 +3,14 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, finalize, map, repeatWhen, switchMap} from 'rxjs/operators';
+import {Category} from '../../models/category';
 import {Game} from '../../models/game';
+import {Mechanic} from '../../models/mechanic';
 import {Person} from '../../models/person';
 import {Publisher} from '../../models/publisher';
+import {CategoriesService} from '../../services/categories.service';
 import {GamesService} from '../../services/games.service';
+import {MechanicsService} from '../../services/mechanics.service';
 import {PersonsService} from '../../services/persons.service';
 import {PublishersService} from '../../services/publishers.service';
 import {AbstractDetail, DetailContext} from '../abstract-detail';
@@ -27,6 +31,8 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     games: Game[],
     publishers: Publisher[],
     persons: Person[],
+    categories: Category[],
+    mechanics: Mechanic[],
   }>;
 
   readonly form = this.fb.group({
@@ -42,12 +48,16 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     boardGameGeekId: [null, Validators.pattern(/\d*/)],
     authors: [[]],
     illustrators: [[]],
+    categories: [[]],
+    mechanics: [[]],
   });
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly publishers: PublishersService,
     private readonly persons: PersonsService,
+    private readonly categories: CategoriesService,
+    private readonly mechanics: MechanicsService,
     @Inject(MAT_DIALOG_DATA) context: DetailContext<GamesService, Game>,
     matDialogRef: MatDialogRef<GameComponent>,
   ) {
@@ -61,8 +71,10 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       this.context.service.getAll(false),
       this.publishers.getAll(),
       this.persons.getAll(),
+      this.categories.getAll(),
+      this.mechanics.getAll(),
     ).pipe(
-      map(([games, publishers, persons]) => ({ games, publishers, persons })),
+      map(([games, publishers, persons, categories, mechanics]) => ({ games, publishers, persons, categories, mechanics })),
       repeatWhen(() => this.refresh),
     );
   }
@@ -73,7 +85,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     this.importing = true;
 
     iif(() => this.form.dirty, this.save(false), of(false)).pipe(
-      switchMap(() => this.context.service.import(this.context.item.id)),
+      switchMap(() => this.context.service.import(this.context.item.id, this.shift)),
       filter(result => result !== null),
       finalize(() => {
         this.form.enable();

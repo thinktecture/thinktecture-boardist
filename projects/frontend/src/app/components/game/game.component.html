@@ -78,6 +78,20 @@
           <mat-option *ngFor="let person of context.persons" [value]="person.id">{{ person.name }}</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Categories</mat-label>
+        <mat-select formControlName="categories" multiple>
+          <mat-option *ngFor="let category of context.categories" [value]="category.id">{{ category.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Mechanics</mat-label>
+        <mat-select formControlName="mechanics" multiple>
+          <mat-option *ngFor="let mechanic of context.mechanics" [value]="mechanic.id">{{ mechanic.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </ng-container>
   </mat-dialog-content>
 
