@@ -47,7 +47,7 @@ namespace Thinktecture.Boardist.WebApi.Services
           .Include(p => p.Mechanics)
           .SingleOrDefaultAsync(p => p.Id == id);
 
-        if (dbGame == null || !dbGame.BoardGameGeekId.HasValue)
+        if (dbGame?.BoardGameGeekId == null)
         {
           return null;
         }
