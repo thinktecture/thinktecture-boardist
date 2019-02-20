@@ -1,6 +1,4 @@
-export interface Publisher {
-  id: string;
-  name: string;
+import {Item} from './item';
 
-  boardGameGeekId?: number;
+export interface Publisher extends Item {
 }

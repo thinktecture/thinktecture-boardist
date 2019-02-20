@@ -1,10 +1,9 @@
 import {Moment} from 'moment';
 import {Category} from './category';
+import {Item} from './item';
 import {Person} from './person';
 
-export interface Game {
-  id: string;
-  name: string;
+export interface Game extends Item {
   minPlayers: number;
   maxPlayers: number;
   minDuration?: number;
@@ -18,6 +17,4 @@ export interface Game {
   categories: Category[];
   authors: Person[];
   illustrators: Person[];
-
-  boardGameGeekId?: number;
 }

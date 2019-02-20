@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subject} from 'rxjs';
 import {filter, finalize, map, repeatWhen, tap} from 'rxjs/operators';
 import {Game} from '../../models/game';
 import {Person} from '../../models/person';
@@ -9,8 +9,7 @@ import {Publisher} from '../../models/publisher';
 import {GamesService} from '../../services/games.service';
 import {PersonsService} from '../../services/persons.service';
 import {PublishersService} from '../../services/publishers.service';
-import {AbstractDetail} from '../abstract-detail';
-import {DetailComponentContainer} from '../detail/detail.component';
+import {AbstractDetail, DetailContext} from '../abstract-detail';
 
 @Component({
   selector: 'ttb-game',
@@ -18,8 +17,8 @@ import {DetailComponentContainer} from '../detail/detail.component';
   styleUrls: ['./game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent extends AbstractDetail<Game> implements OnInit {
-  private readonly refresh = new BehaviorSubject<null>(null);
+export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit {
+  private readonly refresh = new Subject<void>();
 
   data$: Observable<{
     games: Game[],
@@ -44,20 +43,19 @@ export class GameComponent extends AbstractDetail<Game> implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly games: GamesService,
     private readonly publishers: PublishersService,
     private readonly persons: PersonsService,
-    @Inject(MAT_DIALOG_DATA) data: DetailComponentContainer<Game>,
+    @Inject(MAT_DIALOG_DATA) context: DetailContext<GamesService, Game>,
     matDialogRef: MatDialogRef<GameComponent>,
   ) {
-    super(game => games.save(game), data.item, matDialogRef);
+    super(context, matDialogRef);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
 
     this.data$ = combineLatest(
-      this.games.getAll(false),
+      this.context.service.getAll(false),
       this.publishers.getAll(),
       this.persons.getAll(),
     ).pipe(
@@ -69,7 +67,7 @@ export class GameComponent extends AbstractDetail<Game> implements OnInit {
   import(): void {
     this.form.disable();
 
-    this.games.import(this.data.id).pipe(
+    this.context.service.import(this.context.item.id).pipe(
       filter(result => result !== null),
       tap(result => this.form.patchValue(result)),
       finalize(() => this.form.enable()),

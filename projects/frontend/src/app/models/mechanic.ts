@@ -1,6 +1,4 @@
-export interface Mechanic {
-  id: string;
-  name: string;
+import {Item} from './item';
 
-  boardGameGeekId?: number;
+export interface Mechanic extends Item {
 }

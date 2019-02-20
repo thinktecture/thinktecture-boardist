@@ -1,30 +1,64 @@
-import {OnInit, Type} from '@angular/core';
+import {InjectionToken, OnDestroy, OnInit, Type} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {filter, repeatWhen} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {combineLatest, Observable, Subject, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, map, repeatWhen, shareReplay} from 'rxjs/operators';
+import {Item} from '../models/item';
 import {AbstractData} from '../services/abstract-data';
-import {DetailComponent} from './detail/detail.component';
+import {DetailContext} from './abstract-detail';
 
-export abstract class AbstractOverview<T extends { id: string }> implements OnInit {
-  private readonly refresh = new BehaviorSubject<null>(null);
+export interface OverviewContext<S extends AbstractData<T>, T extends Item> {
+  title: string;
+  service: S;
+  detail: Type<any>;
+}
+
+export const OVERVIEW_CONTEXT = new InjectionToken<OverviewContext<any, any>>('overview context');
+
+export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item> implements OnInit, OnDestroy {
+  private readonly refresh = new Subject<void>();
+
+  private subscription = Subscription.EMPTY;
 
   items$: Observable<T[]>;
 
   protected constructor(
-    private readonly title: string,
-    private readonly service: AbstractData<T>,
+    private readonly context: OverviewContext<S, T>,
     private readonly matDialog: MatDialog,
-    private readonly dialogComponent: Type<any> = DetailComponent,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {
   }
 
   ngOnInit(): void {
-    this.items$ = this.service.getAll().pipe(repeatWhen(() => this.refresh));
+    this.items$ = this.context.service.getAll().pipe(repeatWhen(() => this.refresh), shareReplay(1));
+
+    this.subscription = combineLatest(
+      this.items$,
+      this.route.queryParams.pipe(
+        map(params => params.id),
+        distinctUntilChanged(),
+      ),
+    ).pipe(
+      filter(([items, id]) => id),
+      map(([items, id]) => items.find(item => item.id === id)),
+    ).subscribe(item => this.show(item));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   show(item: T): void {
     this.matDialog
-      .open(this.dialogComponent, { data: { title: this.title, service: this.service, item } })
-      .afterClosed().pipe(filter(refresh => refresh)).subscribe(() => this.refresh.next(null));
+      .open<any, DetailContext<S, T>, boolean>(this.context.detail, { data: { ...this.context, item } })
+      .afterClosed()
+      .subscribe(async refresh => {
+        await this.router.navigate([], { queryParams: {} });
+
+        if (refresh) {
+          this.refresh.next(null);
+        }
+      });
   }
 }

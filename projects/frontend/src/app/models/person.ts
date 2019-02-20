@@ -1,6 +1,4 @@
-export interface Person {
-  id: string;
-  name: string;
+import {Item} from './item';
 
-  boardGameGeekId?: number;
+export interface Person extends Item {
 }

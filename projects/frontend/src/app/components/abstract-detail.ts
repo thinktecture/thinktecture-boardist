@@ -1,20 +1,23 @@
 import {OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
-import {Observable} from 'rxjs';
+import {Item} from '../models/item';
+import {AbstractData} from '../services/abstract-data';
 
-export abstract class AbstractDetail<T extends { id: string }> implements OnInit {
+export interface DetailContext<S extends AbstractData<T>, T extends Item> {
+  title: string;
+  service: S;
+  item: T;
+}
+
+export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> implements OnInit {
   abstract readonly form: FormGroup;
 
-  protected constructor(
-    private readonly saveFn: (item: T) => Observable<void>,
-    protected readonly data: T,
-    private readonly matDialogRef: MatDialogRef<any>,
-  ) {
+  protected constructor(protected readonly context: DetailContext<S, T>, private readonly matDialogRef: MatDialogRef<any>) {
   }
 
   ngOnInit(): void {
-    this.form.patchValue(this.data);
+    this.form.patchValue(this.context.item);
   }
 
   save(): void {
@@ -25,7 +28,7 @@ export abstract class AbstractDetail<T extends { id: string }> implements OnInit
       return;
     }
 
-    this.saveFn({ ...this.form.value, id: this.data.id })
+    this.context.service.save({ ...this.form.value, id: this.context.item.id })
       .subscribe(() => this.matDialogRef.close(true), () => this.form.enable());
   }
 }

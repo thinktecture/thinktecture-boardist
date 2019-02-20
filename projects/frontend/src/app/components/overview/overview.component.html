@@ -5,7 +5,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="['name']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name']" (click)="show(row)"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name']" routerLink="." [queryParams]="{ id: row.id }"></tr>
 </table>
 
 <ng-template #loading>

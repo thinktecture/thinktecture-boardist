@@ -20,13 +20,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {CategoriesComponent} from './components/categories/categories.component';
+import {OVERVIEW_CONTEXT} from './components/abstract-overview';
 import {DetailComponent} from './components/detail/detail.component';
 import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
-import {MechanicsComponent} from './components/mechanics/mechanics.component';
-import {PersonsComponent} from './components/persons/persons.component';
-import {PublishersComponent} from './components/publishers/publishers.component';
+import {OverviewComponent} from './components/overview/overview.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
 
@@ -37,11 +35,8 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     GameComponent,
     SpinnerComponent,
     NumbersPipe,
-    PublishersComponent,
-    PersonsComponent,
-    CategoriesComponent,
     DetailComponent,
-    MechanicsComponent,
+    OverviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +62,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
       useValue: { closeOnNavigation: true, disableClose: true, width: '500px', maxWidth: '90vw', hasBackdrop: true, autoFocus: true },
     },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    { provide: OVERVIEW_CONTEXT, useValue: {} },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

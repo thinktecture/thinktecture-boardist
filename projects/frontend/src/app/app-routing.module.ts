@@ -1,17 +1,39 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CategoriesComponent} from './components/categories/categories.component';
 import {GamesComponent} from './components/games/games.component';
-import {MechanicsComponent} from './components/mechanics/mechanics.component';
-import {PersonsComponent} from './components/persons/persons.component';
-import {PublishersComponent} from './components/publishers/publishers.component';
+import {OverviewComponent} from './components/overview/overview.component';
+import {OverviewContextGuard} from './guards/overview-context.guard';
+import {CategoriesService} from './services/categories.service';
+import {MechanicsService} from './services/mechanics.service';
+import {PersonsService} from './services/persons.service';
+import {PublishersService} from './services/publishers.service';
 
 const routes: Routes = [
   { path: 'games', component: GamesComponent },
-  { path: 'publishers', component: PublishersComponent },
-  { path: 'persons', component: PersonsComponent },
-  { path: 'categories', component: CategoriesComponent },
-  { path: 'mechanics', component: MechanicsComponent },
+  {
+    path: 'publishers',
+    component: OverviewComponent,
+    canActivate: [OverviewContextGuard],
+    data: { title: 'Publishers', service: PublishersService },
+  },
+  {
+    path: 'persons',
+    component: OverviewComponent,
+    canActivate: [OverviewContextGuard],
+    data: { title: 'Persons', service: PersonsService },
+  },
+  {
+    path: 'categories',
+    component: OverviewComponent,
+    canActivate: [OverviewContextGuard],
+    data: { title: 'Categories', service: CategoriesService },
+  },
+  {
+    path: 'mechanics',
+    component: OverviewComponent,
+    canActivate: [OverviewContextGuard],
+    data: { title: 'Mechanics', service: MechanicsService },
+  },
 ];
 
 @NgModule({

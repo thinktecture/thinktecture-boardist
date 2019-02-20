@@ -1,14 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {AbstractData} from '../../services/abstract-data';
-import {AbstractDetail} from '../abstract-detail';
-
-export interface DetailComponentContainer<T extends { id: string }> {
-  title: string;
-  service: AbstractData<T>;
-  item: T;
-}
+import {AbstractDetail, DetailContext} from '../abstract-detail';
 
 @Component({
   selector: 'ttb-detail',
@@ -16,7 +9,7 @@ export interface DetailComponentContainer<T extends { id: string }> {
   styleUrls: ['./detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailComponent extends AbstractDetail<any> {
+export class DetailComponent extends AbstractDetail<any, any> {
   readonly form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(250)]],
     boardGameGeekId: [null, Validators.pattern(/\d*/)],
@@ -24,9 +17,9 @@ export class DetailComponent extends AbstractDetail<any> {
 
   constructor(
     private readonly fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) data: DetailComponentContainer<any>,
+    @Inject(MAT_DIALOG_DATA) context: DetailContext<any, any>,
     matDialogRef: MatDialogRef<DetailComponent>,
   ) {
-    super(item => data.service.save(item), data.item, matDialogRef);
+    super(context, matDialogRef);
   }
 }

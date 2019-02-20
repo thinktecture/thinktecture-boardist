@@ -1,6 +1,4 @@
-export interface Category {
-  id: string;
-  name: string;
+import {Item} from './item';
 
-  boardGameGeekId?: number;
+export interface Category extends Item {
 }
