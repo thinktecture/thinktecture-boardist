@@ -26,6 +26,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
 
   searching = false;
   importing = false;
+  overwrite = false;
 
   data$: Observable<{
     games: Game[],
@@ -85,7 +86,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     this.importing = true;
 
     iif(() => this.form.dirty, this.save(false), of(false)).pipe(
-      switchMap(() => this.context.service.import(this.context.item.id, this.shift)),
+      switchMap(() => this.context.service.import(this.context.item.id, this.overwrite)),
       filter(result => result !== null),
       finalize(() => {
         this.form.enable();

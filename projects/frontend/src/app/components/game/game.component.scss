@@ -17,8 +17,12 @@ button + button {
   margin-left: 4px;
 }
 
+.close {
+  margin-left: auto;
+}
+
 .import {
-  margin-right: auto;
+  margin-right: 8px;
 
   mat-spinner {
     margin-right: 8px;

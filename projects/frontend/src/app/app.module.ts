@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatButtonModule,
+  MatButtonModule, MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -57,6 +57,7 @@ import {NumbersPipe} from './pipes/numbers.pipe';
     MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatCheckboxModule,
   ],
   providers: [
     {

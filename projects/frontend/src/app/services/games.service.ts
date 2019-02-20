@@ -17,8 +17,9 @@ export class GamesService extends AbstractData<Game> {
     return this.httpClient.get<Game[]>(`${environment.baseApiUrl}${this.endpoint}`, { params: { expansions: expansions.toString() } });
   }
 
-  import(id: string): Observable<Game | null> {
-    return this.httpClient.post<Game | null>(`${environment.baseApiUrl}${this.endpoint}/${id}/import`, null);
+  import(id: string, overwrite: boolean): Observable<Game | null> {
+    const params = { overwrite: overwrite.toString() };
+    return this.httpClient.post<Game | null>(`${environment.baseApiUrl}${this.endpoint}/${id}/import`, null, { params });
   }
 
   search(query: string): Observable<number | null> {

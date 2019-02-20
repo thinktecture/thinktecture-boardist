@@ -101,7 +101,8 @@
       <mat-spinner *ngIf="importing" [diameter]="20"></mat-spinner>
       BGG™ Import
     </button>
-    <button mat-button type="button" [mat-dialog-close]="reload">Close</button>
+    <mat-checkbox (change)="overwrite = $event.checked">Overwrite</mat-checkbox>
+    <button mat-button class="close" type="button" [mat-dialog-close]="reload">Close</button>
     <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid || form.pristine">Save</button>
   </mat-dialog-actions>
 </form>
