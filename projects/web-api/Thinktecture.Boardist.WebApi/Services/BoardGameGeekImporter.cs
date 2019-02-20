@@ -71,10 +71,10 @@ namespace Thinktecture.Boardist.WebApi.Services
 
         await ImportPublisherRelation(boardGameGeekResult, dbGame, overwrite);
 
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, _boardistContext.Categories);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, _boardistContext.Mechanics);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, _boardistContext.Persons);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, _boardistContext.Persons);
+        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, _boardistContext.Categories, overwrite);
+        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, _boardistContext.Mechanics, overwrite);
+        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, _boardistContext.Persons, overwrite);
+        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, _boardistContext.Persons, overwrite);
 
         await ImportMainGameRelation(boardGameGeekResult, dbGame, overwrite);
 
@@ -107,7 +107,8 @@ namespace Thinktecture.Boardist.WebApi.Services
 
           if (dbPublisher != null)
           {
-            dbPublisher.BoardGameGeekId = xmlPublishers.Single(p => p.Value.Equals(dbPublisher.Name, StringComparison.OrdinalIgnoreCase)).Id;
+            dbPublisher.BoardGameGeekId =
+              xmlPublishers.Single(p => p.Value.Equals(dbPublisher.Name, StringComparison.OrdinalIgnoreCase)).Id;
           }
         }
 
@@ -115,7 +116,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         {
           var xmlPublisher = xmlPublishers.First();
 
-          dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id};
+          dbPublisher = new Publisher() { Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id };
           _boardistContext.Publishers.Add(dbPublisher);
         }
 
@@ -148,67 +149,70 @@ namespace Thinktecture.Boardist.WebApi.Services
     }
 
     private async Task ImportBoardGameGeekRelations<TSource, TResult>(BoardGameGeekApiResult.BoardGame boardGameGeekResult,
-      string linkType, ICollection<TResult> destination, DbSet<TSource> source)
+      string linkType, ICollection<TResult> destination, DbSet<TSource> source, bool overwrite)
       where TSource : class, IBoardGameGeekItem, new()
       where TResult : class, IGameRelation, new()
     {
-      var links = boardGameGeekResult.Link.Where(p => p.Type == linkType).ToList();
-
-      if (links.Count == 0)
+      if (overwrite || destination.Count == 0)
       {
-        return;
-      }
+        var links = boardGameGeekResult.Link.Where(p => p.Type == linkType).ToList();
 
-      destination.Clear();
-
-      var dbItems = source.ToLookup(p => p.BoardGameGeekId);
-
-      foreach (var link in links.Where(p => !dbItems.Contains(p.Id)))
-      {
-        var item = dbItems[null].FirstOrDefault(p => p.Name == link.Value);
-
-        if (item != null)
+        if (links.Count == 0)
         {
-          item.BoardGameGeekId = link.Id;
+          return;
         }
-      }
 
-      var itemsToAdd = links
-        .Select(p => p.Id)
-        .Except(dbItems
-          .SelectMany(p => p)
-          .Where(p => p.BoardGameGeekId.HasValue)
-          .Select(p => p.BoardGameGeekId.Value)
-        )
-        .Select(id => links.Single(x => x.Id == id))
-        .ToList();
+        destination.Clear();
 
-      itemsToAdd
-        .Select(p =>
+        var dbItems = source.ToLookup(p => p.BoardGameGeekId);
+
+        foreach (var link in links.Where(p => !dbItems.Contains(p.Id)))
         {
-          var item = new TSource()
-          {
-            Id = Guid.NewGuid(),
-            Name = p.Value,
-            BoardGameGeekId = p.Id
-          };
-          source.Add(item);
-          return item;
-        })
-        .Select(p => p.Id)
-        .Concat(links
-          .Except(itemsToAdd)
-          .Select(p => dbItems
-            .SelectMany(x => x)
-            .Single(x => x.BoardGameGeekId == p.Id)
-          )
-          .Select(p => p.Id)
-        )
-        .Select(p => new TResult() {DestinationId = p})
-        .ToList()
-        .ForEach(destination.Add);
+          var item = dbItems[null].FirstOrDefault(p => p.Name == link.Value);
 
-      await _boardistContext.SaveChangesAsync();
+          if (item != null)
+          {
+            item.BoardGameGeekId = link.Id;
+          }
+        }
+
+        var itemsToAdd = links
+          .Select(p => p.Id)
+          .Except(dbItems
+            .SelectMany(p => p)
+            .Where(p => p.BoardGameGeekId.HasValue)
+            .Select(p => p.BoardGameGeekId.Value)
+          )
+          .Select(id => links.Single(x => x.Id == id))
+          .ToList();
+
+        itemsToAdd
+          .Select(p =>
+          {
+            var item = new TSource()
+            {
+              Id = Guid.NewGuid(),
+              Name = p.Value,
+              BoardGameGeekId = p.Id
+            };
+            source.Add(item);
+            return item;
+          })
+          .Select(p => p.Id)
+          .Concat(links
+            .Except(itemsToAdd)
+            .Select(p => dbItems
+              .SelectMany(x => x)
+              .Single(x => x.BoardGameGeekId == p.Id)
+            )
+            .Select(p => p.Id)
+          )
+          .Select(p => new TResult() { DestinationId = p })
+          .ToList()
+          .ForEach(destination.Add);
+
+        await _boardistContext.SaveChangesAsync();
+      }
     }
 
     public async Task ImportImage(Guid gameId)
@@ -282,7 +286,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         using (var xmlTextReader = new XmlTextReader(memoryStream))
         {
           var xmlSerializer = new XmlSerializer(typeof(BoardGameGeekApiResult));
-          var result = (BoardGameGeekApiResult) xmlSerializer.Deserialize(xmlTextReader);
+          var result = (BoardGameGeekApiResult)xmlSerializer.Deserialize(xmlTextReader);
           return result.Game;
         }
       }
@@ -299,7 +303,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         using (var xmlTextReader = new XmlTextReader(memoryStream))
         {
           var xmlSerializer = new XmlSerializer(typeof(BoardGameGeekApiResult));
-          var result = (BoardGameGeekApiResult) xmlSerializer.Deserialize(xmlTextReader);
+          var result = (BoardGameGeekApiResult)xmlSerializer.Deserialize(xmlTextReader);
           return result.Game;
         }
       }
