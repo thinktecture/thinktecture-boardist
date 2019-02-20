@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -20,6 +19,7 @@ namespace Thinktecture.Boardist.WebApi.Services
   public class BoardGameGeekImporter
   {
     private const string BoardGameGeekApiUrl = "https://www.boardgamegeek.com/xmlapi2";
+    private const string BoardGameType = "boardgame";
     private const string BoardGamePublisherType = "boardgamepublisher";
     private const string BoardGameDesignerType = "boardgamedesigner";
     private const string BoardGameArtistType = "boardgameartist";
@@ -223,30 +223,30 @@ namespace Thinktecture.Boardist.WebApi.Services
         dbGame.MaxDuration = boardGameGeekResult.MaxPlayTime;
       }
 
-      var xmlPublisher = boardGameGeekResult.Link.FirstOrDefault(p => p.Type == BoardGamePublisherType);
-
-      if (xmlPublisher != null)
+      if (overwrite || !dbGame.PublisherId.HasValue)
       {
-        var dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.BoardGameGeekId == xmlPublisher.Id);
+        var xmlPublisher = boardGameGeekResult.Link.FirstOrDefault(p => p.Type == BoardGamePublisherType);
 
-        if (dbPublisher == null)
+        if (xmlPublisher != null)
         {
-          dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.Name == xmlPublisher.Value);
+          var dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.BoardGameGeekId == xmlPublisher.Id);
 
-          if (dbPublisher != null)
+          if (dbPublisher == null)
           {
-            dbPublisher.BoardGameGeekId = xmlPublisher.Id;
+            dbPublisher = await _boardistContext.Publishers.SingleOrDefaultAsync(p => p.Name == xmlPublisher.Value);
+
+            if (dbPublisher != null)
+            {
+              dbPublisher.BoardGameGeekId = xmlPublisher.Id;
+            }
           }
-        }
 
-        if (dbPublisher == null)
-        {
-          dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id};
-          _boardistContext.Publishers.Add(dbPublisher);
-        }
+          if (dbPublisher == null)
+          {
+            dbPublisher = new Publisher() {Name = xmlPublisher.Value, Id = Guid.NewGuid(), BoardGameGeekId = xmlPublisher.Id};
+            _boardistContext.Publishers.Add(dbPublisher);
+          }
 
-        if (overwrite || !dbGame.PublisherId.HasValue)
-        {
           dbGame.PublisherId = dbPublisher.Id;
         }
       }
@@ -272,7 +272,7 @@ namespace Thinktecture.Boardist.WebApi.Services
     {
       var httpClient = _httpClientFactory.CreateClient();
 
-      var httpResult = await httpClient.GetByteArrayAsync($"{BoardGameGeekApiUrl}/search?query={UrlEncoder.Default.Encode(query)}&exact=1&type=boardgame,boardgameexpansion");
+      var httpResult = await httpClient.GetByteArrayAsync($"{BoardGameGeekApiUrl}/search?query={UrlEncoder.Default.Encode(query)}&exact=1&type={BoardGameType},{BoardGameExpansionType}");
       using (var memoryStream = new MemoryStream(httpResult))
       {
         using (var xmlTextReader = new XmlTextReader(memoryStream))
