@@ -30,6 +30,7 @@ import {OverviewComponent} from './components/overview/overview.component';
 import {PublisherComponent} from './components/publisher/publisher.component';
 import {PublishersComponent} from './components/publishers/publishers.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
+import {FileValueAccessorDirective, MultipleFileValueAccessorDirective} from './directives/file-value-accessor.directive';
 import {NumbersPipe} from './pipes/numbers.pipe';
 import {PublisherPipe} from './pipes/publisher.pipe';
 
@@ -45,6 +46,8 @@ import {PublisherPipe} from './pipes/publisher.pipe';
     PublisherComponent,
     PublisherPipe,
     PublishersComponent,
+    FileValueAccessorDirective,
+    MultipleFileValueAccessorDirective,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@
   <h2 mat-dialog-title>Board game</h2>
 
   <mat-dialog-content>
-    <ng-container *ngIf="data$ | async as context; else loading">
+    <ng-container *ngIf="data$ | async as data; else loading">
       <div class="flex">
         <div class="flex-1">
           <mat-form-field>
@@ -67,7 +67,7 @@
             <mat-label>Expansion to</mat-label>
             <mat-select formControlName="mainGameId">
               <mat-option [value]="null"></mat-option>
-              <mat-option *ngFor="let game of context.games" [value]="game.id">{{ game.name }}</mat-option>
+              <mat-option *ngFor="let game of data.games" [value]="game.id">{{ game.name }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -78,42 +78,50 @@
         <mat-label>Publisher</mat-label>
         <mat-select formControlName="publisherId">
           <mat-option [value]="null"></mat-option>
-          <mat-option *ngFor="let publisher of context.publishers" [value]="publisher.id">{{ publisher.name }}</mat-option>
+          <mat-option *ngFor="let publisher of data.publishers" [value]="publisher.id">{{ publisher.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Authors</mat-label>
         <mat-select formControlName="authors" multiple>
-          <mat-option *ngFor="let person of context.persons" [value]="person.id">{{ person.name }}</mat-option>
+          <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Illustrators</mat-label>
         <mat-select formControlName="illustrators" multiple>
-          <mat-option *ngFor="let person of context.persons" [value]="person.id">{{ person.name }}</mat-option>
+          <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Categories</mat-label>
         <mat-select formControlName="categories" multiple>
-          <mat-option *ngFor="let category of context.categories" [value]="category.id">{{ category.name }}</mat-option>
+          <mat-option *ngFor="let category of data.categories" [value]="category.id">{{ category.name }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Mechanics</mat-label>
         <mat-select formControlName="mechanics" multiple>
-          <mat-option *ngFor="let mechanic of context.mechanics" [value]="mechanic.id">{{ mechanic.name }}</mat-option>
+          <mat-option *ngFor="let mechanic of data.mechanics" [value]="mechanic.id">{{ mechanic.name }}</mat-option>
         </mat-select>
       </mat-form-field>
     </ng-container>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button class="close" type="button" [mat-dialog-close]="reload">Close</button>
+    <a *ngIf="context.item.hasRules" [href]="rulesSrc" class="rules" target="_blank">
+      <button mat-flat-button type="button" color="accent">Open Rules</button>
+    </a>
+    <button *ngIf="context.item.id && !context.item.hasRules" mat-flat-button type="button" class="rules" color="warn"
+            (click)="file.click()">
+      Upload Rules
+      <input type="file" #file formControlName="rules">
+    </button>
+    <button mat-button type="button" [mat-dialog-close]="reload">Close</button>
     <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid || form.pristine">Save</button>
   </mat-dialog-actions>
 </form>

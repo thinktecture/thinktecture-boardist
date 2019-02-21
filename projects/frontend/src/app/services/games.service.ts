@@ -6,6 +6,11 @@ import {environment} from '../../environments/environment';
 import {Game} from '../models/game';
 import {AbstractData} from './abstract-data';
 
+export enum FileCategory {
+  Logo = 'logo',
+  Rules = 'rules',
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,5 +27,13 @@ export class GamesService extends AbstractData<Game> {
 
   search(query: string): Observable<number | null> {
     return this.httpClient.get<number | null>(`${environment.baseApiUrl}${this.endpoint}/lookup`, { params: { query } });
+  }
+
+  upload(category: FileCategory, id: string, file: File): Observable<void> {
+    const data = new FormData();
+    data.append('id', id);
+    data.append('file', file);
+
+    return this.httpClient.post<void>(`${environment.baseApiUrl}binaries/${category}`, data);
   }
 }

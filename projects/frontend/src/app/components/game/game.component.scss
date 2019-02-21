@@ -29,8 +29,12 @@ button + button {
   margin-left: 4px;
 }
 
-.close {
-  margin-left: auto;
+.rules {
+  margin-right: auto;
+
+  input {
+    display: none;
+  }
 }
 
 .import {

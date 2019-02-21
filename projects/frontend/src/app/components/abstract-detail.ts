@@ -20,7 +20,7 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
   reload = false;
   importing = false;
 
-  protected constructor(readonly context: DetailContext<S, T>, private readonly matDialogRef: MatDialogRef<any>) {
+  protected constructor(readonly context: DetailContext<S, T>, protected readonly matDialogRef: MatDialogRef<any>) {
   }
 
   ngOnInit(): void {

@@ -17,4 +17,6 @@ export interface Game extends Item {
   categories: Category[];
   authors: Person[];
   illustrators: Person[];
+
+  hasRules: boolean;
 }

@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {combineLatest, defer, Observable} from 'rxjs';
-import {filter, finalize, map, repeatWhen} from 'rxjs/operators';
+import {combineLatest, defer, iif, Observable, of} from 'rxjs';
+import {filter, finalize, map, mapTo, repeatWhen, switchMap, tap} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 import {Category} from '../../models/category';
 import {Game} from '../../models/game';
@@ -10,7 +10,7 @@ import {Mechanic} from '../../models/mechanic';
 import {Person} from '../../models/person';
 import {Publisher} from '../../models/publisher';
 import {CategoriesService} from '../../services/categories.service';
-import {GamesService} from '../../services/games.service';
+import {FileCategory, GamesService} from '../../services/games.service';
 import {MechanicsService} from '../../services/mechanics.service';
 import {PersonsService} from '../../services/persons.service';
 import {PublishersService} from '../../services/publishers.service';
@@ -48,10 +48,15 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     illustrators: [[]],
     categories: [[]],
     mechanics: [[]],
+    rules: [null],
   });
 
   get coverSrc(): string {
-    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/logo)` : '';
+    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Logo})` : '';
+  }
+
+  get rulesSrc(): string {
+    return `${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Rules}`;
   }
 
   constructor(
@@ -88,6 +93,28 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     this.persons.clearCache();
     this.categories.clearCache();
     this.mechanics.clearCache();
+  }
+
+  protected save(close = true): Observable<Game> {
+    const { service } = this.context;
+    return service.save({ ...this.form.value, id: this.context.item.id, rules: null }).pipe(
+      switchMap(result =>
+        iif(() => this.form.value.rules,
+          service.upload(FileCategory.Rules, result.id, this.form.value.rules).pipe(
+            tap(() => {
+              this.context.item.hasRules = true;
+              this.form.patchValue({rules: null});
+              this.form.controls.rules.markAsPristine();
+              this.form.controls.rules.markAsUntouched();
+            }),
+          ),
+          of(null),
+        ).pipe(
+          mapTo(result),
+        ),
+      ),
+      tap(() => close && this.matDialogRef.close(this.reload)),
+    );
   }
 
   search(): void {
