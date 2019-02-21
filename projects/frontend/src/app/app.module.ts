@@ -28,6 +28,7 @@ import {GameComponent} from './components/game/game.component';
 import {GamesComponent} from './components/games/games.component';
 import {OverviewComponent} from './components/overview/overview.component';
 import {PublisherComponent} from './components/publisher/publisher.component';
+import {PublishersComponent} from './components/publishers/publishers.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {NumbersPipe} from './pipes/numbers.pipe';
 import {PublisherPipe} from './pipes/publisher.pipe';
@@ -43,6 +44,7 @@ import {PublisherPipe} from './pipes/publisher.pipe';
     OverviewComponent,
     PublisherComponent,
     PublisherPipe,
+    PublishersComponent,
   ],
   imports: [
     BrowserModule,

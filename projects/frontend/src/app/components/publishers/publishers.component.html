@@ -1,0 +1,27 @@
+<mat-table *ngIf="items$ | async as items; else loading" [dataSource]="items" matSort (matSortChange)="this.resort($event)"
+           [matSortActive]="sort.active" [matSortDirection]="sort.direction">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{ item.name }}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="priority">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Priority</mat-header-cell>
+    <mat-cell *matCellDef="let item">
+      <ng-container [ngSwitch]="item.priority">
+        <mat-icon *ngSwitchCase="10">done</mat-icon>
+        <mat-icon *ngSwitchCase="20">done_all</mat-icon>
+      </ng-container>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['name', 'priority']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['name', 'priority']" (click)="show(row)"></mat-row>
+</mat-table>
+
+<button mat-fab class="add" color="primary" (click)="add()">
+  <mat-icon>playlist_add</mat-icon>
+</button>
+
+<ng-template #loading>
+  <ttb-spinner></ttb-spinner>
+</ng-template>

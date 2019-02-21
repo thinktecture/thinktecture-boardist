@@ -1,0 +1,15 @@
+.mat-table {
+  .mat-row {
+    cursor: pointer;
+  }
+
+  .mat-column-priority {
+    flex: 0 0 60px;
+  }
+}
+
+.add {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
