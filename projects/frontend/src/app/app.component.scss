@@ -6,34 +6,33 @@
   height: 100vh;
 
   &.is-mobile {
-    mat-toolbar {
-      position: fixed;
-      z-index: 2;
-    }
-
     mat-sidenav-container {
-      flex: 1 0 auto;
+      margin-top: 56px;
     }
   }
 }
 
-h1 {
-  margin-left: 8px;
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  flex-shrink: 0;
 
-  display: flex;
-  align-items: center;
+  h1 {
+    margin-left: 8px;
 
-  mat-icon {
-    margin-right: 4px;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 4px;
+    }
   }
 }
 
 mat-sidenav-container {
-  flex: 1;
-}
-
-mat-nav-list {
-  padding-top: 7px;
+  margin-top: 64px;
+  flex: 1 0 auto;
 
   mat-icon {
     margin-right: 8px;

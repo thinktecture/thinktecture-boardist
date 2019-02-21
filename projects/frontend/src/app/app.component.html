@@ -5,8 +5,8 @@
   <h1><mat-icon>supervised_user_circle</mat-icon>Boardist</h1>
 </mat-toolbar>
 
-<mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-  <mat-sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+<mat-sidenav-container>
+  <mat-sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="true" [fixedTopGap]="mobileQuery.matches ? 56 : 64">
     <mat-nav-list (click)="snav.toggle()">
       <a mat-list-item [routerLink]="['what-to-play']"><mat-icon>question_answer</mat-icon> What-to-Play™</a>
       <mat-divider></mat-divider>

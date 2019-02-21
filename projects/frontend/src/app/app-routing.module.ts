@@ -2,21 +2,15 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {GamesComponent} from './components/games/games.component';
 import {OverviewComponent} from './components/overview/overview.component';
-import {PublisherComponent} from './components/publisher/publisher.component';
+import {PublishersComponent} from './components/publishers/publishers.component';
 import {OverviewContextGuard} from './guards/overview-context.guard';
 import {CategoriesService} from './services/categories.service';
 import {MechanicsService} from './services/mechanics.service';
 import {PersonsService} from './services/persons.service';
-import {PublishersService} from './services/publishers.service';
 
 const routes: Routes = [
   { path: 'games', component: GamesComponent },
-  {
-    path: 'publishers',
-    component: OverviewComponent,
-    canActivate: [OverviewContextGuard],
-    data: { title: 'Publishers', service: PublishersService, detail: PublisherComponent },
-  },
+  { path: 'publishers', component: PublishersComponent },
   {
     path: 'persons',
     component: OverviewComponent,
@@ -38,7 +32,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {
