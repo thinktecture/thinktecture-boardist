@@ -266,12 +266,12 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       if (boardGameGeekResult.MinPlayTime != 0 && (overwrite || !dbGame.MinDuration.HasValue))
       {
-        dbGame.MinDuration = boardGameGeekResult.MinPlayTime;
+        dbGame.MinDuration = (int)Math.Ceiling(boardGameGeekResult.MinPlayTime / 5m) * 5;
       }
 
       if (boardGameGeekResult.MaxPlayTime != 0 && (overwrite || !dbGame.MaxDuration.HasValue))
       {
-        dbGame.MaxDuration = boardGameGeekResult.MaxPlayTime;
+        dbGame.MaxDuration = (int)Math.Ceiling(boardGameGeekResult.MaxPlayTime / 5m) * 5;
       }
     }
 
