@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {combineLatest, defer, iif, Observable, of} from 'rxjs';
@@ -22,7 +23,8 @@ import {AbstractDetail, DetailContext} from '../abstract-detail';
   styleUrls: ['./game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit {
+export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit, OnDestroy {
+  mobileQuery: MediaQueryList;
   searching = false;
 
   data$: Observable<{
@@ -51,6 +53,8 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     rules: [null],
   });
 
+  private listener = () => this.changeDetectorRef.markForCheck();
+
   get coverSrc(): string {
     return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Logo})` : '';
   }
@@ -67,12 +71,17 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     private readonly mechanics: MechanicsService,
     @Inject(MAT_DIALOG_DATA) context: DetailContext<GamesService, Game>,
     matDialogRef: MatDialogRef<GameComponent>,
+    private readonly media: MediaMatcher,
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super(context, matDialogRef);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
+    this.mobileQuery.addListener(this.listener);
 
     this.data$ = defer(() => combineLatest(
       this.context.service.getAll(false),
@@ -84,6 +93,10 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       map(([games, publishers, persons, categories, mechanics]) => ({ games, publishers, persons, categories, mechanics })),
       repeatWhen(() => this.refresh),
     );
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this.listener);
   }
 
   protected afterImport(): void {
@@ -103,7 +116,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
           service.upload(FileCategory.Rules, result.id, this.form.value.rules).pipe(
             tap(() => {
               this.context.item.hasRules = true;
-              this.form.patchValue({rules: null});
+              this.form.patchValue({ rules: null });
               this.form.controls.rules.markAsPristine();
               this.form.controls.rules.markAsUntouched();
             }),
@@ -117,7 +130,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     );
   }
 
-  search(): void {
+  searchForBoardGameGeekId(): void {
     const { boardGameGeekId } = this.form.controls;
     boardGameGeekId.disable();
 

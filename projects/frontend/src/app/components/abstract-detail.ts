@@ -42,13 +42,13 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     ).subscribe();
   }
 
-  import(): void {
+  importFromBoardGameGeek(): void {
     this.form.disable();
 
     this.importing = true;
 
     iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
-      switchMap(item => this.context.service.import(item.id)),
+      switchMap(item => this.context.service.import(item.id, this.form.controls.boardGameGeekId.dirty)),
       filter(result => result !== null),
       tap(() => this.afterImport()),
       finalize(() => {

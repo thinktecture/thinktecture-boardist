@@ -14,14 +14,15 @@
             <mat-form-field>
               <mat-label>BoardGameGeek™ Id</mat-label>
               <input type="text" matInput formControlName="boardGameGeekId">
-              <mat-icon *ngIf="form.value.name && !form.value.boardGameGeekId && !searching" class="search" matSuffix (click)="search()">
+              <mat-icon *ngIf="form.value.name && !form.value.boardGameGeekId && !searching" class="search" matSuffix
+                        (click)="searchForBoardGameGeekId()">
                 search
               </mat-icon>
               <mat-spinner *ngIf="searching || importing" matSuffix [diameter]="20"></mat-spinner>
             </mat-form-field>
 
             <div class="flex column">
-              <button mat-flat-button type="button" class="import" color="accent" (click)="import()"
+              <button mat-flat-button type="button" class="import" color="accent" (click)="importFromBoardGameGeek()"
                       [disabled]="!form.value.boardGameGeekId || importing">
                 BGG™ Import
               </button>
@@ -71,7 +72,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="flex-1 cover" [style.backgroundImage]="coverSrc"></div>
+        <div *ngIf="!mobileQuery.matches" class="flex-1 cover" [style.backgroundImage]="coverSrc"></div>
       </div>
 
       <mat-form-field>

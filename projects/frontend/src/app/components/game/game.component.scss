@@ -19,10 +19,6 @@ mat-form-field {
   background-size: contain;
 
   margin: 50px;
-
-  @media (max-width: 600px) {
-    display: none;
-  }
 }
 
 button + button {
