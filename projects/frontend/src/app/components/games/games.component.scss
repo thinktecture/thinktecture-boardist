@@ -34,16 +34,16 @@
       color: inherit;
     }
   }
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
 }
 
 .add {
   position: fixed;
   bottom: 20px;
   right: 20px;
-}
-
-mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
 }

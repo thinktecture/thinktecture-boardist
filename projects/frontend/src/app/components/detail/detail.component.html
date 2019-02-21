@@ -7,14 +7,23 @@
       <input type="text" matInput formControlName="name">
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>BoardGameGeek™ Id</mat-label>
-      <input type="text" matInput formControlName="boardGameGeekId">
-    </mat-form-field>
+    <div class="flex">
+      <mat-form-field>
+        <mat-label>BoardGameGeek™ Id</mat-label>
+        <input type="text" matInput formControlName="boardGameGeekId">
+        <mat-spinner *ngIf="importing" matSuffix [diameter]="20"></mat-spinner>
+      </mat-form-field>
+
+      <div class="flex column">
+        <button mat-flat-button type="button" class="import" color="accent" (click)="import()"
+                [disabled]="!form.value.boardGameGeekId || importing">
+          BGG™ Import
+        </button>
+      </div>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-flat-button type="button" class="import" color="accent" (click)="import()" disabled>BGG™ Import</button>
     <button mat-button type="button" [mat-dialog-close]="reload">Close</button>
     <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid || form.pristine">Save</button>
   </mat-dialog-actions>

@@ -1,8 +1,7 @@
-import {InjectionToken, OnDestroy, OnInit, Type} from '@angular/core';
-import {MatDialog, Sort} from '@angular/material';
-import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, defer, Observable, Subject, Subscription} from 'rxjs';
-import {distinctUntilChanged, filter, map, repeatWhen} from 'rxjs/operators';
+import {InjectionToken, OnInit, Type} from '@angular/core';
+import {MatDialog, MatDialogConfig, Sort} from '@angular/material';
+import {defer, Observable, Subject} from 'rxjs';
+import {filter, map, repeatWhen} from 'rxjs/operators';
 import {Item} from '../models/item';
 import {AbstractData} from '../services/abstract-data';
 import {DetailContext} from './abstract-detail';
@@ -15,14 +14,13 @@ export interface OverviewContext<S extends AbstractData<T>, T extends Item> {
   title: string;
   service: S;
   detail: Type<any>;
+  dialogConfig?: MatDialogConfig<DetailContext<S, T>>,
 }
 
 export const OVERVIEW_CONTEXT = new InjectionToken<OverviewContext<any, any>>('overview context');
 
-export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item> implements OnInit, OnDestroy {
+export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item> implements OnInit {
   private readonly refresh = new Subject<void>();
-
-  private subscription = Subscription.EMPTY;
 
   items$: Observable<T[]>;
   sort: Sort = { active: 'name', direction: 'asc' };
@@ -30,8 +28,6 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
   protected constructor(
     private readonly context: OverviewContext<S, T>,
     private readonly matDialog: MatDialog,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
   ) {
   }
 
@@ -40,21 +36,6 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
       map(items => this.sortData(items)),
       repeatWhen(() => this.refresh),
     );
-
-    this.subscription = combineLatest(
-      this.items$,
-      this.route.queryParams.pipe(
-        map(params => params.id),
-        distinctUntilChanged(),
-      ),
-    ).pipe(
-      filter(([items, id]) => id),
-      map(([items, id]) => items.find(item => item.id === id)),
-    ).subscribe(item => this.show(item));
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   private sortData(items: T[]): T[] {
@@ -74,14 +55,9 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
 
   show(item: T): void {
     this.matDialog
-      .open<any, DetailContext<S, T>, boolean>(this.context.detail, { data: { ...this.context, item } })
-      .afterClosed()
-      .subscribe(async refresh => {
-        await this.router.navigate([], { queryParams: {} });
-
-        if (refresh) {
-          this.refresh.next(null);
-        }
-      });
+      .open<any, DetailContext<S, T>, boolean>(this.context.detail, { ...this.context.dialogConfig, data: { ...this.context, item } })
+      .afterClosed().pipe(
+      filter(refresh => refresh),
+    ).subscribe(() => this.refresh.next(null));
   }
 }
