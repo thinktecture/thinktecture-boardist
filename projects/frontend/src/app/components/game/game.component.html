@@ -49,7 +49,7 @@
               <mat-label>Minimum play time</mat-label>
               <mat-select formControlName="minDuration">
                 <mat-option [value]="null"></mat-option>
-                <mat-option *ngFor="let nr of null | numbers : 5 : 120 : 5" [value]="nr">{{ nr }}</mat-option>
+                <mat-option *ngFor="let nr of null | numbers : 5 : 240 : 5" [value]="nr">{{ nr }}</mat-option>
               </mat-select>
             </mat-form-field>
 
