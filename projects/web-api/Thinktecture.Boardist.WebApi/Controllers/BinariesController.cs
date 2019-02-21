@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Thinktecture.Boardist.WebApi.DTOs;
 using Thinktecture.Boardist.WebApi.Models;
@@ -28,7 +27,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
       {
         await _boardGameGeekImporter.ImportImage(id);
       }
-      
+
       var result = _filesService.Load(id, FileCategory.Logo);
 
       return File(result.Stream, result.MimeType);
