@@ -11,6 +11,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
   .flex-1 {
+    max-width: 100%;
     flex: 1;
   }
 }

@@ -3,6 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {combineLatest, defer, Observable} from 'rxjs';
 import {filter, finalize, map, repeatWhen} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 import {Category} from '../../models/category';
 import {Game} from '../../models/game';
 import {Mechanic} from '../../models/mechanic';
@@ -48,6 +49,10 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     categories: [[]],
     mechanics: [[]],
   });
+
+  get coverSrc(): string {
+    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/logo)` : '';
+  }
 
   constructor(
     private readonly fb: FormBuilder,
