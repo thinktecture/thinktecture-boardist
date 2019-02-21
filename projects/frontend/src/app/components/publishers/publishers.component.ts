@@ -13,6 +13,6 @@ import {PublisherComponent} from '../publisher/publisher.component';
 })
 export class PublishersComponent extends AbstractOverview<PublishersService, Publisher> {
   constructor(publishers: PublishersService, matDialog: MatDialog) {
-    super({ title: 'Publishers', service: publishers, detail: PublisherComponent }, matDialog);
+    super({ title: 'Publishers', service: publishers, detail: PublisherComponent, dialogConfig: { width: '700px' } }, matDialog);
   }
 }

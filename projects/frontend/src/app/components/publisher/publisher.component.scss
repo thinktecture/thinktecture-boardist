@@ -3,6 +3,18 @@ mat-form-field {
   min-width: 1px;
 }
 
+.cover {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  margin: 50px;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
 button + button {
   margin-left: 4px;
 }

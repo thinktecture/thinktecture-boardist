@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {environment} from '../../../environments/environment';
 import {Publisher} from '../../models/publisher';
 import {PublishersService} from '../../services/publishers.service';
 import {AbstractDetail, DetailContext} from '../abstract-detail';
@@ -17,6 +18,10 @@ export class PublisherComponent extends AbstractDetail<PublishersService, Publis
     priority: [null, Validators.required],
     boardGameGeekId: [null, Validators.pattern(/\d*/)],
   });
+
+  get coverSrc(): string {
+    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/logo)` : '';
+  }
 
   constructor(
     private readonly fb: FormBuilder,

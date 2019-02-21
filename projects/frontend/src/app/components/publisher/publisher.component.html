@@ -2,34 +2,39 @@
   <h2 mat-dialog-title>Publisher</h2>
 
   <mat-dialog-content>
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input type="text" matInput formControlName="name">
-    </mat-form-field>
-
     <div class="flex">
-      <mat-form-field>
-        <mat-label>BoardGameGeek™ Id</mat-label>
-        <input type="text" matInput formControlName="boardGameGeekId">
-        <mat-spinner *ngIf="importing" matSuffix [diameter]="20"></mat-spinner>
-      </mat-form-field>
+      <div class="flex-1">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="name">
+        </mat-form-field>
 
-      <div class="flex column">
-        <button mat-flat-button type="button" class="import" color="accent" (click)="import()"
-                [disabled]="!form.value.boardGameGeekId || importing">
-          BGG™ Import
-        </button>
+        <div class="flex">
+          <mat-form-field>
+            <mat-label>BoardGameGeek™ Id</mat-label>
+            <input type="text" matInput formControlName="boardGameGeekId">
+            <mat-spinner *ngIf="importing" matSuffix [diameter]="20"></mat-spinner>
+          </mat-form-field>
+
+          <div class="flex column">
+            <button mat-flat-button type="button" class="import" color="accent" (click)="import()"
+                    [disabled]="!form.value.boardGameGeekId || importing">
+              BGG™ Import
+            </button>
+          </div>
+        </div>
+
+        <mat-form-field>
+          <mat-label>Priority</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option [value]="0">Default</mat-option>
+            <mat-option [value]="10">Medium</mat-option>
+            <mat-option [value]="20">High</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
+      <div class="flex-1 cover" [style.backgroundImage]="coverSrc"></div>
     </div>
-
-    <mat-form-field>
-      <mat-label>Priority</mat-label>
-      <mat-select formControlName="priority">
-        <mat-option [value]="0">Default</mat-option>
-        <mat-option [value]="10">Medium</mat-option>
-        <mat-option [value]="20">High</mat-option>
-      </mat-select>
-    </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
