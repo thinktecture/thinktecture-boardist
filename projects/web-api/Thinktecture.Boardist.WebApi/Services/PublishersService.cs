@@ -24,7 +24,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PublisherDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers).ToArrayAsync();
+      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<PublisherDto> GetAsync(Guid id)

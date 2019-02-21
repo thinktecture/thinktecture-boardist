@@ -22,7 +22,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<CategoryDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories).ToArrayAsync();
+      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<CategoryDto> GetAsync(Guid id)

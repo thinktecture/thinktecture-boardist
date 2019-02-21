@@ -32,7 +32,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         query = query.Where(p => p.MainGame == null);
       }
 
-      var games = await _mapper.ProjectTo<GameDto>(query).ToArrayAsync();
+      var games = await _mapper.ProjectTo<GameDto>(query.OrderBy(p => p.Name)).ToArrayAsync();
 
       foreach (var game in games)
       {
