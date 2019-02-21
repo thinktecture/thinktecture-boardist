@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Models;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
@@ -31,12 +32,23 @@ namespace Thinktecture.Boardist.WebApi.Services
         query = query.Where(p => p.MainGame == null);
       }
 
-      return await _mapper.ProjectTo<GameDto>(query).ToArrayAsync();
+      var games = await _mapper.ProjectTo<GameDto>(query).ToArrayAsync();
+
+      foreach (var game in games)
+      {
+        game.HasRules = _filesService.Exists(game.Id, FileCategory.Rules);
+      }
+
+      return games;
     }
 
     public async Task<GameDto> GetAsync(Guid id)
     {
-      return await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      var game = await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
+
+      game.HasRules = _filesService.Exists(game.Id, FileCategory.Rules);
+
+      return game;
     }
 
     public async Task<GameDto> CreateAsync(GameDto game)

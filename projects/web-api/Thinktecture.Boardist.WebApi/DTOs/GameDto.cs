@@ -20,5 +20,7 @@ namespace Thinktecture.Boardist.WebApi.DTOs
     public ICollection<Guid> Illustrators { get; set; }
     public ICollection<Guid> Categories { get; set; }
     public ICollection<Guid> Mechanics { get; set; }
+
+    public bool HasRules { get; set; }
   }
 }
