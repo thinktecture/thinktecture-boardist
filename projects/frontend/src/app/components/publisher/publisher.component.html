@@ -2,26 +2,24 @@
   <h2 mat-dialog-title>Publisher</h2>
 
   <mat-dialog-content>
-    <div class="flex">
-      <div class="flex-1">
+    <div class="grid">
+      <div>
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input type="text" matInput formControlName="name">
         </mat-form-field>
 
-        <div class="flex">
+        <div class="grid mobile bgg">
           <mat-form-field>
             <mat-label>BoardGameGeek™ Id</mat-label>
             <input type="text" matInput formControlName="boardGameGeekId">
             <mat-spinner *ngIf="importing" matSuffix [diameter]="20"></mat-spinner>
           </mat-form-field>
 
-          <div class="flex column">
-            <button mat-flat-button type="button" class="import" color="accent" (click)="importFromBoardGameGeek()"
-                    [disabled]="!form.value.boardGameGeekId || importing">
-              BGG™ Import
-            </button>
-          </div>
+          <button mat-flat-button type="button" class="import" color="accent" (click)="importFromBoardGameGeek()"
+                  [disabled]="!form.value.boardGameGeekId || importing">
+            BGG™ Import
+          </button>
         </div>
 
         <mat-form-field>
@@ -33,7 +31,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="flex-1 cover" [style.backgroundImage]="coverSrc"></div>
+      <div class="cover" [style.backgroundImage]="coverSrc"></div>
     </div>
   </mat-dialog-content>
 

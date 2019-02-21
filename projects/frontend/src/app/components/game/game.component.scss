@@ -7,22 +7,31 @@ mat-form-field {
   }
 }
 
-.flex.multiple {
-  mat-form-field + mat-form-field {
-    margin-left: 8px;
-  }
-}
-
 .cover {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 
+  align-self: stretch;
+  justify-self: stretch;
   margin: 50px;
 }
 
 button + button {
   margin-left: 4px;
+}
+
+.bgg {
+  grid-template-columns: 1fr auto;
+
+  .import {
+    margin-top: 12px;
+    margin-left: 8px;
+  }
+
+  mat-spinner {
+    margin: 2px;
+  }
 }
 
 .rules {
@@ -31,13 +40,4 @@ button + button {
   input {
     display: none;
   }
-}
-
-.import {
-  margin-top: 12px;
-  margin-left: 8px;
-}
-
-mat-spinner {
-  margin: 2px;
 }

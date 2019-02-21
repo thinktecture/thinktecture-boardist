@@ -8,7 +8,7 @@ export interface Game extends Item {
   maxPlayers: number;
   minDuration?: number;
   maxDuration?: number;
-  minAge?: number;
+  minAge: number;
   buyDate?: Moment;
   buyPrice?: number;
   publisherId: string;

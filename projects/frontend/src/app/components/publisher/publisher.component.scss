@@ -8,22 +8,24 @@ mat-form-field {
   background-position: center;
   background-size: contain;
 
+  align-self: stretch;
+  justify-self: stretch;
   margin: 50px;
-
-  @media (max-width: 600px) {
-    display: none;
-  }
 }
 
 button + button {
   margin-left: 4px;
 }
 
-.import {
-  margin-top: 12px;
-  margin-left: 8px;
-}
+.bgg {
+  grid-template-columns: 1fr auto;
 
-mat-spinner {
-  margin: 2px;
+  .import {
+    margin-top: 12px;
+    margin-left: 8px;
+  }
+
+  mat-spinner {
+    margin: 2px;
+  }
 }

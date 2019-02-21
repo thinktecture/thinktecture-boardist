@@ -42,6 +42,7 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     maxPlayers: ['', Validators.required],
     minDuration: [null],
     maxDuration: [null],
+    minAge: [null, Validators.required],
     buyDate: [null],
     buyPrice: [null],
     publisherId: [null],

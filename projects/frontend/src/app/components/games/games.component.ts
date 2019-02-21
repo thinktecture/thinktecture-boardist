@@ -12,6 +12,8 @@ import {GameComponent} from '../game/game.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GamesComponent extends AbstractOverview<GamesService, Game> {
+  readonly columns = ['name', 'publisher', 'minAge', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId'];
+
   constructor(games: GamesService, matDialog: MatDialog) {
     super({ title: 'Games', service: games, detail: GameComponent, dialogConfig: { width: '900px' } }, matDialog);
   }

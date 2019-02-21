@@ -4,13 +4,10 @@
   }
 
   .mat-column-publisher {
-    @media (max-width: 600px) {
-      display: none;
-    }
-
     flex: 0 0 200px;
   }
 
+  .mat-column-minAge,
   .mat-column-minPlayers,
   .mat-column-maxPlayers {
     flex: 0 0 50px;
@@ -32,6 +29,15 @@
 
     a {
       color: inherit;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mat-column-minAge,
+    .mat-column-minPlayers,
+    .mat-column-isExtension,
+    .mat-column-publisher {
+      display: none;
     }
   }
 

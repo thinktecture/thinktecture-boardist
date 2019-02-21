@@ -8,6 +8,10 @@
     <mat-header-cell *matHeaderCellDef>Publisher</mat-header-cell>
     <mat-cell *matCellDef="let game">{{ game.publisherId | publisher$ | async }}</mat-cell>
   </ng-container>
+  <ng-container matColumnDef="minAge">
+    <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+    <mat-cell *matCellDef="let game">{{ game.minAge }}</mat-cell>
+  </ng-container>
   <ng-container matColumnDef="minPlayers">
     <mat-header-cell *matHeaderCellDef>Min.</mat-header-cell>
     <mat-cell *matCellDef="let game">{{ game.minPlayers }}</mat-cell>
@@ -32,9 +36,8 @@
     </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['name', 'publisher', 'minPlayers', 'maxPlayers', 'isExtension', 'boardGameGeekId']"
-           (click)="show(row)"></mat-row>
+  <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: columns" (click)="show(row)"></mat-row>
 </mat-table>
 
 <button mat-fab class="add" color="primary" (click)="add()">

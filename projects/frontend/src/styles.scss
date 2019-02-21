@@ -3,15 +3,20 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.flex {
-  display: flex;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 8px;
+  justify-items: start;
+  align-items: start;
 
-  &.column {
-    flex-direction: column;
+  &:not(.mobile) {
+    @media (max-width: 600px) {
+      display: block;
+    }
   }
 
-  .flex-1 {
-    max-width: 100%;
-    flex: 1;
+  .mat-form-field-infix {
+    width: auto;
   }
 }

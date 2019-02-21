@@ -3,14 +3,14 @@
 
   <mat-dialog-content>
     <ng-container *ngIf="data$ | async as data; else loading">
-      <div class="flex">
-        <div class="flex-1">
+      <div class="grid">
+        <div>
           <mat-form-field>
             <mat-label>Board game name</mat-label>
             <input type="text" matInput formControlName="name">
           </mat-form-field>
 
-          <div class="flex">
+          <div class="grid mobile bgg">
             <mat-form-field>
               <mat-label>BoardGameGeek™ Id</mat-label>
               <input type="text" matInput formControlName="boardGameGeekId">
@@ -21,23 +21,21 @@
               <mat-spinner *ngIf="searching || importing" matSuffix [diameter]="20"></mat-spinner>
             </mat-form-field>
 
-            <div class="flex column">
-              <button mat-flat-button type="button" class="import" color="accent" (click)="importFromBoardGameGeek()"
-                      [disabled]="!form.value.boardGameGeekId || importing">
-                BGG™ Import
-              </button>
-            </div>
+            <button mat-flat-button type="button" class="import" color="accent" (click)="importFromBoardGameGeek()"
+                    [disabled]="!form.value.boardGameGeekId || importing">
+              BGG™ Import
+            </button>
           </div>
 
-          <div class="flex multiple">
-            <mat-form-field class="flex-1">
+          <div class="grid mobile">
+            <mat-form-field>
               <mat-label>Minimum players</mat-label>
               <mat-select formControlName="minPlayers">
                 <mat-option *ngFor="let nr of null | numbers : 1 : 4" [value]="nr">{{ nr }}</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="flex-1">
+            <mat-form-field>
               <mat-label>Maximum players</mat-label>
               <mat-select formControlName="maxPlayers">
                 <mat-option *ngFor="let nr of null | numbers : 1 : 20 : 1 : form.value.minPlayers" [value]="nr">{{ nr }}</mat-option>
@@ -46,8 +44,8 @@
             </mat-form-field>
           </div>
 
-          <div class="flex multiple">
-            <mat-form-field class="flex-1">
+          <div class="grid mobile">
+            <mat-form-field>
               <mat-label>Minimum play time</mat-label>
               <mat-select formControlName="minDuration">
                 <mat-option [value]="null"></mat-option>
@@ -55,7 +53,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="flex-1">
+            <mat-form-field>
               <mat-label>Maximum play time</mat-label>
               <mat-select formControlName="maxDuration">
                 <mat-option [value]="null"></mat-option>
@@ -65,6 +63,14 @@
           </div>
 
           <mat-form-field>
+            <mat-label>Minimum age</mat-label>
+            <mat-select formControlName="minAge">
+              <mat-option [value]="0">No restriction</mat-option>
+              <mat-option *ngFor="let nr of null | numbers : 1 : 18" [value]="nr">{{ nr }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
             <mat-label>Expansion to</mat-label>
             <mat-select formControlName="mainGameId">
               <mat-option [value]="null"></mat-option>
@@ -72,7 +78,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div *ngIf="!mobileQuery.matches" class="flex-1 cover" [style.backgroundImage]="coverSrc"></div>
+        <div *ngIf="!mobileQuery.matches" class="cover" [style.backgroundImage]="coverSrc"></div>
       </div>
 
       <mat-form-field>
@@ -83,33 +89,37 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Authors</mat-label>
-        <mat-select formControlName="authors" multiple>
-          <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="grid">
+        <mat-form-field>
+          <mat-label>Authors</mat-label>
+          <mat-select formControlName="authors" multiple>
+            <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Illustrators</mat-label>
-        <mat-select formControlName="illustrators" multiple>
-          <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>Illustrators</mat-label>
+          <mat-select formControlName="illustrators" multiple>
+            <mat-option *ngFor="let person of data.persons" [value]="person.id">{{ person.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-      <mat-form-field>
-        <mat-label>Categories</mat-label>
-        <mat-select formControlName="categories" multiple>
-          <mat-option *ngFor="let category of data.categories" [value]="category.id">{{ category.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="grid">
+        <mat-form-field>
+          <mat-label>Categories</mat-label>
+          <mat-select formControlName="categories" multiple>
+            <mat-option *ngFor="let category of data.categories" [value]="category.id">{{ category.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Mechanics</mat-label>
-        <mat-select formControlName="mechanics" multiple>
-          <mat-option *ngFor="let mechanic of data.mechanics" [value]="mechanic.id">{{ mechanic.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>Mechanics</mat-label>
+          <mat-select formControlName="mechanics" multiple>
+            <mat-option *ngFor="let mechanic of data.mechanics" [value]="mechanic.id">{{ mechanic.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </ng-container>
   </mat-dialog-content>
 
