@@ -20,6 +20,11 @@ export abstract class AbstractData<T extends Item> {
     );
   }
 
+  import(id: string, overwrite = false): Observable<T | null> {
+    const params = { overwrite: overwrite.toString() };
+    return this.httpClient.post<T | null>(`${environment.baseApiUrl}${this.endpoint}/${id}/import`, null, { params });
+  }
+
   save(item: T): Observable<T> {
     return this.httpClient[item.id ? 'put' : 'post']<T | null>(`${environment.baseApiUrl}${this.endpoint}`, item).pipe(
       map(result => result || item),

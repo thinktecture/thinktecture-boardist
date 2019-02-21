@@ -20,11 +20,6 @@ export class GamesService extends AbstractData<Game> {
     );
   }
 
-  import(id: string, overwrite: boolean): Observable<Game | null> {
-    const params = { overwrite: overwrite.toString() };
-    return this.httpClient.post<Game | null>(`${environment.baseApiUrl}${this.endpoint}/${id}/import`, null, { params });
-  }
-
   search(query: string): Observable<number | null> {
     return this.httpClient.get<number | null>(`${environment.baseApiUrl}${this.endpoint}/lookup`, { params: { query } });
   }

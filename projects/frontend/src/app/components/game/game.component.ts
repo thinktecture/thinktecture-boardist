@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {combineLatest, defer, iif, Observable, of, Subject} from 'rxjs';
-import {filter, finalize, map, repeatWhen, switchMap, tap} from 'rxjs/operators';
+import {combineLatest, defer, Observable} from 'rxjs';
+import {filter, finalize, map, repeatWhen} from 'rxjs/operators';
 import {Category} from '../../models/category';
 import {Game} from '../../models/game';
 import {Mechanic} from '../../models/mechanic';
@@ -22,11 +22,7 @@ import {AbstractDetail, DetailContext} from '../abstract-detail';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit {
-  private readonly refresh = new Subject<void>();
-
   searching = false;
-  importing = false;
-  overwrite = false;
 
   data$: Observable<{
     games: Game[],
@@ -80,33 +76,13 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     );
   }
 
-  import(): void {
-    this.form.disable();
+  protected afterImport(): void {
+    super.afterImport();
 
-    this.importing = true;
-
-    iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
-      switchMap(item => this.context.service.import(item.id, this.overwrite)),
-      filter(result => result !== null),
-      tap(() => {
-        this.context.service.clearCache();
-        this.publishers.clearCache();
-        this.persons.clearCache();
-        this.categories.clearCache();
-        this.mechanics.clearCache();
-      }),
-      finalize(() => {
-        this.form.enable();
-        this.importing = false;
-      }),
-    ).subscribe(result => {
-      this.form.patchValue(result);
-      this.form.markAsPristine();
-      this.form.markAsUntouched();
-
-      this.reload = true;
-      this.refresh.next(null);
-    });
+    this.publishers.clearCache();
+    this.persons.clearCache();
+    this.categories.clearCache();
+    this.mechanics.clearCache();
   }
 
   search(): void {
