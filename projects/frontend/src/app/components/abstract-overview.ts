@@ -1,10 +1,10 @@
-import {InjectionToken, OnInit, Type} from '@angular/core';
-import {MatDialog, MatDialogConfig, Sort} from '@angular/material';
-import {defer, Observable, Subject} from 'rxjs';
-import {filter, map, repeatWhen} from 'rxjs/operators';
-import {Item} from '../models/item';
-import {AbstractData} from '../services/abstract-data';
-import {DetailContext} from './abstract-detail';
+import { InjectionToken, OnInit, Type } from '@angular/core';
+import { MatDialog, MatDialogConfig, Sort } from '@angular/material';
+import { defer, Observable, Subject } from 'rxjs';
+import { filter, map, repeatWhen } from 'rxjs/operators';
+import { Item } from '../models/item';
+import { AbstractData } from '../services/abstract-data';
+import { DetailContext } from './abstract-detail';
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -42,6 +42,10 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
     return !this.sort || !this.sort.active || this.sort.direction === ''
       ? items
       : items.slice().sort((a, b) => compare(a[this.sort.active], b[this.sort.active], this.sort.direction === 'asc'));
+  }
+
+  trackBy(index: number, item: T) {
+    return item.id;
   }
 
   resort(sort: Sort): void {
