@@ -44,12 +44,9 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-      if (await _categoriesService.DeleteAsync(id))
-      {
-        return Ok();
-      }
+      await _categoriesService.DeleteAsync(id);
 
-      return NotFound();
+      return Ok();
     }
 
     [HttpPut]

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Extensions;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
@@ -22,12 +23,12 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<MechanicDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<MechanicDto>(_boardistContext.Mechanics.OrderBy(p => p.Name)).ToArrayAsync();
+      return await _mapper.ProjectTo<MechanicDto>(_boardistContext.Mechanics.WithoutDeleted().OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<MechanicDto> GetAsync(Guid id)
     {
-      return await _mapper.ProjectTo<MechanicDto>(_boardistContext.Mechanics.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      return await _mapper.ProjectTo<MechanicDto>(_boardistContext.Mechanics.WithoutDeleted().Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
     public async Task<MechanicDto> CreateAsync(MechanicDto mechanic)
@@ -40,22 +41,13 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Mechanic, MechanicDto>(dbMechanic);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-      var dbMechanic = new Mechanic() { Id = id };
+      var dbMechanic = new Mechanic() { Id = id, IsDeleted = true };
 
-      _boardistContext.Entry(dbMechanic).State = EntityState.Deleted;
+      _boardistContext.Attach(dbMechanic);
 
-      try
-      {
-        await _boardistContext.SaveChangesAsync();
-
-        return true;
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        return false;
-      }
+      await _boardistContext.SaveChangesAsync();
     }
 
     public async Task<MechanicDto> UpdateAsync(MechanicDto mechanic)

@@ -67,6 +67,8 @@ namespace Thinktecture.Boardist.WebApi.Services
           return null;
         }
 
+        dbGame.IsDeleted = false;
+
         ImportSimpleValues(boardGameGeekResult, dbGame, overwrite);
 
         await ImportPublisherRelation(boardGameGeekResult, dbGame, overwrite);
@@ -122,6 +124,8 @@ namespace Thinktecture.Boardist.WebApi.Services
           _boardistContext.Publishers.Add(dbPublisher);
         }
 
+        dbPublisher.IsDeleted = false;
+
         dbGame.PublisherId = dbPublisher.Id;
       }
     }
@@ -142,6 +146,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         }
 
         dbGame.MainGameId = dbMainGame.Id;
+        dbGame.IsDeleted = false;
 
         await _boardistContext.SaveChangesAsync();
       }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Extensions;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
@@ -22,12 +23,12 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<CategoryDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.OrderBy(p => p.Name)).ToArrayAsync();
+      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.WithoutDeleted().OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<CategoryDto> GetAsync(Guid id)
     {
-      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      return await _mapper.ProjectTo<CategoryDto>(_boardistContext.Categories.WithoutDeleted().Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
     public async Task<CategoryDto> CreateAsync(CategoryDto category)
@@ -40,22 +41,12 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Category, CategoryDto>(dbCategory);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-      var dbCategory = new Category() { Id = id };
+      var dbCategory = new Category() { Id = id, IsDeleted = true };
+      _boardistContext.Attach(dbCategory);
 
-      _boardistContext.Entry(dbCategory).State = EntityState.Deleted;
-
-      try
-      {
-        await _boardistContext.SaveChangesAsync();
-
-        return true;
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        return false;
-      }
+      await _boardistContext.SaveChangesAsync();
     }
 
     public async Task<CategoryDto> UpdateAsync(CategoryDto category)
