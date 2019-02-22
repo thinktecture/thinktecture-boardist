@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -10,10 +11,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   public class PersonsController : ControllerBase
   {
     private readonly PersonsService _personsService;
+    private readonly SyncService _syncService;
 
-    public PersonsController(PersonsService personsService)
+    public PersonsController(PersonsService personsService, SyncService syncService)
     {
       _personsService = personsService;
+      _syncService = syncService;
     }
 
     [HttpGet]
@@ -53,6 +56,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     {
       await _personsService.UpdateAsync(person);
       return Ok();
+    }
+    
+    [HttpGet("sync/{timestamp?}")]
+    public async Task<ActionResult<SyncDto<PersonDto>>> SyncAsync(string timestamp)
+    {
+      return Ok(await _syncService.SyncAsync<Person, PublisherDto>(timestamp));
     }
   }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -10,10 +11,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   public class MechanicsController : ControllerBase
   {
     private readonly MechanicsService _mechanicsService;
+    private readonly SyncService _syncService;
 
-    public MechanicsController(MechanicsService mechanicsService)
+    public MechanicsController(MechanicsService mechanicsService, SyncService syncService)
     {
       _mechanicsService = mechanicsService;
+      _syncService = syncService;
     }
 
     [HttpGet]
@@ -53,6 +56,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     {
       await _mechanicsService.UpdateAsync(mechanic);
       return Ok();
+    }
+    
+    [HttpGet("sync/{timestamp?}")]
+    public async Task<ActionResult<SyncDto<MechanicDto>>> SyncAsync(string timestamp)
+    {
+      return Ok(await _syncService.SyncAsync<Mechanic, PublisherDto>(timestamp));
     }
   }
 }
