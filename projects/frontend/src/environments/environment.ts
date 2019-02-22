@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
   baseApiUrl: 'http://localhost:5000/api/',
+  syncStartDelay: 1_000,
+  syncCheckInterval: 10_000,
+  syncRetry: 3,
 };
 
 /*

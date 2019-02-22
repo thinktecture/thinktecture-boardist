@@ -109,6 +109,8 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       this.form.patchValue({ rules: null });
       this.form.controls.rules.markAsPristine();
       this.form.controls.rules.markAsUntouched();
+
+      await this.context.service.update(this.context.item);
     }
 
     if (close) {
