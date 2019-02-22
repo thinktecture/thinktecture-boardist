@@ -34,7 +34,12 @@ namespace Thinktecture.Boardist.WebApi.Services
       var changed = await _mapper.ProjectTo<TResult>(baseQuery.WithoutDeleted()).ToListAsync();
       var deleted = await baseQuery.Where(p => p.IsDeleted).Select(p => p.Id).ToListAsync();
 
-      return new SyncDto<TResult>() { Timestamp = timestamp, Changed = changed, Deleted = deleted };
+      return new SyncDto<TResult>
+      {
+        Timestamp = timestamp,
+        Changed = changed,
+        Deleted = deleted
+      };
     }
   }
 }
