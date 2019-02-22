@@ -131,7 +131,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
 
                     b.Property<int?>("BoardGameGeekId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                      .HasMaxLength(250);
 
                     b.HasKey("Id");
 

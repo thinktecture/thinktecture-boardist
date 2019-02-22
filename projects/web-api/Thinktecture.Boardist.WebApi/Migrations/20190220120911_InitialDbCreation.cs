@@ -25,7 +25,7 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: true),
                     BoardGameGeekId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
