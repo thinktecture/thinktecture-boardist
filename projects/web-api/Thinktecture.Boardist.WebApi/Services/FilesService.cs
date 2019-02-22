@@ -3,8 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using MimeTypes;
+using Thinktecture.Boardist.WebApi.Database;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.Models;
 
 namespace Thinktecture.Boardist.WebApi.Services
@@ -12,24 +15,26 @@ namespace Thinktecture.Boardist.WebApi.Services
   public class FilesService
   {
     private readonly IHostingEnvironment _hostingEnvironment;
+    private readonly BoardistContext _boardistContext;
     private const string BaseFolderName = "Assets";
     private const string NoImageAvailableFileName = "no-image-available.png";
 
     private string BaseDirectory => Path.Combine(_hostingEnvironment.ContentRootPath, BaseFolderName);
 
-    public FilesService(IHostingEnvironment hostingEnvironment)
+    public FilesService(IHostingEnvironment hostingEnvironment, BoardistContext boardistContext)
     {
       _hostingEnvironment = hostingEnvironment;
+      _boardistContext = boardistContext;
     }
 
-    public async Task Save(Stream stream, Guid fileId, FileCategory category, string fileExtension)
+    public async Task Save(Stream stream, Guid gameId, FileCategory category, string fileExtension)
     {
       if (!fileExtension.StartsWith('.'))
       {
         fileExtension = $".{fileExtension}";
       }
 
-      var fileIdName = fileId.ToString();
+      var fileIdName = gameId.ToString();
       var fileName = $"{FileCategoryToFileName(category)}{fileExtension}";
 
       EnsureFolderExists(Path.Combine(BaseDirectory, fileIdName));
@@ -39,11 +44,15 @@ namespace Thinktecture.Boardist.WebApi.Services
         stream.Seek(0, SeekOrigin.Begin);
         await stream.CopyToAsync(fileStream);
       }
+
+      var dbGame = await _boardistContext.Games.SingleAsync(p => p.Id == gameId);
+      _boardistContext.Entry(dbGame).Property(p => p.BoardGameGeekId).IsModified = true;
+      await _boardistContext.SaveChangesAsync();
     }
 
-    public async Task Save(Stream stream, Guid fileId, FileCategory category, MediaTypeHeaderValue contentType)
+    public async Task Save(Stream stream, Guid gameId, FileCategory category, MediaTypeHeaderValue contentType)
     {
-      await Save(stream, fileId, category, MimeTypeMap.GetExtension(contentType.MediaType));
+      await Save(stream, gameId, category, MimeTypeMap.GetExtension(contentType.MediaType));
     }
 
     public FileLoadResult Load(Guid fileId, FileCategory category)

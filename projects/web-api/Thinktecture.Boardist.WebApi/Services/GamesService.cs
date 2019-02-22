@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Extensions;
 using Thinktecture.Boardist.WebApi.Models;
 
 namespace Thinktecture.Boardist.WebApi.Services
@@ -32,7 +33,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         query = query.Where(p => p.MainGame == null);
       }
 
-      var games = await _mapper.ProjectTo<GameDto>(query.OrderBy(p => p.Name)).ToArrayAsync();
+      var games = await _mapper.ProjectTo<GameDto>(query.WithoutDeleted().OrderBy(p => p.Name)).ToArrayAsync();
 
       foreach (var game in games)
       {
@@ -44,7 +45,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<GameDto> GetAsync(Guid id)
     {
-      var game = await _mapper.ProjectTo<GameDto>(_boardistContext.Games.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      var game = await _mapper.ProjectTo<GameDto>(_boardistContext.Games.WithoutDeleted().Where(p => p.Id == id)).SingleOrDefaultAsync();
 
       game.HasRules = _filesService.Exists(game.Id, FileCategory.Rules);
 
@@ -62,23 +63,14 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Game, GameDto>(dbGame);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-      var dbGame = new Game() {Id = id};
+      var dbGame = new Game() { Id = id, IsDeleted = true };
 
-      _boardistContext.Entry(dbGame).State = EntityState.Deleted;
+      _boardistContext.Attach(dbGame);
 
-      try
-      {
-        await _boardistContext.SaveChangesAsync();
-        _filesService.Delete(id);
-
-        return true;
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        return false;
-      }
+      await _boardistContext.SaveChangesAsync();
+      _filesService.Delete(id);
     }
 
     public async Task<GameDto> UpdateAsync(GameDto game)
@@ -98,7 +90,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       _mapper.Map(game, dbGame);
 
       _boardistContext.Entry(dbGame).Property(p => p.BoardGameGeekId).IsModified = true;
-      
+
       await _boardistContext.SaveChangesAsync();
 
       return _mapper.Map<Game, GameDto>(dbGame);

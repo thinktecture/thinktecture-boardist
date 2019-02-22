@@ -6,5 +6,6 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
   {
     Guid Id { get; set; }
     byte[] RowVersion { get; set; }
+    bool IsDeleted { get; set; }
   }
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Extensions;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
@@ -22,12 +23,12 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PersonDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<PersonDto>(_boardistContext.Persons.OrderBy(p => p.Name)).ToArrayAsync();
+      return await _mapper.ProjectTo<PersonDto>(_boardistContext.Persons.WithoutDeleted().OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<PersonDto> GetAsync(Guid id)
     {
-      return await _mapper.ProjectTo<PersonDto>(_boardistContext.Persons.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      return await _mapper.ProjectTo<PersonDto>(_boardistContext.Persons.WithoutDeleted().Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
     public async Task<PersonDto> CreateAsync(PersonDto person)
@@ -40,22 +41,12 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Person, PersonDto>(dbPerson);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-      var dbPerson = new Person() { Id = id };
+      var dbPerson = new Person() { Id = id, IsDeleted = true };
 
-      _boardistContext.Entry(dbPerson).State = EntityState.Deleted;
-
-      try
-      {
-        await _boardistContext.SaveChangesAsync();
-
-        return true;
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        return false;
-      }
+      _boardistContext.Attach(dbPerson);
+      await _boardistContext.SaveChangesAsync();
     }
 
     public async Task<PersonDto> UpdateAsync(PersonDto person)

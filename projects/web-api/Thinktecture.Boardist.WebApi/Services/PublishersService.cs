@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
+using Thinktecture.Boardist.WebApi.Extensions;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
@@ -24,12 +25,12 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task<PublisherDto[]> GetAllAsync()
     {
-      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.OrderBy(p => p.Name)).ToArrayAsync();
+      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.WithoutDeleted().OrderBy(p => p.Name)).ToArrayAsync();
     }
 
     public async Task<PublisherDto> GetAsync(Guid id)
     {
-      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.Where(p => p.Id == id)).SingleOrDefaultAsync();
+      return await _mapper.ProjectTo<PublisherDto>(_boardistContext.Publishers.WithoutDeleted().Where(p => p.Id == id)).SingleOrDefaultAsync();
     }
 
     public async Task<PublisherDto> CreateAsync(PublisherDto publisher)
@@ -42,23 +43,13 @@ namespace Thinktecture.Boardist.WebApi.Services
       return _mapper.Map<Publisher, PublisherDto>(dbPublisher);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-      var dbPublisher = new Publisher() { Id = id };
+      var dbPublisher = new Publisher() { Id = id, IsDeleted = true };
 
-      _boardistContext.Entry(dbPublisher).State = EntityState.Deleted;
-
-      try
-      {
-        await _boardistContext.SaveChangesAsync();
-        _filesService.Delete(id);
-
-        return true;
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        return false;
-      }
+      _boardistContext.Attach(dbPublisher);
+      await _boardistContext.SaveChangesAsync();
+      _filesService.Delete(id);
     }
 
     public async Task<PublisherDto> UpdateAsync(PublisherDto publisher)
