@@ -95,5 +95,10 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       return _mapper.Map<Game, GameDto>(dbGame);
     }
+
+    public bool HasRules(Guid id)
+    {
+      return _filesService.Exists(id, FileCategory.Rules);
+    }
   }
 }
