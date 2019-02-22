@@ -2,9 +2,8 @@ using System;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class Publisher : IBoardGameGeekItem
+  public class Publisher : Syncable, IBoardGameGeekItem
   {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public int Priority { get; set; }
 

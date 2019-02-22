@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class PublisherEntityTypeConfiguration : IEntityTypeConfiguration<Publisher>
+  public class PublisherEntityTypeConfiguration : SyncableEntityTypeConfiguration<Publisher>
   {
-    public void Configure(EntityTypeBuilder<Publisher> builder)
+    public override void Configure(EntityTypeBuilder<Publisher> builder)
     {
-      builder.HasKey(p => p.Id);
+      base.Configure(builder);
+      
       builder.Property(p => p.Name).HasMaxLength(BoardistContext.MaxStringLength);
     }
   }

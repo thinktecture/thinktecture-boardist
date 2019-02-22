@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class Game : IBoardGameGeekItem
+  public class Game : Syncable, IBoardGameGeekItem
   {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
