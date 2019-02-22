@@ -2,7 +2,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { combineLatest, defer, iif, Observable, of } from 'rxjs';
+import { combineLatest, defer, forkJoin, iif, Observable, of } from 'rxjs';
 import { filter, finalize, map, mapTo, repeatWhen, switchMap, tap } from 'rxjs/operators';
 import { Category } from '../../models/category';
 import { Game } from '../../models/game';
@@ -99,13 +99,14 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     this.mobileQuery.removeListener(this.listener);
   }
 
-  protected afterImport(): void {
-    super.afterImport();
-
-    this.publishers.clearCache();
-    this.persons.clearCache();
-    this.categories.clearCache();
-    this.mechanics.clearCache();
+  protected afterImport(): Observable<void> {
+    return forkJoin(
+      super.afterImport(),
+      this.publishers.clearCache(),
+      this.persons.clearCache(),
+      this.categories.clearCache(),
+      this.mechanics.clearCache(),
+    ).pipe(mapTo(undefined));
   }
 
   protected save(close = true): Observable<Game> {
@@ -114,11 +115,14 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       switchMap(result =>
         iif(() => this.form.value.rules,
           service.upload(FileCategory.Rules, result.id, this.form.value.rules).pipe(
-            tap(() => {
+            switchMap(() => {
               this.context.item.hasRules = true;
+
               this.form.patchValue({ rules: null });
               this.form.controls.rules.markAsPristine();
               this.form.controls.rules.markAsUntouched();
+
+              return service.update(this.context.item);
             }),
           ),
           of(null),

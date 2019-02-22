@@ -2,7 +2,7 @@ import { OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { iif, Observable, of, Subject } from 'rxjs';
-import { filter, finalize, switchMap, tap } from 'rxjs/operators';
+import { filter, finalize, mapTo, switchMap, tap } from 'rxjs/operators';
 import { Item } from '../models/item';
 import { AbstractData } from '../services/abstract-data';
 
@@ -50,7 +50,7 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
       switchMap(item => this.context.service.import(item.id, this.form.controls.boardGameGeekId.dirty)),
       filter(result => result !== null),
-      tap(() => this.afterImport()),
+      switchMap(result => this.afterImport().pipe(mapTo(result))),
       finalize(() => {
         this.form.enable();
         this.importing = false;
@@ -65,8 +65,8 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     });
   }
 
-  protected afterImport(): void {
-    this.context.service.clearCache();
+  protected afterImport(): Observable<void> {
+    return this.context.service.clearCache();
   }
 
   protected save(close = true): Observable<T> {

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Game } from '../models/game';
 import { AbstractData } from './abstract-data';
+import { SyncService } from './sync.service';
 
 export enum FileCategory {
   Logo = 'logo',
@@ -15,8 +16,8 @@ export enum FileCategory {
   providedIn: 'root',
 })
 export class GamesService extends AbstractData<Game> {
-  constructor(httpClient: HttpClient) {
-    super(httpClient, 'games');
+  constructor(httpClient: HttpClient, sync: SyncService) {
+    super(httpClient, sync, 'games');
   }
 
   getAll(expansions = true): Observable<Game[]> {
