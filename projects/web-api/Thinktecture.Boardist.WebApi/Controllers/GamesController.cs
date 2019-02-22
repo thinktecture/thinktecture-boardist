@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -11,11 +12,13 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   {
     private readonly GamesService _gamesService;
     private readonly BoardGameGeekImporter _importer;
+    private readonly SyncService _syncService;
 
-    public GamesController(GamesService gamesService, BoardGameGeekImporter importer)
+    public GamesController(GamesService gamesService, BoardGameGeekImporter importer, SyncService syncService)
     {
       _gamesService = gamesService;
       _importer = importer;
+      _syncService = syncService;
     }
 
     [HttpPost("{id}/import")]
@@ -67,6 +70,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     {
       await _gamesService.UpdateAsync(game);
       return Ok();
+    }
+    
+    [HttpGet("sync/{timestamp?}")]
+    public async Task<ActionResult<SyncDto<GameDto>>> SyncAsync(string timestamp)
+    {
+      return Ok(await _syncService.SyncAsync<Game, GameDto>(timestamp));
     }
   }
 }

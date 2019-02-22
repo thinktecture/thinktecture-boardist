@@ -1,6 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Thinktecture.Boardist.WebApi.Database;
+using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.DTOs;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -10,10 +14,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
   public class PublishersController : ControllerBase
   {
     private readonly PublishersService _publishersService;
+    private readonly SyncService _syncService;
 
-    public PublishersController(PublishersService publishersService)
+    public PublishersController(PublishersService publishersService, SyncService syncService)
     {
       _publishersService = publishersService;
+      _syncService = syncService;
     }
 
     [HttpGet]
@@ -53,6 +59,12 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     {
       await _publishersService.UpdateAsync(publisher);
       return Ok();
+    }
+
+    [HttpGet("sync/{timestamp?}")]
+    public async Task<ActionResult<SyncDto<PublisherDto>>> SyncAsync(string timestamp)
+    {
+      return Ok(await _syncService.SyncAsync<Publisher, PublisherDto>(timestamp));
     }
   }
 }

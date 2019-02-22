@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Thinktecture.Boardist.WebApi.Database.Models;
 
@@ -13,9 +16,16 @@ namespace Thinktecture.Boardist.WebApi.Database
     public DbSet<Category> Categories { get; set; }
     public DbSet<Mechanic> Mechanics { get; set; }
 
+    private DbQuery<DbQueryValue> DbQueryValue { get; set; }
+
     public BoardistContext(DbContextOptions<BoardistContext> options)
       : base(options)
     {
+    }
+
+    public async Task<byte[]> GetMinActiveRowVersionAsync()
+    {
+      return await DbQueryValue.FromSql("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).SingleAsync();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
