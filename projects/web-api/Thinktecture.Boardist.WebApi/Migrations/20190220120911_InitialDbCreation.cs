@@ -221,6 +221,8 @@ namespace Thinktecture.Boardist.WebApi.Migrations
                 column: "PublisherId");
 
             migrationBuilder.Sql(@"
+EXEC sp_MSforeachtable ""ALTER TABLE ? NOCHECK CONSTRAINT all""
+
 INSERT INTO Categories (Id, Name, BoardGameGeekId) VALUES ('68C2FDF3-9ECC-4991-9E41-069EDFA11CA8', 'Educational', 1094);
 INSERT INTO Categories (Id, Name, BoardGameGeekId) VALUES ('8318BE2E-CDB5-4561-92BB-06A48C433EE4', 'Economic', 1021);
 INSERT INTO Categories (Id, Name, BoardGameGeekId) VALUES ('852264C9-A989-41FC-A59C-09AB003DFE16', 'Bluffing', 1023);
@@ -3728,6 +3730,8 @@ INSERT INTO GameMechanic (GameId, MechanicId) VALUES ('229F5591-F056-4B25-AF11-6
 INSERT INTO GameMechanic (GameId, MechanicId) VALUES ('AAAD0FD6-1ABB-4565-8C00-850C01A5DD4E', '761A8CF7-17BC-49FE-AAFB-F9E82CDD732D');
 INSERT INTO GameMechanic (GameId, MechanicId) VALUES ('4EC2ADC6-51BE-4B7B-BB2A-E7282192AE61', '761A8CF7-17BC-49FE-AAFB-F9E82CDD732D');
 INSERT INTO GameMechanic (GameId, MechanicId) VALUES ('25FBFB5E-7D3D-46A1-A7E9-F9CFC5C83FD3', '761A8CF7-17BC-49FE-AAFB-F9E82CDD732D');
+
+exec sp_MSforeachtable ""ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all""
 ");
         }
 
