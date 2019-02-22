@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class GameEntityTypeConfiguration : IEntityTypeConfiguration<Game>
+  public class GameEntityTypeConfiguration : SyncableEntityTypeConfiguration<Game>
   {
-    public void Configure(EntityTypeBuilder<Game> builder)
+    public override void Configure(EntityTypeBuilder<Game> builder)
     {
-      builder.HasKey(p => p.Id);
+      base.Configure(builder);
+      
       builder.Property(p => p.Name).HasMaxLength(BoardistContext.MaxStringLength);
 
       builder

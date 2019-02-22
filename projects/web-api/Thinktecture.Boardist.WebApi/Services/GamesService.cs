@@ -97,6 +97,8 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       _mapper.Map(game, dbGame);
 
+      _boardistContext.Entry(dbGame).Property(p => p.BoardGameGeekId).IsModified = true;
+      
       await _boardistContext.SaveChangesAsync();
 
       return _mapper.Map<Game, GameDto>(dbGame);

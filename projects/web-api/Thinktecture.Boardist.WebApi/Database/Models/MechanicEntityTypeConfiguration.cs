@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Thinktecture.Boardist.WebApi.Database.Models
 {
-  public class MechanicEntityTypeConfiguration : IEntityTypeConfiguration<Mechanic>
+  public class MechanicEntityTypeConfiguration : SyncableEntityTypeConfiguration<Mechanic>
   {
-    public void Configure(EntityTypeBuilder<Mechanic> builder)
+    public override void Configure(EntityTypeBuilder<Mechanic> builder)
     {
-      builder.HasKey(p => p.Id);
+      base.Configure(builder);
+      
       builder.Property(p => p.Name).HasMaxLength(BoardistContext.MaxStringLength);
     }
   }
