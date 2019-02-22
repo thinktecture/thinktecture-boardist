@@ -77,5 +77,16 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     {
       return Ok(await _syncService.SyncAsync<Game, GameDto>(timestamp));
     }
+
+    [HttpHead("{id}")]
+    public IActionResult HasRules(Guid id)
+    {
+      if (_gamesService.HasRules(id))
+      {
+        return Ok(true);
+      }
+
+      return NoContent();
+    }
   }
 }
