@@ -11,6 +11,7 @@ COPY projects ./projects
 COPY angular.json ./
 COPY tsconfig.json ./
 COPY tslint.json ./
+COPY nginx.conf ./
 
 RUN npm run build-prod
 
@@ -19,3 +20,4 @@ FROM nginx:alpine
 WORKDIR /app
 
 COPY --from=build-env /app/dist/frontend /usr/share/nginx/html
+COPY --from=build-env /app/nginx.conf /etc/nginx/conf.d/default.conf
