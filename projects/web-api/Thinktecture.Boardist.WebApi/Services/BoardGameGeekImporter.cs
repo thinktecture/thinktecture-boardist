@@ -71,10 +71,10 @@ namespace Thinktecture.Boardist.WebApi.Services
 
         await ImportPublisherRelation(boardGameGeekResult, dbGame, overwrite);
 
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, _boardistContext.Categories, overwrite);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, _boardistContext.Mechanics, overwrite);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, _boardistContext.Persons, overwrite);
-        await ImportBoardGameGeekRelations(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, _boardistContext.Persons, overwrite);
+        await ImportBoardGameGeekRelations<Category, GameCategory>(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, overwrite);
+        await ImportBoardGameGeekRelations<Mechanic, GameMechanic>(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, overwrite);
+        await ImportBoardGameGeekRelations<Person, GameAuthor>(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, overwrite);
+        await ImportBoardGameGeekRelations<Person, GameIllustrator>(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, overwrite);
 
         await ImportMainGameRelation(boardGameGeekResult, dbGame, overwrite);
 
@@ -148,7 +148,7 @@ namespace Thinktecture.Boardist.WebApi.Services
     }
 
     private async Task ImportBoardGameGeekRelations<TSource, TResult>(BoardGameGeekApiResult.BoardGame boardGameGeekResult,
-      string linkType, ICollection<TResult> destination, DbSet<TSource> source, bool overwrite)
+      string linkType, ICollection<TResult> destination, bool overwrite)
       where TSource : class, IBoardGameGeekItem, new()
       where TResult : class, IGameRelation, new()
     {
@@ -162,6 +162,8 @@ namespace Thinktecture.Boardist.WebApi.Services
         }
 
         destination.Clear();
+
+        var source = _boardistContext.Set<TSource>();
 
         var dbItems = source.ToLookup(p => p.BoardGameGeekId);
 
