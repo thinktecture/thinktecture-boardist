@@ -22,8 +22,8 @@ namespace Thinktecture.Boardist.WebApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddAutoMapper();
-      
-      services.AddDbContext<BoardistContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BoardistContext")).EnableSensitiveDataLogging());
+
+      services.AddDbContext<BoardistContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BoardistContext")));
 
       services.AddTransient<DatabaseMigrator>();
       services.AddTransient<GamesService>();
@@ -34,7 +34,7 @@ namespace Thinktecture.Boardist.WebApi
       services.AddTransient<BoardGameGeekImporter>();
       services.AddTransient<FilesService>();
       services.AddTransient<SyncService>();
-      
+
       services.AddHttpClient();
 
       services.AddMvc()
