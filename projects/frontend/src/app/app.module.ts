@@ -36,6 +36,8 @@ import {
 } from './directives/file-value-accessor.directive';
 import { NumbersPipe } from './pipes/numbers.pipe';
 import { PublisherPipe } from './pipes/publisher.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { PublisherPipe } from './pipes/publisher.pipe';
     MatFormFieldModule,
     MatCheckboxModule,
     MatSortModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     {
@@ -88,4 +91,11 @@ import { PublisherPipe } from './pipes/publisher.pipe';
   ],
 })
 export class AppModule {
+  constructor() {
+    // Workaround. Angular ServiceWorker is only installed when the app become stable,
+    // but this never happens because of used timers
+    if ('serviceWorker' in navigator && environment.production) {
+      navigator.serviceWorker.register('ngsw-worker.js');
+    }
+  }
 }
