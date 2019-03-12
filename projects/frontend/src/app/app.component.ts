@@ -2,6 +2,8 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { SyncService } from './services/sync.service';
+import { BinariesService } from './services/binaries.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'ttb-root',
@@ -18,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private listener = () => undefined;
 
-  constructor(private readonly media: MediaMatcher, private readonly sync: SyncService) {
+  constructor(private readonly media: MediaMatcher, private readonly sync: SyncService, private readonly binaries: BinariesService) {
   }
 
   ngOnInit(): void {
@@ -30,6 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sync.sync('persons');
     this.sync.sync('publishers');
     this.sync.sync('games');
+
+    if (environment.production) {
+      this.binaries.sync();
+    }
   }
 
   ngOnDestroy(): void {
