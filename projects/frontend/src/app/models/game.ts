@@ -19,4 +19,5 @@ export interface Game extends Item {
   illustrators: Person[];
 
   hasRules: boolean;
+  hasLogo: boolean;
 }

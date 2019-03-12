@@ -11,7 +11,6 @@ export abstract class AbstractData<T extends Item> {
 
   getAll(): Observable<T[]> {
     return this.sync.getAll(this.endpoint);
-    ;
   }
 
   get(id: string): Observable<T> {
