@@ -10,7 +10,6 @@ import {
   finalize,
   map,
   mapTo,
-  repeat,
   repeatWhen,
   retry,
   switchMap,
@@ -59,7 +58,7 @@ export class SyncService extends Dexie {
     let idle = true;
 
     timer(environment.syncStartDelay, environment.syncCheckInterval).pipe(
-      filter(() => idle),
+      filter(() => idle && navigator.onLine),
       tap(() => idle = false),
       switchMap(() => merge(
         of(new Subject<void>()),
@@ -89,7 +88,7 @@ export class SyncService extends Dexie {
         }),
         finalize(() => idle = true),
       )),
-      repeat(),
+      retry(),
     ).subscribe();
   }
 
@@ -114,8 +113,11 @@ export class SyncService extends Dexie {
     return defer(() => this.table(name).where({ id }).first()).pipe(repeatWhen(() => this.waitForRefresh(name)));
   }
 
-  async put<T>(name: string, item: T): Promise<void> {
+  async put<T>(name: string, item: T, options: { emitRefresh?: boolean } = {}): Promise<void> {
     await this.table(name).put(item);
-    this.refreshed.next(name);
+
+    if (options.emitRefresh !== false) {
+      this.refreshed.next(name);
+    }
   }
 }
