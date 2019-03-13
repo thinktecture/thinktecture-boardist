@@ -31,8 +31,8 @@ export abstract class AbstractData<T extends Item> {
     );
   }
 
-  update(item: T): Observable<void> {
-    return defer(() => this.sync.put(this.endpoint, item));
+  update(item: T, options: { emitRefresh?: boolean} = {}): Observable<void> {
+    return defer(() => this.sync.put(this.endpoint, item, options));
   }
 
   clearCache(): Observable<void> {
