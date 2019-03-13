@@ -25,7 +25,7 @@ namespace Thinktecture.Boardist.WebApi.Database
 
     public async Task<byte[]> GetMinActiveRowVersionAsync()
     {
-      return await DbQueryValue.FromSql("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).SingleAsync();
+      return await DbQueryValue.FromSql("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).FirstAsync();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
