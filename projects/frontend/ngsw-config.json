@@ -33,11 +33,11 @@
     {
       "name": "sync",
       "urls": [
-        "http://localhost:5000/api/categories/**",
-        "http://localhost:5000/api/games/**",
-        "http://localhost:5000/api/mechanics/**",
-        "http://localhost:5000/api/persons/**",
-        "http://localhost:5000/api/publishers/**"
+        "*://*/api/categories/**",
+        "*://*/api/games/**",
+        "*://*/api/mechanics/**",
+        "*://*/api/persons/**",
+        "*://*/api/publishers/**"
       ],
       "cacheConfig": {
         "maxSize": 5,
@@ -48,7 +48,7 @@
     {
       "name": "binaries",
       "urls": [
-        "http://localhost:5000/api/binaries/**"
+        "*://*/api/binaries/**"
       ],
       "cacheConfig": {
         "maxSize": 1000,
