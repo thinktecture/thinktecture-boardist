@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { PublishersService } from '../services/publishers.service';
 
 @Pipe({
@@ -11,6 +11,11 @@ export class PublisherPipe implements PipeTransform {
   }
 
   transform(publisherId: string): Observable<string> {
-    return publisherId ? this.publishers.get(publisherId).pipe(map(publisher => publisher.name)) : EMPTY;
+    return publisherId
+      ? this.publishers.get(publisherId).pipe(
+        filter(publisher => !!publisher),
+        map(publisher => publisher.name),
+      )
+      : EMPTY;
   }
 }
