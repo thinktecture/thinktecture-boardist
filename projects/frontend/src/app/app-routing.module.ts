@@ -1,12 +1,12 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {GamesComponent} from './components/games/games.component';
-import {OverviewComponent} from './components/overview/overview.component';
-import {PublishersComponent} from './components/publishers/publishers.component';
-import {OverviewContextGuard} from './guards/overview-context.guard';
-import {CategoriesService} from './services/categories.service';
-import {MechanicsService} from './services/mechanics.service';
-import {PersonsService} from './services/persons.service';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { GamesComponent } from './components/games/games.component';
+import { OverviewComponent } from './components/overview/overview.component';
+import { PublishersComponent } from './components/publishers/publishers.component';
+import { OverviewContextGuard } from './guards/overview-context.guard';
+import { CategoriesService } from './services/categories.service';
+import { MechanicsService } from './services/mechanics.service';
+import { PersonsService } from './services/persons.service';
 
 const routes: Routes = [
   { path: 'games', component: GamesComponent },

@@ -1,7 +1,7 @@
-import {Moment} from 'moment';
-import {Category} from './category';
-import {Item} from './item';
-import {Person} from './person';
+import { Moment } from 'moment';
+import { Category } from './category';
+import { Item } from './item';
+import { Person } from './person';
 
 export interface Game extends Item {
   minPlayers: number;

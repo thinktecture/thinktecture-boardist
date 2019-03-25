@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {AbstractDetail, DetailContext} from '../abstract-detail';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { AbstractDetail, DetailContext } from '../abstract-detail';
 
 @Component({
   selector: 'ttb-detail',

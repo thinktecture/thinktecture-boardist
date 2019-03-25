@@ -1,21 +1,21 @@
-import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {combineLatest, defer, iif, Observable, of} from 'rxjs';
-import {filter, finalize, map, mapTo, repeatWhen, switchMap, tap} from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
-import {Category} from '../../models/category';
-import {Game} from '../../models/game';
-import {Mechanic} from '../../models/mechanic';
-import {Person} from '../../models/person';
-import {Publisher} from '../../models/publisher';
-import {CategoriesService} from '../../services/categories.service';
-import {FileCategory, GamesService} from '../../services/games.service';
-import {MechanicsService} from '../../services/mechanics.service';
-import {PersonsService} from '../../services/persons.service';
-import {PublishersService} from '../../services/publishers.service';
-import {AbstractDetail, DetailContext} from '../abstract-detail';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { combineLatest, defer, iif, Observable, of } from 'rxjs';
+import { filter, finalize, map, mapTo, repeatWhen, switchMap, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { Category } from '../../models/category';
+import { Game } from '../../models/game';
+import { Mechanic } from '../../models/mechanic';
+import { Person } from '../../models/person';
+import { Publisher } from '../../models/publisher';
+import { CategoriesService } from '../../services/categories.service';
+import { FileCategory, GamesService } from '../../services/games.service';
+import { MechanicsService } from '../../services/mechanics.service';
+import { PersonsService } from '../../services/persons.service';
+import { PublishersService } from '../../services/publishers.service';
+import { AbstractDetail, DetailContext } from '../abstract-detail';
 
 @Component({
   selector: 'ttb-game',

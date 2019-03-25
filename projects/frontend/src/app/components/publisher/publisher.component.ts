@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {environment} from '../../../environments/environment';
-import {Publisher} from '../../models/publisher';
-import {PublishersService} from '../../services/publishers.service';
-import {AbstractDetail, DetailContext} from '../abstract-detail';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { environment } from '../../../environments/environment';
+import { Publisher } from '../../models/publisher';
+import { PublishersService } from '../../services/publishers.service';
+import { AbstractDetail, DetailContext } from '../abstract-detail';
 
 @Component({
   selector: 'ttb-publisher',

@@ -1,6 +1,6 @@
-import {HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -18,21 +18,24 @@ import {
   MatTableModule,
   MatToolbarModule,
 } from '@angular/material';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {OVERVIEW_CONTEXT} from './components/abstract-overview';
-import {DetailComponent} from './components/detail/detail.component';
-import {GameComponent} from './components/game/game.component';
-import {GamesComponent} from './components/games/games.component';
-import {OverviewComponent} from './components/overview/overview.component';
-import {PublisherComponent} from './components/publisher/publisher.component';
-import {PublishersComponent} from './components/publishers/publishers.component';
-import {SpinnerComponent} from './components/spinner/spinner.component';
-import {FileValueAccessorDirective, MultipleFileValueAccessorDirective} from './directives/file-value-accessor.directive';
-import {NumbersPipe} from './pipes/numbers.pipe';
-import {PublisherPipe} from './pipes/publisher.pipe';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { OVERVIEW_CONTEXT } from './components/abstract-overview';
+import { DetailComponent } from './components/detail/detail.component';
+import { GameComponent } from './components/game/game.component';
+import { GamesComponent } from './components/games/games.component';
+import { OverviewComponent } from './components/overview/overview.component';
+import { PublisherComponent } from './components/publisher/publisher.component';
+import { PublishersComponent } from './components/publishers/publishers.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import {
+  FileValueAccessorDirective,
+  MultipleFileValueAccessorDirective,
+} from './directives/file-value-accessor.directive';
+import { NumbersPipe } from './pipes/numbers.pipe';
+import { PublisherPipe } from './pipes/publisher.pipe';
 
 @NgModule({
   declarations: [

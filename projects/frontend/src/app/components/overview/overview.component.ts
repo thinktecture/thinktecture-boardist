@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {MatDialog} from '@angular/material';
-import {Item} from '../../models/item';
-import {AbstractData} from '../../services/abstract-data';
-import {AbstractOverview, OVERVIEW_CONTEXT, OverviewContext} from '../abstract-overview';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Item } from '../../models/item';
+import { AbstractData } from '../../services/abstract-data';
+import { AbstractOverview, OVERVIEW_CONTEXT, OverviewContext } from '../abstract-overview';
 
 @Component({
   selector: 'ttb-overview',

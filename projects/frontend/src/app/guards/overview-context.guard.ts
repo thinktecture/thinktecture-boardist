@@ -1,8 +1,8 @@
-import {Inject, Injectable, Injector} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable} from 'rxjs';
-import {OVERVIEW_CONTEXT, OverviewContext} from '../components/abstract-overview';
-import {DetailComponent} from '../components/detail/detail.component';
+import { Inject, Injectable, Injector } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { OVERVIEW_CONTEXT, OverviewContext } from '../components/abstract-overview';
+import { DetailComponent } from '../components/detail/detail.component';
 
 @Injectable({
   providedIn: 'root',

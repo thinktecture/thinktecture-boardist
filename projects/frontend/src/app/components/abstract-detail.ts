@@ -1,10 +1,10 @@
-import {OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
-import {iif, Observable, of, Subject} from 'rxjs';
-import {filter, finalize, switchMap, tap} from 'rxjs/operators';
-import {Item} from '../models/item';
-import {AbstractData} from '../services/abstract-data';
+import { OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { iif, Observable, of, Subject } from 'rxjs';
+import { filter, finalize, switchMap, tap } from 'rxjs/operators';
+import { Item } from '../models/item';
+import { AbstractData } from '../services/abstract-data';
 
 export interface DetailContext<S extends AbstractData<T>, T extends Item> {
   title: string;

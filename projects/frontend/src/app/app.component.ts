@@ -1,6 +1,6 @@
-import {MediaMatcher} from '@angular/cdk/layout';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSidenav} from '@angular/material';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'ttb-root',

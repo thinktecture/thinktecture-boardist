@@ -1,7 +1,7 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {PublishersService} from '../services/publishers.service';
+import { Pipe, PipeTransform } from '@angular/core';
+import { EMPTY, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PublishersService } from '../services/publishers.service';
 
 @Pipe({
   name: 'publisher$',

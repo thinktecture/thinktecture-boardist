@@ -1,8 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Publisher} from '../models/publisher';
-import {AbstractData} from './abstract-data';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Publisher } from '../models/publisher';
+import { AbstractData } from './abstract-data';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Person} from '../models/person';
-import {AbstractData} from './abstract-data';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Person } from '../models/person';
+import { AbstractData } from './abstract-data';
 
 @Injectable({
   providedIn: 'root',

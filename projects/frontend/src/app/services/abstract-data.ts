@@ -1,8 +1,8 @@
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map, shareReplay, tap} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
-import {Item} from '../models/item';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Item } from '../models/item';
 
 export abstract class AbstractData<T extends Item> {
   private cache: Observable<T[]> | null = null;
