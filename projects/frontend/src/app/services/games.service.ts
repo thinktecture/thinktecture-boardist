@@ -36,4 +36,12 @@ export class GamesService extends AbstractData<Game> {
 
     return this.httpClient.post<void>(`${environment.baseApiUrl}binaries/${category}`, data);
   }
+
+  getLogoUrl(id: string): string {
+    return `${environment.baseApiUrl}binaries/${id}/${FileCategory.Logo}`;
+  }
+
+  getRulesUrl(id: string): string {
+    return `${environment.baseApiUrl}binaries/${id}/${FileCategory.Rules}`;
+  }
 }

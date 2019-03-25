@@ -4,7 +4,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { combineLatest, defer, iif, Observable, of } from 'rxjs';
 import { filter, finalize, map, mapTo, repeatWhen, switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { Category } from '../../models/category';
 import { Game } from '../../models/game';
 import { Mechanic } from '../../models/mechanic';
@@ -57,11 +56,11 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
   private listener = () => this.changeDetectorRef.markForCheck();
 
   get coverSrc(): string {
-    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Logo})` : '';
+    return this.context.item.id ? `url(${this.context.service.getLogoUrl(this.context.item.id)})` : '';
   }
 
   get rulesSrc(): string {
-    return `${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Rules}`;
+    return this.context.service.getRulesUrl(this.context.item.id);
   }
 
   constructor(

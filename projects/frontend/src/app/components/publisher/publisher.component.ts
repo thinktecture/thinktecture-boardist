@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Publisher } from '../../models/publisher';
 import { PublishersService } from '../../services/publishers.service';
 import { AbstractDetail, DetailContext } from '../abstract-detail';
+import { FileCategory } from '../../services/games.service';
 
 @Component({
   selector: 'ttb-publisher',
@@ -20,7 +21,7 @@ export class PublisherComponent extends AbstractDetail<PublishersService, Publis
   });
 
   get coverSrc(): string {
-    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/logo)` : '';
+    return this.context.item.id ? `url(${environment.baseApiUrl}binaries/${this.context.item.id}/${FileCategory.Logo})` : '';
   }
 
   constructor(
