@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Dexie from 'dexie';
-import { defer, from, merge, Observable, of, Subject, throwError, timer } from 'rxjs';
+import { defer, from, merge, Observable, of, Subject, timer } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
-  catchError,
   concatMap,
+  delay,
   filter,
   finalize,
   map,
   mapTo,
   repeatWhen,
   retry,
+  retryWhen,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -69,10 +70,7 @@ export class SyncService extends Dexie {
       )),
       switchMap(force => from(this.timestamps.where({ name }).first()).pipe(
         switchMap(status => this.httpClient.get<Sync>(`${environment.baseApiUrl}${name}/sync${status ? `/${status.timestamp}` : ''}`).pipe(
-          catchError(err => timer(environment.syncStartDelay).pipe(
-            switchMap(() => throwError(err)),
-          )),
-          retry(environment.syncRetry),
+          retryWhen(error => error.pipe(delay(environment.syncStartDelay))),
         )),
         concatMap(({ timestamp, changed, deleted }) => {
           const table = this.table(name);
