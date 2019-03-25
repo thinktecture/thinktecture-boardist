@@ -72,8 +72,8 @@ namespace Thinktecture.Boardist.WebApi.Controllers
       return Ok();
     }
     
-    [HttpGet("sync/{timestamp?}")]
-    public async Task<ActionResult<SyncDto<GameDto>>> SyncAsync(string timestamp)
+    [HttpGet("sync")]
+    public async Task<ActionResult<SyncDto<GameDto>>> SyncAsync([FromQuery] string timestamp = null)
     {
       return Ok(await _syncService.SyncAsync<Game, GameDto>(timestamp));
     }
