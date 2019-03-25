@@ -69,7 +69,7 @@ export class SyncService extends Dexie {
         ),
       )),
       switchMap(force => from(this.timestamps.where({ name }).first()).pipe(
-        switchMap(status => this.httpClient.get<Sync>(`${environment.baseApiUrl}${name}/sync${status ? `/${status.timestamp}` : ''}`).pipe(
+        switchMap(status => this.httpClient.get<Sync>(`${environment.baseApiUrl}${name}/sync`, { params: { timestamp: status && status.timestamp || '' } }).pipe(
           retryWhen(error => error.pipe(delay(environment.syncStartDelay))),
         )),
         concatMap(({ timestamp, changed, deleted }) => {
