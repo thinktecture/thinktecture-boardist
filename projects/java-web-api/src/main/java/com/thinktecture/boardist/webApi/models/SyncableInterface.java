@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-public abstract class SyncableInterface extends PanacheEntityBase {
+public interface SyncableInterface {
 
-    public UUID id;
-    public char[] rowVersion;
-    public boolean isDeleted;
+    // public UUID id = null;
+    // public char[] rowVersion = null;
+    // public Boolean isDeleted = null;
 }

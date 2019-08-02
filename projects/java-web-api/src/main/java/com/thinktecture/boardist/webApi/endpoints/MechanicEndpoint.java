@@ -17,54 +17,54 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.thinktecture.boardist.webApi.dtos.ItemDto;
-import com.thinktecture.boardist.webApi.models.Person;
+import com.thinktecture.boardist.webApi.models.Mechanic;
 
-@Path("persons")
+@Path("mechanics")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class PersonEndpoint {
+public class MechanicEndpoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Object> getPersons() {
-        return Person.findAll().stream().map(p -> ItemDto.fromItem((Person) p)).collect(Collectors.toList());
+    public List<Object> getAll() {
+        return Mechanic.findAll().stream().map(e -> ItemDto.fromItem((Mechanic) e)).collect(Collectors.toList());
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPerson(@PathParam("id") UUID id) {
-        Person person = Person.findById(id);
-        if (person == null) {
+    public Response getSingle(@PathParam("id") UUID id) {
+        Mechanic entity = Mechanic.findById(id);
+        if (entity == null) {
             return Response.status(404).build();
         }
-        return Response.ok(ItemDto.fromItem(Person.findById(id))).build();
+        return Response.ok(ItemDto.fromItem(Mechanic.findById(id))).build();
     }
 
     @DELETE
     @Path("{id}")
     @Transactional()
-    public Response deletePerson(@PathParam("id") UUID id) {
-        Person delperson = Person.findById(id);
-        if (delperson == null) {
+    public Response delete(@PathParam("id") UUID id) {
+        Mechanic delMechanic = Mechanic.findById(id);
+        if (delMechanic == null) {
             return Response.status(404).build();
         }
-        if (delperson.isPersistent()) {
-            delperson.delete();
+        if (delMechanic.isPersistent()) {
+            delMechanic.delete();
         }
         return Response.ok().build();
     }
 
     @POST
-    public Response postPerson(Person data) {
+    public Response post(Mechanic data) {
         data.persistAndFlush();
         return Response.ok(data).build();
     }
 
     @PUT
-    public void updatePerson(ItemDto data) {
+    public void update(ItemDto data) {
         // preferred method would be BeanUtils.copyProperties
-        Person old = Person.findById(data.id);
+        Mechanic old = Mechanic.findById(data.id);
         old.copyOver(data);
         old.persistAndFlush();
     }

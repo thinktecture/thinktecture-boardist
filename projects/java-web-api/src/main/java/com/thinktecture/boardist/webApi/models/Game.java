@@ -19,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity()
 @Table(name = "Games", schema = "dbo", catalog = "boardist")
-public class Game extends ItemInterface {
+public class Game extends Item {
 
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -39,6 +39,7 @@ public class Game extends ItemInterface {
     public Integer maxDuration;
     public Float buyPrice;
     public Date buyDate;
+    public Boolean hasRules;
 
     // @OneToOne(optional = true)
     // @JoinColumn(name="Id")
@@ -68,5 +69,12 @@ public class Game extends ItemInterface {
         joinColumns = {@JoinColumn(name = "GameId")},
         inverseJoinColumns= {@JoinColumn(name="AuthorId")})
     public List<Person> authors;
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "GameIllustrator", 
+        joinColumns = {@JoinColumn(name = "GameId")},
+        inverseJoinColumns= {@JoinColumn(name="IllustratorId")})
+    public List<Person> illustrators;
 
 }

@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity()
 @Table(name = "Publishers", schema = "dbo", catalog = "boardist")
-public class Publisher extends ItemInterface {
+public class Publisher extends Item {
     
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")

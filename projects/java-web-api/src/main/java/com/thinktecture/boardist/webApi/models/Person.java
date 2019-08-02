@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity()
 @Table(name = "Persons", schema = "dbo", catalog = "boardist")
-public class Person extends ItemInterface {
+public class Person extends Item {
     
 
     // values have to be redefined, so that panache recognises them corretly. The Interfaces have no value

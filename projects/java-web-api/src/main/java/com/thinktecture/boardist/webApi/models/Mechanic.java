@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity()
 @Table(name = "Mechanics", schema = "dbo", catalog = "boardist")
-public class Mechanic extends ItemInterface {
+public class Mechanic extends Item {
     
     @Id
     @GenericGenerator(name = "uuid", strategy = "uuid2")
