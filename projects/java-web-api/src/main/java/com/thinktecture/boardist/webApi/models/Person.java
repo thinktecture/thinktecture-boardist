@@ -14,15 +14,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "Persons", schema = "dbo", catalog = "boardist")
 public class Person extends ItemInterface {
     
+
+    // values have to be redefined, so that panache recognises them corretly. The Interfaces have no value
+    // but to have generic types
     @Id
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
     @GeneratedValue(generator = "uuid")
     @Column(columnDefinition = "UNIQUEIDENTIFIER")
     public UUID id;
     
     public String name;
     public int boardGameGeekId;
-    public byte[] rowVersion;
+    public char[] rowVersion;
     public boolean isDeleted;
+
 
 }
