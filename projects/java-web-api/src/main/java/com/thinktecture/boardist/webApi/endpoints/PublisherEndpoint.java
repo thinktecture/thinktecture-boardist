@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,14 +26,12 @@ import com.thinktecture.boardist.webApi.models.Publisher;
 public class PublisherEndpoint {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public List<Object> getAll() {
         return Publisher.findAll().stream().map(e -> ItemDto.fromItem((Publisher) e)).collect(Collectors.toList());
     }
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getSingle(@PathParam("id") UUID id) {
         Publisher entity = Publisher.findById(id);
         if (entity == null) {
@@ -71,7 +70,8 @@ public class PublisherEndpoint {
 
     @GET
     @Path("sync")
-    public void sync() {
-        // TODO sync
+    public Response sync(@QueryParam("timestamp") String timestamp) {
+        // SyncDto<PublisherDto>
+        return Response.ok().build();
     }
 }

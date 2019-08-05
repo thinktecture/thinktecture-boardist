@@ -21,7 +21,7 @@ public class GameDto {
     public Integer maxDuration;
     public Float buyPrice;
     public Date buyDate;
-    public Boolean hasRules;
+    // public Boolean hasRules;
     public UUID publisherId;
     public UUID mainGameId;
     public List<UUID> mechanics;
@@ -34,7 +34,7 @@ public class GameDto {
         GameDto dto = new GameDto();
         dto.name = game.name;
         dto.id = game.id;
-        dto.hasRules = game.hasRules;
+        // dto.hasRules = game.hasRules;
         dto.boardGameGeekId = game.boardGameGeekId;
         dto.maxPlayers = game.maxPlayers;
         dto.minPlayers = game.minPlayers;

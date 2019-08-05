@@ -39,7 +39,7 @@ public class Game extends Item {
     public Integer maxDuration;
     public Float buyPrice;
     public Date buyDate;
-    public Boolean hasRules;
+    // public Boolean hasRules;
 
     // @OneToOne(optional = true)
     // @JoinColumn(name="Id")

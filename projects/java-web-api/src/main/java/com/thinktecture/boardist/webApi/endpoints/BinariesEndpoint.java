@@ -59,6 +59,8 @@ public class BinariesEndpoint {
 
     void upload(BinaryUploadDto data, FileCategoryEnum fc) {
         System.out.println("UPLOAD " + fc.getCategoryValue());
-        this.fileService.save(data.getFile(), data.getId(),fc.getCategoryValue(), "png");
+        System.out.println("UUID: " + data.getId().toString());
+        System.out.println("BINARY: " + data.getFile().toString());
+        // this.fileService.save(data.getFile(), data.getId(),fc.getCategoryValue(), "png");
     }
 }

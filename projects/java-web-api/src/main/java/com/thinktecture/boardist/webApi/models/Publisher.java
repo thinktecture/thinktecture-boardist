@@ -24,4 +24,5 @@ public class Publisher extends Item {
     public byte[] rowVersion;
     public boolean isDeleted;
 
+    public int priority;
 }
