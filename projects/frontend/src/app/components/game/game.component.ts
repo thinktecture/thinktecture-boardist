@@ -2,8 +2,8 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { combineLatest, defer, iif, Observable, of } from 'rxjs';
-import { filter, finalize, map, mapTo, repeatWhen, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, defer, Observable } from 'rxjs';
+import { map, repeatWhen } from 'rxjs/operators';
 import { Category } from '../../models/category';
 import { Game } from '../../models/game';
 import { Mechanic } from '../../models/mechanic';
@@ -91,53 +91,53 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     );
   }
 
-  protected afterImport(): void {
-    super.afterImport();
+  protected async afterImport(): Promise<void> {
+    await super.afterImport();
 
-    this.publishers.clearCache();
-    this.persons.clearCache();
-    this.categories.clearCache();
-    this.mechanics.clearCache();
+    await this.publishers.clearCache();
+    await this.persons.clearCache();
+    await this.categories.clearCache();
+    await this.mechanics.clearCache();
   }
 
-  protected save(close = true): Observable<Game> {
+  protected async save(close: boolean): Promise<Game> {
     const { service } = this.context;
-    return service.save({ ...this.form.value, id: this.context.item.id, rules: null }).pipe(
-      switchMap(result =>
-        iif(() => this.form.value.rules,
-          service.upload(FileCategory.Rules, result.id, this.form.value.rules).pipe(
-            tap(() => {
-              this.context.item.hasRules = true;
-              this.form.patchValue({ rules: null });
-              this.form.controls.rules.markAsPristine();
-              this.form.controls.rules.markAsUntouched();
-            }),
-          ),
-          of(null),
-        ).pipe(
-          mapTo(result),
-        ),
-      ),
-      tap(() => close && this.matDialogRef.close(this.reload)),
-    );
+    const result = await this.context.service.save({ ...this.form.value, id: this.context.item.id, rules: null });
+
+    if (this.form.value.rules) {
+      await this.context.service.upload(FileCategory.Rules, result.id, this.form.value.rules);
+
+      this.context.item.hasRules = true;
+      this.form.patchValue({ rules: null });
+      this.form.controls.rules.markAsPristine();
+      this.form.controls.rules.markAsUntouched();
+    }
+
+    if (close) {
+      this.matDialogRef.close(this.reload);
+    }
+
+    return result;
   }
 
-  searchForBoardGameGeekId(): void {
-    const { boardGameGeekId } = this.form.controls;
-    boardGameGeekId.disable();
+  async searchForBoardGameGeekId(): Promise<void> {
+    const control = this.form.controls.boardGameGeekId;
 
+    control.disable();
     this.searching = true;
 
-    this.context.service.search(this.form.value.name).pipe(
-      filter(result => result !== null),
-      finalize(() => {
-        boardGameGeekId.enable();
-        this.searching = false;
-      }),
-    ).subscribe(result => {
-      this.form.patchValue({ boardGameGeekId: result });
-      boardGameGeekId.markAsDirty();
-      boardGameGeekId.markAsTouched();
-    });
+    try {
+      const boardGameGeekId = await this.context.service.search(this.form.value.name);
+      if (boardGameGeekId === null) {
+        return;
+      }
+
+      this.form.patchValue({ boardGameGeekId });
+      control.markAsDirty();
+      control.markAsTouched();
+    } finally {
+      control.enable();
+      this.searching = false;
+    }
   }
 }

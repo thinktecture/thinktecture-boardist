@@ -1,7 +1,7 @@
 import { InjectionToken, OnInit, Type } from '@angular/core';
 import { MatDialog, MatDialogConfig, Sort } from '@angular/material';
 import { defer, Observable, Subject } from 'rxjs';
-import { filter, map, repeatWhen } from 'rxjs/operators';
+import { map, repeatWhen } from 'rxjs/operators';
 import { Item } from '../models/item';
 import { AbstractData } from '../services/abstract-data';
 import { DetailContext } from './abstract-detail';
@@ -14,7 +14,7 @@ export interface OverviewContext<S extends AbstractData<T>, T extends Item> {
   title: string;
   service: S;
   detail: Type<any>;
-  dialogConfig?: MatDialogConfig<DetailContext<S, T>>,
+  dialogConfig?: MatDialogConfig<DetailContext<S, T>>;
 }
 
 export const OVERVIEW_CONTEXT = new InjectionToken<OverviewContext<any, any>>('overview context');
@@ -41,7 +41,7 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
   private sortData(items: T[]): T[] {
     return !this.sort || !this.sort.active || this.sort.direction === ''
       ? items
-      : items.slice().sort((a, b) => compare(a[this.sort.active], b[this.sort.active], this.sort.direction === 'asc'));
+      : [...items].sort((a, b) => compare(a[this.sort.active], b[this.sort.active], this.sort.direction === 'asc'));
   }
 
   trackBy(index: number, item: T) {
@@ -57,11 +57,14 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
     this.show({} as T);
   }
 
-  show(item: T): void {
-    this.matDialog
+  async show(item: T): Promise<void> {
+    const refresh = await this.matDialog
       .open<any, DetailContext<S, T>, boolean>(this.context.detail, { ...this.context.dialogConfig, data: { ...this.context, item } })
-      .afterClosed().pipe(
-      filter(refresh => refresh),
-    ).subscribe(() => this.refresh.next(null));
+      .afterClosed()
+      .toPromise();
+
+    if (refresh) {
+      this.refresh.next();
+    }
   }
 }

@@ -1,8 +1,7 @@
 import { OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { iif, Observable, of, Subject } from 'rxjs';
-import { filter, finalize, switchMap, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { Item } from '../models/item';
 import { AbstractData } from '../services/abstract-data';
 
@@ -27,7 +26,7 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
     this.form.patchValue(this.context.item);
   }
 
-  saveAndClose(): void {
+  async saveAndClose(): Promise<void> {
     this.form.disable();
 
     if (this.form.pristine) {
@@ -37,41 +36,54 @@ export abstract class AbstractDetail<S extends AbstractData<T>, T extends Item> 
 
     this.reload = true;
 
-    this.save(true).pipe(
-      finalize(() => () => this.form.enable()),
-    ).subscribe();
+    try {
+      await this.save(true);
+    } finally {
+      this.form.enable();
+    }
   }
 
-  importFromBoardGameGeek(): void {
+  async importFromBoardGameGeek(): Promise<void> {
     this.form.disable();
 
     this.importing = true;
 
-    iif(() => this.form.dirty, this.save(false), of(this.context.item)).pipe(
-      switchMap(item => this.context.service.import(item.id, this.form.controls.boardGameGeekId.dirty)),
-      filter(result => result !== null),
-      tap(() => this.afterImport()),
-      finalize(() => {
-        this.form.enable();
-        this.importing = false;
-      }),
-    ).subscribe(result => {
+    try {
+      let item = this.context.item;
+      if (this.form.dirty) {
+        item = await this.save(false);
+      }
+
+      const result = await this.context.service.import(item.id, this.form.controls.boardGameGeekId.dirty);
+      if (result === null) {
+        return;
+      }
+
+      await this.afterImport();
+
       this.form.patchValue(result);
       this.form.markAsPristine();
       this.form.markAsUntouched();
 
       this.reload = true;
-      this.refresh.next(null);
-    });
+      this.refresh.next();
+    } finally {
+      this.form.enable();
+      this.importing = false;
+    }
   }
 
-  protected afterImport(): void {
-    this.context.service.clearCache();
+  protected async afterImport(): Promise<void> {
+    await this.context.service.clearCache();
   }
 
-  protected save(close = true): Observable<T> {
-    return this.context.service.save({ ...this.form.value, id: this.context.item.id }).pipe(
-      tap(() => close && this.matDialogRef.close(this.reload)),
-    );
+  protected async save(close: boolean): Promise<T> {
+    const result = await this.context.service.save({ ...this.form.value, id: this.context.item.id });
+
+    if (close) {
+      this.matDialogRef.close(this.reload);
+    }
+
+    return result;
   }
 }

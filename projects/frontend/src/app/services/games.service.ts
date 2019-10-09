@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Game } from '../models/game';
 import { AbstractData } from './abstract-data';
@@ -19,22 +17,21 @@ export class GamesService extends AbstractData<Game> {
     super(httpClient, 'games');
   }
 
-  getAll(expansions = true): Observable<Game[]> {
-    return super.getAll().pipe(
-      map(items => items.filter(item => expansions || !item.mainGameId)),
-    );
+  async getAll(expansions = true): Promise<Game[]> {
+    const items = await super.getAll();
+    return items.filter(item => expansions || !item.mainGameId);
   }
 
-  search(query: string): Observable<number | null> {
-    return this.httpClient.get<number | null>(`${environment.baseApiUrl}${this.endpoint}/lookup`, { params: { query } });
+  search(query: string): Promise<number | null> {
+    return this.httpClient.get<number | null>(`${environment.baseApiUrl}${this.endpoint}/lookup`, { params: { query } }).toPromise();
   }
 
-  upload(category: FileCategory, id: string, file: File): Observable<void> {
+  async upload(category: FileCategory, id: string, file: File): Promise<void> {
     const data = new FormData();
     data.append('id', id);
     data.append('file', file);
 
-    return this.httpClient.post<void>(`${environment.baseApiUrl}binaries/${category}`, data);
+    await this.httpClient.post<void>(`${environment.baseApiUrl}binaries/${category}`, data).toPromise();
   }
 
   getLogoUrl(id: string): string {
