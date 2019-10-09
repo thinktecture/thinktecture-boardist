@@ -1,4 +1,3 @@
-import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
@@ -70,7 +69,6 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
     private readonly mechanics: MechanicsService,
     @Inject(MAT_DIALOG_DATA) context: DetailContext<GamesService, Game>,
     matDialogRef: MatDialogRef<GameComponent>,
-    private readonly media: MediaMatcher,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super(context, matDialogRef);
