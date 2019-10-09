@@ -1,7 +1,7 @@
 import { InjectionToken, OnInit, Type } from '@angular/core';
 import { MatDialog, MatDialogConfig, Sort } from '@angular/material';
-import { defer, Observable, Subject } from 'rxjs';
-import { map, repeatWhen } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Item } from '../models/item';
 import { AbstractData } from '../services/abstract-data';
 import { DetailContext } from './abstract-detail';
@@ -20,7 +20,7 @@ export interface OverviewContext<S extends AbstractData<T>, T extends Item> {
 export const OVERVIEW_CONTEXT = new InjectionToken<OverviewContext<any, any>>('overview context');
 
 export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item> implements OnInit {
-  private readonly refresh = new Subject<void>();
+  private readonly refresh = new BehaviorSubject<void>(null);
 
   items$: Observable<T[]>;
   sort: Sort = { active: 'name', direction: 'asc' };
@@ -32,9 +32,9 @@ export abstract class AbstractOverview<S extends AbstractData<T>, T extends Item
   }
 
   ngOnInit(): void {
-    this.items$ = defer(() => this.context.service.getAll()).pipe(
+    this.items$ = this.refresh.pipe(
+      switchMap(() => this.context.service.getAll()),
       map(items => this.sortData(items)),
-      repeatWhen(() => this.refresh),
     );
   }
 

@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PublishersService } from '../services/publishers.service';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Pipe({
   name: 'publisher$',
@@ -8,14 +10,13 @@ export class PublisherPipe implements PipeTransform {
   constructor(private readonly publishers: PublishersService) {
   }
 
-  async transform(publisherId: string): Promise<string> {
+  transform(publisherId: string): Observable<string> {
     if (publisherId) {
-      const publisher = await this.publishers.get(publisherId);
-      if (publisher) {
-        return publisher.name;
-      }
+      return this.publishers.get(publisherId).pipe(
+        map(publisher => publisher ? publisher.name : ''),
+      );
     }
 
-    return '';
+    return of('');
   }
 }

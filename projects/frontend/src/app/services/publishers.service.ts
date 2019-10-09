@@ -9,6 +9,6 @@ import { SyncService } from './sync.service';
 })
 export class PublishersService extends AbstractData<Publisher> {
   constructor(httpClient: HttpClient, sync: SyncService) {
-    super(httpClient, sync, 'publishers');
+    super(httpClient, 'publishers', sync);
   }
 }

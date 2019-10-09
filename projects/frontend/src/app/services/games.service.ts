@@ -4,6 +4,8 @@ import { environment } from '../../environments/environment';
 import { Game } from '../models/game';
 import { AbstractData } from './abstract-data';
 import { SyncService } from './sync.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export enum FileCategory {
   Logo = 'logo',
@@ -15,12 +17,13 @@ export enum FileCategory {
 })
 export class GamesService extends AbstractData<Game> {
   constructor(httpClient: HttpClient, sync: SyncService) {
-    super(httpClient, sync, 'games');
+    super(httpClient, 'games', sync);
   }
 
-  async getAll(expansions = true): Promise<Game[]> {
-    const items = await super.getAll();
-    return items.filter(item => expansions || !item.mainGameId);
+  getAll(expansions = true): Observable<Game[]> {
+    return super.getAll().pipe(
+      map(items => items.filter(item => expansions || !item.mainGameId)),
+    );
   }
 
   search(query: string): Promise<number | null> {

@@ -9,6 +9,6 @@ import { SyncService } from './sync.service';
 })
 export class CategoriesService extends AbstractData<Category> {
   constructor(httpClient: HttpClient, sync: SyncService) {
-    super(httpClient, sync, 'categories');
+    super(httpClient, 'categories', sync);
   }
 }

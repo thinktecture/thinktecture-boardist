@@ -3,19 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import Dexie from 'dexie';
 import { defer, from, merge, Observable, of, Subject, timer } from 'rxjs';
 import { environment } from '../../environments/environment';
-import {
-  concatMap,
-  delay,
-  filter,
-  finalize,
-  map,
-  mapTo,
-  repeatWhen,
-  retry,
-  retryWhen,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { concatMap, delay, filter, finalize, map, mapTo, repeatWhen, retry, retryWhen, switchMap, tap } from 'rxjs/operators';
 import { Syncable } from '../models/syncable';
 
 interface Timestamp {
@@ -69,6 +57,7 @@ export class SyncService extends Dexie {
         ),
       )),
       switchMap(force => from(this.timestamps.where({ name }).first()).pipe(
+        // tslint:disable-next-line:max-line-length
         switchMap(status => this.httpClient.get<Sync>(`${environment.baseApiUrl}${name}/sync`, { params: { timestamp: status && status.timestamp || '' } }).pipe(
           retryWhen(error => error.pipe(delay(environment.syncStartDelay))),
         )),
@@ -90,10 +79,10 @@ export class SyncService extends Dexie {
     ).subscribe();
   }
 
-  update(name: string): Observable<void> {
+  update(name: string): Promise<void> {
     const done = new Subject<void>();
     this.force.next({ name, done });
-    return done;
+    return done.toPromise();
   }
 
   private waitForRefresh(name: string): Observable<void> {
@@ -104,11 +93,15 @@ export class SyncService extends Dexie {
   }
 
   getAll<T>(name: string): Observable<T[]> {
-    return defer(() => this.table(name).toArray()).pipe(repeatWhen(() => this.waitForRefresh(name)));
+    return defer(() => this.table(name).toArray()).pipe(
+      repeatWhen(() => this.waitForRefresh(name)),
+    );
   }
 
   get<T>(name: string, id: string): Observable<T> {
-    return defer(() => this.table(name).where({ id }).first()).pipe(repeatWhen(() => this.waitForRefresh(name)));
+    return defer(() => this.table(name).where({ id }).first()).pipe(
+      repeatWhen(() => this.waitForRefresh(name)),
+    );
   }
 
   async put<T>(name: string, item: T, options: { emitRefresh?: boolean } = {}): Promise<void> {
