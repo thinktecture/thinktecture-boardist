@@ -15,6 +15,10 @@ mat-form-field {
   align-self: stretch;
   justify-self: stretch;
   margin: 50px;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 }
 
 button + button {

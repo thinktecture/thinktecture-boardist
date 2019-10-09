@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { combineLatest, defer, iif, Observable, of } from 'rxjs';
@@ -22,8 +22,7 @@ import { AbstractDetail, DetailContext } from '../abstract-detail';
   styleUrls: ['./game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit, OnDestroy {
-  mobileQuery: MediaQueryList;
+export class GameComponent extends AbstractDetail<GamesService, Game> implements OnInit {
   searching = false;
 
   data$: Observable<{
@@ -80,9 +79,6 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
-    this.mobileQuery.addListener(this.listener);
-
     this.data$ = defer(() => combineLatest(
       this.context.service.getAll(false),
       this.publishers.getAll(),
@@ -93,10 +89,6 @@ export class GameComponent extends AbstractDetail<GamesService, Game> implements
       map(([games, publishers, persons, categories, mechanics]) => ({ games, publishers, persons, categories, mechanics })),
       repeatWhen(() => this.refresh),
     );
-  }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this.listener);
   }
 
   protected afterImport(): void {
