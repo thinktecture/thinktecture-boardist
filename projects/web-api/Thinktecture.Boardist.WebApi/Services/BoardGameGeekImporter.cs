@@ -251,7 +251,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       var responseMessage = await httpClient.GetAsync(boardGameGeekResult.Image);
       var stream = await responseMessage.Content.ReadAsStreamAsync();
-      await _filesService.SaveAsync(stream, gameId, FileCategory.Logo, (string)responseMessage.Content.Headers.ContentType);
+      await _filesService.SaveAsync(stream, gameId, FileCategory.Logo, responseMessage.Content.Headers.ContentType);
     }
 
     private void ImportSimpleValues(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)

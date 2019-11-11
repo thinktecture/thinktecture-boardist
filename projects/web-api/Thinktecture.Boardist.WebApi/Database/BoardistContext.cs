@@ -16,7 +16,7 @@ namespace Thinktecture.Boardist.WebApi.Database
     public DbSet<Category> Categories { get; set; }
     public DbSet<Mechanic> Mechanics { get; set; }
 
-    private DbQuery<DbQueryValue> DbQueryValue { get; set; }
+    private DbSet<DbQueryValue> DbQueryValue { get; set; }
 
     public BoardistContext(DbContextOptions<BoardistContext> options)
       : base(options)
@@ -25,7 +25,7 @@ namespace Thinktecture.Boardist.WebApi.Database
 
     public async Task<byte[]> GetMinActiveRowVersionAsync()
     {
-      return await DbQueryValue.FromSql("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).SingleAsync();
+      return await DbQueryValue.FromSqlRaw("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).SingleAsync();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +41,7 @@ namespace Thinktecture.Boardist.WebApi.Database
       modelBuilder.ApplyConfiguration(new GameAuthorEntityTypeConfiguration());
       modelBuilder.ApplyConfiguration(new GameIllustratorEntityTypeConfiguration());
       modelBuilder.ApplyConfiguration(new GameCategoryEntityTypeConfiguration());
+      modelBuilder.ApplyConfiguration(new DbQueryValueEntityTypeConfiguration());
     }
   }
 }
