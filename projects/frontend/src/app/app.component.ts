@@ -13,7 +13,7 @@ import { MatSidenav } from '@angular/material';
 })
 export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
-  @ViewChild(MatSidenav) snav: MatSidenav;
+  @ViewChild(MatSidenav, { static: true }) snav: MatSidenav;
 
   private listener = () => undefined;
 
