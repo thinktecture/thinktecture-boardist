@@ -22,15 +22,15 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpPost("{id}/import")]
-    public async Task<ActionResult<bool>> Import(Guid id, bool overwrite = false)
+    public async Task<ActionResult<bool>> ImportAsync(Guid id, bool overwrite = false)
     {
-      return Ok(await _importer.Import(id, overwrite));
+      return Ok(await _importer.ImportAsync(id, overwrite));
     }
 
     [HttpGet("lookup")]
-    public async Task<ActionResult<bool>> Lookup(string query)
+    public async Task<ActionResult<bool>> LookupAsync(string query)
     {
-      return Ok(await _importer.Lookup(query));
+      return Ok(await _importer.LookupAsync(query));
     }
 
     [HttpGet]

@@ -26,7 +26,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       _boardistContext = boardistContext;
     }
 
-    public async Task Save(Stream stream, Guid gameId, FileCategory category, string fileExtension)
+    public async Task SaveAsync(Stream stream, Guid gameId, FileCategory category, string fileExtension)
     {
       if (!fileExtension.StartsWith('.'))
       {
@@ -49,9 +49,9 @@ namespace Thinktecture.Boardist.WebApi.Services
       await _boardistContext.SaveChangesAsync();
     }
 
-    public async Task Save(Stream stream, Guid gameId, FileCategory category, MediaTypeHeaderValue contentType)
+    public async Task SaveAsync(Stream stream, Guid gameId, FileCategory category, MediaTypeHeaderValue contentType)
     {
-      await Save(stream, gameId, category, MimeTypeMap.GetExtension(contentType.MediaType));
+      await SaveAsync(stream, gameId, category, MimeTypeMap.GetExtension(contentType.MediaType));
     }
 
     public FileLoadResult Load(Guid fileId, FileCategory category)
