@@ -1,10 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
 using Thinktecture.Boardist.WebApi.Database;
 using Thinktecture.Boardist.WebApi.Services;
 
@@ -21,8 +22,8 @@ namespace Thinktecture.Boardist.WebApi
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddAutoMapper();
-      
+      services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
       services.AddDbContext<BoardistContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BoardistContext")).EnableSensitiveDataLogging());
 
       services.AddTransient<DatabaseMigrator>();
@@ -33,14 +34,13 @@ namespace Thinktecture.Boardist.WebApi
       services.AddTransient<MechanicsService>();
       services.AddTransient<BoardGameGeekImporter>();
       services.AddTransient<FilesService>();
-      
+
       services.AddHttpClient();
 
-      services.AddMvc()
-        .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+      services.AddMvc();
     }
 
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       using (var scope = app.ApplicationServices.CreateScope())
       {
@@ -56,7 +56,9 @@ namespace Thinktecture.Boardist.WebApi
       // TODO: DO NOT USE IN PRODUCTION
       app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-      app.UseMvc();
+      app.UseRouting();
+
+      app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
   }
 }
