@@ -21,11 +21,11 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpGet("{id}/logo")]
-    public async Task<IActionResult> Logo(Guid id)
+    public async Task<IActionResult> LogoAsync(Guid id)
     {
       if (!_filesService.Exists(id, FileCategory.Logo))
       {
-        await _boardGameGeekImporter.ImportImage(id);
+        await _boardGameGeekImporter.ImportImageAsync(id);
       }
 
       var result = _filesService.Load(id, FileCategory.Logo);
@@ -42,18 +42,18 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     }
 
     [HttpPost("logo")]
-    public async Task<IActionResult> UploadLogo([FromForm] BinaryUploadDto binaryUploadDto)
+    public async Task<IActionResult> UploadLogoAsync([FromForm] BinaryUploadDto binaryUploadDto)
     {
-      return await Upload(binaryUploadDto, FileCategory.Logo);
+      return await UploadAsync(binaryUploadDto, FileCategory.Logo);
     }
 
     [HttpPost("rules")]
-    public async Task<IActionResult> UploadRules([FromForm] BinaryUploadDto binaryUploadDto)
+    public async Task<IActionResult> UploadRulesAsync([FromForm] BinaryUploadDto binaryUploadDto)
     {
-      return await Upload(binaryUploadDto, FileCategory.Rules);
+      return await UploadAsync(binaryUploadDto, FileCategory.Rules);
     }
 
-    private async Task<IActionResult> Upload(BinaryUploadDto binaryUploadDto, FileCategory category)
+    private async Task<IActionResult> UploadAsync(BinaryUploadDto binaryUploadDto, FileCategory category)
     {
       if (binaryUploadDto?.Id == Guid.Empty || binaryUploadDto?.File == null)
       {
@@ -62,7 +62,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
 
       using (var stream = binaryUploadDto.File.OpenReadStream())
       {
-        await _filesService.Save(stream, binaryUploadDto.Id, category, Path.GetExtension(binaryUploadDto.File.FileName));
+        await _filesService.SaveAsync(stream, binaryUploadDto.Id, category, Path.GetExtension(binaryUploadDto.File.FileName));
       }
 
       return Ok();

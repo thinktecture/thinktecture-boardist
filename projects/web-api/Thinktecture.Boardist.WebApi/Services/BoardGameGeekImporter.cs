@@ -44,7 +44,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       _mapper = mapper;
     }
 
-    public async Task<GameDto> Import(Guid id, bool overwrite)
+    public async Task<GameDto> ImportAsync(Guid id, bool overwrite)
     {
       using (var transaction = await _boardistContext.Database.BeginTransactionAsync())
       {
@@ -60,7 +60,7 @@ namespace Thinktecture.Boardist.WebApi.Services
           return null;
         }
 
-        var boardGameGeekResult = await QueryBoardGameGeekApi(dbGame.BoardGameGeekId.Value);
+        var boardGameGeekResult = await QueryBoardGameGeekApiAsync(dbGame.BoardGameGeekId.Value);
 
         if (boardGameGeekResult == null)
         {
@@ -69,14 +69,14 @@ namespace Thinktecture.Boardist.WebApi.Services
 
         ImportSimpleValues(boardGameGeekResult, dbGame, overwrite);
 
-        await ImportPublisherRelation(boardGameGeekResult, dbGame, overwrite);
+        await ImportPublisherRelationAsync(boardGameGeekResult, dbGame, overwrite);
 
-        await ImportBoardGameGeekRelations<Category, GameCategory>(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, overwrite);
-        await ImportBoardGameGeekRelations<Mechanic, GameMechanic>(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, overwrite);
-        await ImportBoardGameGeekRelations<Person, GameAuthor>(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, overwrite);
-        await ImportBoardGameGeekRelations<Person, GameIllustrator>(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, overwrite);
+        await ImportBoardGameGeekRelationsAsync<Category, GameCategory>(boardGameGeekResult, BoardGameCategoryType, dbGame.Categories, overwrite);
+        await ImportBoardGameGeekRelationsAsync<Mechanic, GameMechanic>(boardGameGeekResult, BoardGameMechanicType, dbGame.Mechanics, overwrite);
+        await ImportBoardGameGeekRelationsAsync<Person, GameAuthor>(boardGameGeekResult, BoardGameDesignerType, dbGame.Authors, overwrite);
+        await ImportBoardGameGeekRelationsAsync<Person, GameIllustrator>(boardGameGeekResult, BoardGameArtistType, dbGame.Illustrators, overwrite);
 
-        await ImportMainGameRelation(boardGameGeekResult, dbGame, overwrite);
+        await ImportMainGameRelationAsync(boardGameGeekResult, dbGame, overwrite);
 
         await _boardistContext.SaveChangesAsync();
 
@@ -86,7 +86,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task ImportPublisherRelation(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
+    private async Task ImportPublisherRelationAsync(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
     {
       var xmlPublishers = boardGameGeekResult.Link.Where(p => p.Type == BoardGamePublisherType).ToArray();
 
@@ -126,7 +126,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task ImportMainGameRelation(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
+    private async Task ImportMainGameRelationAsync(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
     {
       var xmlInbounds = boardGameGeekResult.Link.Where(p => p.Inbound && p.Type == BoardGameExpansionType).Select(p => p.Id).ToArray();
 
@@ -147,7 +147,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task ImportBoardGameGeekRelations<TSource, TResult>(BoardGameGeekApiResult.BoardGame boardGameGeekResult,
+    private async Task ImportBoardGameGeekRelationsAsync<TSource, TResult>(BoardGameGeekApiResult.BoardGame boardGameGeekResult,
       string linkType, ICollection<TResult> destination, bool overwrite)
       where TSource : class, IBoardGameGeekItem, new()
       where TResult : class, IGameRelation, new()
@@ -216,7 +216,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task ImportImage(Guid gameId)
+    public async Task ImportImageAsync(Guid gameId)
     {
       var dbGame = await _boardistContext.Games.SingleOrDefaultAsync(p => p.Id == gameId);
 
@@ -225,17 +225,17 @@ namespace Thinktecture.Boardist.WebApi.Services
         return;
       }
 
-      var boardGameGeekResult = await QueryBoardGameGeekApi(dbGame.BoardGameGeekId.Value);
+      var boardGameGeekResult = await QueryBoardGameGeekApiAsync(dbGame.BoardGameGeekId.Value);
 
       if (boardGameGeekResult == null)
       {
         return;
       }
 
-      await DownloadImage(boardGameGeekResult, gameId);
+      await DownloadImageAsync(boardGameGeekResult, gameId);
     }
 
-    private async Task DownloadImage(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Guid gameId)
+    private async Task DownloadImageAsync(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Guid gameId)
     {
       if (string.IsNullOrWhiteSpace(boardGameGeekResult.Image))
       {
@@ -246,7 +246,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 
       var responseMessage = await httpClient.GetAsync(boardGameGeekResult.Image);
       var stream = await responseMessage.Content.ReadAsStreamAsync();
-      await _filesService.Save(stream, gameId, FileCategory.Logo, responseMessage.Content.Headers.ContentType);
+      await _filesService.SaveAsync(stream, gameId, FileCategory.Logo, responseMessage.Content.Headers.ContentType);
     }
 
     private void ImportSimpleValues(BoardGameGeekApiResult.BoardGame boardGameGeekResult, Game dbGame, bool overwrite)
@@ -277,7 +277,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task<BoardGameGeekApiResult.BoardGame> QueryBoardGameGeekApi(int boardGameGeekId)
+    private async Task<BoardGameGeekApiResult.BoardGame> QueryBoardGameGeekApiAsync(int boardGameGeekId)
     {
       var httpClient = _httpClientFactory.CreateClient();
 
@@ -293,7 +293,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    private async Task<BoardGameGeekApiResult.BoardGame> QueryBoardGameGeekApi(string query)
+    private async Task<BoardGameGeekApiResult.BoardGame> QueryBoardGameGeekApiAsync(string query)
     {
       var httpClient = _httpClientFactory.CreateClient();
 
@@ -310,7 +310,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task<int?> Lookup(string query)
+    public async Task<int?> LookupAsync(string query)
     {
       if (query == "ALL")
       {
@@ -321,7 +321,7 @@ namespace Thinktecture.Boardist.WebApi.Services
           foreach (var game in games)
           {
             Thread.Sleep(5000);
-            var result = await QueryBoardGameGeekApi(game.Name);
+            var result = await QueryBoardGameGeekApiAsync(game.Name);
             if (result != null)
             {
               game.BoardGameGeekId = result.Id;
@@ -337,7 +337,7 @@ namespace Thinktecture.Boardist.WebApi.Services
         return null;
       }
 
-      var boardGameGeekResult = await QueryBoardGameGeekApi(query);
+      var boardGameGeekResult = await QueryBoardGameGeekApiAsync(query);
 
       return boardGameGeekResult?.Id;
     }

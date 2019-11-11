@@ -23,7 +23,7 @@ namespace Thinktecture.Boardist.WebApi.Services
       _hostingEnvironment = hostingEnvironment;
     }
 
-    public async Task Save(Stream stream, Guid fileId, FileCategory category, string fileExtension)
+    public async Task SaveAsync(Stream stream, Guid fileId, FileCategory category, string fileExtension)
     {
       if (!fileExtension.StartsWith('.'))
       {
@@ -42,9 +42,9 @@ namespace Thinktecture.Boardist.WebApi.Services
       }
     }
 
-    public async Task Save(Stream stream, Guid fileId, FileCategory category, MediaTypeHeaderValue contentType)
+    public async Task SaveAsync(Stream stream, Guid fileId, FileCategory category, MediaTypeHeaderValue contentType)
     {
-      await Save(stream, fileId, category, MimeTypeMap.GetExtension(contentType.MediaType));
+      await SaveAsync(stream, fileId, category, MimeTypeMap.GetExtension(contentType.MediaType));
     }
 
     public FileLoadResult Load(Guid fileId, FileCategory category)
