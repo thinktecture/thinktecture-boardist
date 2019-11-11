@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Thinktecture.Boardist.WebApi.Database;
 
 namespace Thinktecture.Boardist.WebApi.Migrations
 {
     [DbContext(typeof(BoardistContext))]
-    partial class BoardistContextModelSnapshot : ModelSnapshot
+    [Migration("20191111121529_RemoveRowVersion")]
+    partial class RemoveRowVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
