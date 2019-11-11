@@ -3,25 +3,24 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using MimeTypes;
 using Thinktecture.Boardist.WebApi.Database;
-using Thinktecture.Boardist.WebApi.Database.Models;
 using Thinktecture.Boardist.WebApi.Models;
 
 namespace Thinktecture.Boardist.WebApi.Services
 {
   public class FilesService
   {
-    private readonly IHostingEnvironment _hostingEnvironment;
+    private readonly IWebHostEnvironment _hostingEnvironment;
     private readonly BoardistContext _boardistContext;
     private const string BaseFolderName = "Assets";
     private const string NoImageAvailableFileName = "no-image-available.png";
 
     private string BaseDirectory => Path.Combine(_hostingEnvironment.ContentRootPath, BaseFolderName);
 
-    public FilesService(IHostingEnvironment hostingEnvironment, BoardistContext boardistContext)
+    public FilesService(IWebHostEnvironment hostingEnvironment, BoardistContext boardistContext)
     {
       _hostingEnvironment = hostingEnvironment;
       _boardistContext = boardistContext;
