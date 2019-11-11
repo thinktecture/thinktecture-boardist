@@ -61,7 +61,7 @@ namespace Thinktecture.Boardist.WebApi.Controllers
     [HttpGet("sync")]
     public async Task<ActionResult<SyncDto<PersonDto>>> SyncAsync([FromQuery] string timestamp = null)
     {
-      return Ok(await _syncService.SyncAsync<Person, PublisherDto>(timestamp));
+      return Ok(await _syncService.SyncAsync<Person, PersonDto>(timestamp));
     }
   }
 }
