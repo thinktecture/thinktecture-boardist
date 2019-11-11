@@ -23,7 +23,7 @@ namespace Thinktecture.Boardist.WebApi.Database
     {
     }
 
-    public async Task<byte[]> GetMinActiveRowVersionAsync()
+    public async Task<ulong> GetMinActiveRowVersionAsync()
     {
       return await DbQueryValue.FromSqlRaw("SELECT MIN_ACTIVE_ROWVERSION() AS Value").Select(p => p.Value).SingleAsync();
     }

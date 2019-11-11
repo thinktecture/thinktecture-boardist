@@ -12,6 +12,7 @@ namespace Thinktecture.Boardist.WebApi.Services
 {
   public class SyncService
   {
+    private static readonly string EmptyRowVersion = Convert.ToBase64String(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 });
     private readonly BoardistContext _boardistContext;
     private readonly IMapper _mapper;
 
@@ -25,18 +26,18 @@ namespace Thinktecture.Boardist.WebApi.Services
       where TSource : Syncable
       where TResult : SyncableDto
     {
-      var rowVersion = Convert.FromBase64String(value ?? string.Empty);
+      var rowVersion = Convert.FromBase64String(value ?? EmptyRowVersion).ToBigEndianUInt64();
 
       var timestamp = await _boardistContext.GetMinActiveRowVersionAsync();
 
-      var baseQuery = _boardistContext.Set<TSource>().Where(p => (ulong)(object)p.RowVersion >= (ulong)(object)rowVersion);
+      var baseQuery = _boardistContext.Set<TSource>().Where(p => p.RowVersion >= rowVersion);
 
       var changed = await _mapper.ProjectTo<TResult>(baseQuery.WithoutDeleted()).ToListAsync();
       var deleted = await baseQuery.Where(p => p.IsDeleted).Select(p => p.Id).ToListAsync();
 
       return new SyncDto<TResult>
       {
-        Timestamp = timestamp,
+        Timestamp = timestamp.ToBigEndianBytes(),
         Changed = changed,
         Deleted = deleted
       };

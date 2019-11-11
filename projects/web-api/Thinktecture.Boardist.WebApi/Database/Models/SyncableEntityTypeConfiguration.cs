@@ -9,7 +9,10 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
       builder.HasKey(p => p.Id);
-      builder.Property(p => p.RowVersion).IsRowVersion();
+      builder.Property(p => p.RowVersion)
+        .HasColumnType("rowversion")
+        .IsRowVersion()
+        .HasConversion(Converters.RowVersionConverter());
       builder.Property(p => p.IsDeleted).IsRequired();
     }
   }

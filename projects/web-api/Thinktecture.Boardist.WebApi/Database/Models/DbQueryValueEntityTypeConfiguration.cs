@@ -8,6 +8,10 @@ namespace Thinktecture.Boardist.WebApi.Database.Models
     public void Configure(EntityTypeBuilder<DbQueryValue> builder)
     {
       builder.ToView(nameof(DbQueryValue)).HasNoKey();
+      builder.Property(p => p.Value)
+        .HasColumnType("rowversion")
+        .IsRowVersion()
+        .HasConversion(Converters.RowVersionConverter());
     }
   }
 }
