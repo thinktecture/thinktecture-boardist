@@ -8,6 +8,7 @@
         <PackageReference Include="AutoMapper" Version="9.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     </ItemGroup>
 
