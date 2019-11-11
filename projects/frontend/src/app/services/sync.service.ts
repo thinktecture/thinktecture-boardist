@@ -11,7 +11,7 @@ interface Timestamp {
   timestamp: string;
 }
 
-interface Sync {
+interface SyncResult {
   timestamp: string;
   changed: Syncable[];
   deleted: string[];
@@ -34,12 +34,12 @@ export class SyncService extends Dexie {
     super('sync');
 
     this.version(1).stores({
-      timestamps: '&name',
-      categories: '&id',
-      games: '&id',
-      mechanics: '&id',
-      persons: '&id',
-      publishers: '&id',
+      timestamps: 'name',
+      categories: 'id',
+      games: 'id',
+      mechanics: 'id',
+      persons: 'id',
+      publishers: 'id',
     });
   }
 
@@ -57,15 +57,16 @@ export class SyncService extends Dexie {
         ),
       )),
       switchMap(force => from(this.timestamps.where({ name }).first()).pipe(
-        // tslint:disable-next-line:max-line-length
-        switchMap(status => this.httpClient.get<Sync>(`${environment.baseApiUrl}${name}/sync`, { params: { timestamp: status && status.timestamp || '' } }).pipe(
+        map(status => status && status.timestamp || ''),
+        switchMap(timestamp => this.httpClient.get<SyncResult>(`${environment.baseApiUrl}${name}/sync`, { params: { timestamp } }).pipe(
           retryWhen(error => error.pipe(delay(environment.syncStartDelay))),
         )),
-        concatMap(({ timestamp, changed, deleted }) => {
+        concatMap(async ({ timestamp, changed, deleted }) => {
           const table = this.table(name);
-          return from(Promise.all([table.bulkDelete(deleted), table.bulkPut(changed)])).pipe(
-            switchMap(() => this.timestamps.put({ name, timestamp })),
-          );
+          await table.bulkDelete(deleted);
+          await table.bulkPut(changed);
+
+          await this.timestamps.put({ name, timestamp });
         }),
         tap(() => {
           this.refreshed.next(name);
