@@ -36,6 +36,8 @@ import {
 } from './directives/file-value-accessor.directive';
 import { NumbersPipe } from './pipes/numbers.pipe';
 import { PublisherPipe } from './pipes/publisher.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { PublisherPipe } from './pipes/publisher.pipe';
     MatFormFieldModule,
     MatCheckboxModule,
     MatSortModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     {
