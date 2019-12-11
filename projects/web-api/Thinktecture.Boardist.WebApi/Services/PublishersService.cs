@@ -45,9 +45,10 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task DeleteAsync(Guid id)
     {
-      var dbPublisher = new Publisher() { Id = id, IsDeleted = true };
+      var dbPublisher = await _boardistContext.Publishers.SingleAsync(p => p.Id == id);
 
-      _boardistContext.Attach(dbPublisher);
+      dbPublisher.IsDeleted = true;
+
       await _boardistContext.SaveChangesAsync();
       _filesService.Delete(id);
     }

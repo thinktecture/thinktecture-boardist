@@ -43,9 +43,9 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task DeleteAsync(Guid id)
     {
-      var dbMechanic = new Mechanic() { Id = id, IsDeleted = true };
+      var dbMechanic = await _boardistContext.Mechanics.SingleAsync(p => p.Id == id);
 
-      _boardistContext.Attach(dbMechanic);
+      dbMechanic.IsDeleted = true;
 
       await _boardistContext.SaveChangesAsync();
     }

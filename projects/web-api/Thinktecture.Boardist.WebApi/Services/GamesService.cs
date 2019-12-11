@@ -65,9 +65,9 @@ namespace Thinktecture.Boardist.WebApi.Services
 
     public async Task DeleteAsync(Guid id)
     {
-      var dbGame = new Game() { Id = id, IsDeleted = true };
+      var dbGame = await _boardistContext.Games.SingleAsync(p => p.Id == id);
 
-      _boardistContext.Attach(dbGame);
+      dbGame.IsDeleted = true;
 
       await _boardistContext.SaveChangesAsync();
       _filesService.Delete(id);
